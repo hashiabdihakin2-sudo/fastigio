@@ -38,9 +38,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       velocity.current.x += steerForce;
     }
 
-    // Apply gravity and forward movement
+    // Apply gravity and forward movement (positive Z = forward)
     velocity.current.y += gravity;
-    velocity.current.z = -ballSpeed;
+    velocity.current.z = ballSpeed; // Changed to positive for forward movement
 
     // Damping for x movement
     velocity.current.x *= 0.95;
@@ -72,15 +72,15 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
     setBallPosition(newPosition);
     
-    // Update score based on distance
+    // Update score based on distance (positive Z movement)
     updateScore(Math.abs(newPosition.z * 10));
 
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Move camera to follow ball
+    // Move camera to follow ball (follow behind the ball)
     if (groupRef.current) {
-      groupRef.current.position.z = newPosition.z + 10;
+      groupRef.current.position.z = newPosition.z - 10; // Camera stays behind ball
     }
   });
 

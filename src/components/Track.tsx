@@ -9,9 +9,9 @@ export const Track = ({ ballPosition }: TrackProps) => {
   const segmentLength = 10;
   const numSegments = 10;
 
-  // Generate track segments ahead of the ball
+  // Generate track segments ahead of the ball (positive Z direction)
   for (let i = 0; i < numSegments; i++) {
-    const z = ballPosition.z - (i * segmentLength);
+    const z = ballPosition.z + (i * segmentLength); // Track ahead of ball
     
     trackSegments.push(
       <group key={i} position={[0, 0, z]}>

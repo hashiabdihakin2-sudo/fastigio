@@ -18,7 +18,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     const numObstacles = 20;
 
     for (let i = 0; i < numObstacles; i++) {
-      const z = -(i * spacing) - 20;
+      const z = (i * spacing) + 20; // Obstacles ahead of starting position
       const x = (Math.random() - 0.5) * 6; // Random x position within track bounds
       
       obstacles.push({
@@ -45,14 +45,14 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     });
 
     // Generate new obstacles as ball moves forward
-    const furthestObstacle = Math.min(...obstaclesRef.current.map(o => o.position.z));
-    if (ballPosition.z < furthestObstacle + 100) {
+    const furthestObstacle = Math.max(...obstaclesRef.current.map(o => o.position.z));
+    if (ballPosition.z > furthestObstacle - 100) {
       const newObstacles = generateObstacles();
       obstaclesRef.current = [
         ...obstaclesRef.current,
         ...newObstacles.map(o => ({
           ...o,
-          position: new Vector3(o.position.x, o.position.y, o.position.z + furthestObstacle)
+          position: new Vector3(o.position.x, o.position.y, o.position.z + furthestObstacle + 20)
         }))
       ];
     }
