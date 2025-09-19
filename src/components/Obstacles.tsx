@@ -11,18 +11,23 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const { endGame } = useGameStore();
   const obstaclesRef = useRef<{ position: Vector3; id: number }[]>([]);
 
-  // Generate obstacles procedurally
-  const generateObstacles = () => {
+  // Generate obstacles procedurally with progressive difficulty
+  const generateObstacles = (startZ: number = 20) => {
     const obstacles = [];
-    const spacing = 15;
-    const numObstacles = 20;
+    const distance = Math.abs(ballPosition.z);
+    const difficultyMultiplier = 1 + (distance / 300); // Difficulty increases every 300 units
+    
+    // Progressive spacing and density
+    const baseSpacing = 15;
+    const spacing = Math.max(8, baseSpacing - (distance / 400)); // Closer obstacles over time
+    const numObstacles = Math.min(30, Math.floor(20 * difficultyMultiplier)); // More obstacles
 
     for (let i = 0; i < numObstacles; i++) {
-      const z = (i * spacing) + 20; // Obstacles ahead of starting position
+      const z = startZ + (i * spacing);
       const x = (Math.random() - 0.5) * 10; // Random x position within track bounds
       
       obstacles.push({
-        id: i,
+        id: Date.now() + i, // Unique IDs for new obstacles
         position: new Vector3(x, 0.5, z)
       });
     }
@@ -44,16 +49,13 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       }
     });
 
-    // Generate new obstacles as ball moves forward
+    // Generate new obstacles as ball moves forward with progressive difficulty
     const furthestObstacle = Math.max(...obstaclesRef.current.map(o => o.position.z));
     if (ballPosition.z > furthestObstacle - 100) {
-      const newObstacles = generateObstacles();
+      const newObstacles = generateObstacles(furthestObstacle + 20);
       obstaclesRef.current = [
         ...obstaclesRef.current,
-        ...newObstacles.map(o => ({
-          ...o,
-          position: new Vector3(o.position.x, o.position.y, o.position.z + furthestObstacle + 20)
-        }))
+        ...newObstacles
       ];
     }
   });

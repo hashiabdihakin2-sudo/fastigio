@@ -23,27 +23,37 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   } = useGameStore();
 
   const velocity = useRef(new Vector3(0, 0, 0));
-  const ballSpeed = 0.15;
-  const gravity = -0.02;
-  const steerForce = 0.08;
+  const baseBallSpeed = 0.1;
+  const gravity = -0.025;
+  const baseSteerForce = 0.12;
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Apply steering
+    // Calculate progressive difficulty based on distance
+    const distance = Math.abs(ballPosition.z);
+    const progressMultiplier = 1 + (distance / 200); // Speed increases every 200 units
+    const difficultyMultiplier = Math.min(progressMultiplier, 3); // Cap at 3x speed
+    
+    // Dynamic values based on progress
+    const currentBallSpeed = baseBallSpeed * progressMultiplier;
+    const currentSteerForce = baseSteerForce * Math.min(1.5, 1 + (distance / 500)); // Better steering with progress
+    const steerDamping = Math.max(0.85, 0.95 - (distance / 1000)); // Less damping = more responsive
+
+    // Apply steering with improved responsiveness
     if (controls.left) {
-      velocity.current.x -= steerForce;
+      velocity.current.x -= currentSteerForce;
     }
     if (controls.right) {
-      velocity.current.x += steerForce;
+      velocity.current.x += currentSteerForce;
     }
 
-    // Apply gravity and forward movement (positive Z = forward)
+    // Apply gravity and progressive forward movement
     velocity.current.y += gravity;
-    velocity.current.z = ballSpeed; // Changed to positive for forward movement
+    velocity.current.z = currentBallSpeed;
 
-    // Damping for x movement
-    velocity.current.x *= 0.95;
+    // Progressive damping for x movement (less damping = more responsive)
+    velocity.current.x *= steerDamping;
 
     // Update ball position
     const newPosition = new Vector3(
