@@ -4,6 +4,8 @@ import { Vector3, Group, Mesh } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
+import { Background } from './Background';
+import { StartingStation } from './StartingStation';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -121,6 +123,12 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       />
       <pointLight position={[0, 10, 0]} intensity={0.5} color="#9D4EDD" />
 
+      {/* Background elements */}
+      <Background ballPosition={ballPosition} />
+      
+      {/* Starting station */}
+      <StartingStation />
+      
       {/* Game objects */}
       <Ball ref={ballRef} />
       <Track ballPosition={ballPosition} />
