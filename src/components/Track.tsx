@@ -17,7 +17,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
       <group key={i} position={[0, 0, z]}>
         {/* Main track surface */}
         <mesh position={[0, -0.1, 0]} receiveShadow>
-          <boxGeometry args={[8, 0.2, segmentLength]} />
+          <boxGeometry args={[12, 0.2, segmentLength]} />
           <meshPhongMaterial 
             color="#1a1a2e"
             emissive="#16213e"
@@ -26,7 +26,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         </mesh>
         
         {/* Track borders with neon glow */}
-        <mesh position={[-4, 0.2, 0]}>
+        <mesh position={[-6, 0.2, 0]}>
           <boxGeometry args={[0.2, 0.6, segmentLength]} />
           <meshPhongMaterial 
             color="#4A90E2"
@@ -34,7 +34,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
             emissiveIntensity={0.8}
           />
         </mesh>
-        <mesh position={[4, 0.2, 0]}>
+        <mesh position={[6, 0.2, 0]}>
           <boxGeometry args={[0.2, 0.6, segmentLength]} />
           <meshPhongMaterial 
             color="#4A90E2"

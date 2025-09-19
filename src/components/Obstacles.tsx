@@ -19,7 +19,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
 
     for (let i = 0; i < numObstacles; i++) {
       const z = (i * spacing) + 20; // Obstacles ahead of starting position
-      const x = (Math.random() - 0.5) * 6; // Random x position within track bounds
+      const x = (Math.random() - 0.5) * 10; // Random x position within track bounds
       
       obstacles.push({
         id: i,

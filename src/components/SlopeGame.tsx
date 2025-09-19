@@ -3,6 +3,7 @@ import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Suspense, useEffect, useState } from 'react';
 import { GameScene } from './GameScene';
 import { GameUI } from './GameUI';
+import { HomeScreen } from './HomeScreen';
 import { useGameStore } from '../store/gameStore';
 
 export const SlopeGame = () => {
@@ -52,6 +53,10 @@ export const SlopeGame = () => {
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-background">
+      {gameState === 'waiting' && (
+        <HomeScreen onStartGame={restartGame} highScore={highScore} />
+      )}
+      
       <Canvas 
         shadows 
         className="bg-gradient-to-b from-cyber-dark to-background"

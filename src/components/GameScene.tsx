@@ -65,7 +65,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     }
 
     // Track boundaries
-    if (Math.abs(newPosition.x) > 4) {
+    if (Math.abs(newPosition.x) > 6) {
       endGame();
       return;
     }
@@ -78,9 +78,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Move camera to follow ball (follow behind the ball)
+    // Move camera to follow ball (camera follows from behind)
     if (groupRef.current) {
-      groupRef.current.position.z = newPosition.z - 10; // Camera stays behind ball
+      groupRef.current.position.z = -newPosition.z - 10; // Camera stays behind ball
     }
   });
 
