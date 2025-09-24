@@ -90,10 +90,10 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Move camera to follow ball (camera follows from behind)
+    // Camera fixed on ball - follows all movements
     if (groupRef.current) {
-      groupRef.current.position.set(0, 2, newPosition.z + 8); // Camera stays behind ball
-      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z); // Look at the ball
+      groupRef.current.position.set(newPosition.x, newPosition.y + 3, newPosition.z + 6); // Camera follows ball exactly
+      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z - 5); // Look ahead of the ball
     }
   });
 
