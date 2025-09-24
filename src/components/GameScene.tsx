@@ -92,7 +92,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
     // Move camera to follow ball (camera follows from behind)
     if (groupRef.current) {
-      groupRef.current.position.z = -newPosition.z + 10; // Camera stays behind ball
+      groupRef.current.position.set(0, 2, newPosition.z + 8); // Camera stays behind ball
+      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z); // Look at the ball
     }
   });
 
@@ -106,22 +107,29 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   return (
     <group ref={groupRef}>
-      {/* Lighting */}
-      <ambientLight intensity={0.3} color="#4A90E2" />
+      {/* Improved Lighting for better ball visibility */}
+      <ambientLight intensity={0.6} color="#4A90E2" />
       <directionalLight
-        position={[10, 20, 5]}
-        intensity={1}
+        position={[0, 15, 10]}
+        intensity={1.2}
         color="#ffffff"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-far={50}
-        shadow-camera-left={-20}
-        shadow-camera-right={20}
-        shadow-camera-top={20}
-        shadow-camera-bottom={-20}
+        shadow-camera-left={-25}
+        shadow-camera-right={25}
+        shadow-camera-top={25}
+        shadow-camera-bottom={-25}
       />
-      <pointLight position={[0, 10, 0]} intensity={0.5} color="#9D4EDD" />
+      <pointLight position={[0, 8, 5]} intensity={0.8} color="#9D4EDD" />
+      <spotLight 
+        position={[0, 10, 5]} 
+        intensity={0.5} 
+        angle={Math.PI / 3}
+        penumbra={0.5}
+        color="#ffffff"
+      />
 
       {/* Background elements */}
       <Background ballPosition={ballPosition} />

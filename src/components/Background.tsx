@@ -11,45 +11,47 @@ export const Background = ({ ballPosition }: BackgroundProps) => {
   const groundRef = useRef<Group>(null);
 
   useFrame(() => {
-    // Move background elements to create speed sensation
+    // Move background elements to create smooth speed sensation
     if (starsRef.current) {
-      starsRef.current.position.z = -ballPosition.z * 0.1; // Parallax effect
+      starsRef.current.position.z = ballPosition.z * 0.05; // Subtle parallax effect
     }
     if (groundRef.current) {
-      groundRef.current.position.z = -ballPosition.z * 0.3; // Ground moves faster
+      groundRef.current.position.z = ballPosition.z * 0.15; // Ground moves with ball
     }
   });
 
-  // Generate stars
+  // Generate fewer stars for smoother performance
   const stars = [];
-  for (let i = 0; i < 200; i++) {
-    const x = (Math.random() - 0.5) * 200;
-    const y = Math.random() * 50 + 10;
-    const z = (Math.random() - 0.5) * 500;
+  for (let i = 0; i < 50; i++) {
+    const x = (Math.random() - 0.5) * 150;
+    const y = Math.random() * 30 + 15;
+    const z = (Math.random() - 0.5) * 300;
     
     stars.push(
       <mesh key={i} position={[x, y, z]}>
-        <sphereGeometry args={[0.1, 4, 4]} />
+        <sphereGeometry args={[0.15, 6, 6]} />
         <meshBasicMaterial 
           color="#ffffff"
+          transparent
+          opacity={0.8}
         />
       </mesh>
     );
   }
 
-  // Generate ground pattern
+  // Generate simpler ground pattern
   const groundPatterns = [];
-  for (let i = 0; i < 50; i++) {
-    const x = (Math.random() - 0.5) * 100;
-    const z = i * 20 - 200;
+  for (let i = 0; i < 20; i++) {
+    const x = (Math.random() - 0.5) * 80;
+    const z = i * 30 - 150;
     
     groundPatterns.push(
-      <mesh key={i} position={[x, -15, z]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2, 4, 8]} />
+      <mesh key={i} position={[x, -12, z]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[1.5, 3, 6]} />
         <meshBasicMaterial 
           color="#4A90E2" 
           transparent
-          opacity={0.6}
+          opacity={0.4}
         />
       </mesh>
     );
