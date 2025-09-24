@@ -4,7 +4,7 @@ import { Vector3, Group } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
-import { Background } from './Background';
+
 import { StartingStation } from './StartingStation';
 import { useGameStore } from '../store/gameStore';
 
@@ -90,10 +90,10 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Camera fixed on ball - follows all movements
+    // Camera behind the ball
     if (groupRef.current) {
-      groupRef.current.position.set(newPosition.x, newPosition.y + 3, newPosition.z + 6); // Camera follows ball exactly
-      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z - 5); // Look ahead of the ball
+      groupRef.current.position.set(newPosition.x, newPosition.y + 2, newPosition.z + 8); // Camera behind ball
+      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z); // Look at the ball
     }
   });
 
@@ -131,8 +131,6 @@ export const GameScene = ({ controls }: GameSceneProps) => {
         color="#ffffff"
       />
 
-      {/* Background elements */}
-      <Background ballPosition={ballPosition} />
       
       {/* Starting station */}
       <StartingStation />
