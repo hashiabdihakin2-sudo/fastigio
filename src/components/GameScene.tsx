@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { useRef, useEffect } from 'react';
-import { Vector3, Group, Mesh } from 'three';
+import { Vector3, Group } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
@@ -14,7 +14,7 @@ interface GameSceneProps {
 
 export const GameScene = ({ controls }: GameSceneProps) => {
   const groupRef = useRef<Group>(null);
-  const ballRef = useRef<Mesh>(null);
+  const ballRef = useRef<Group>(null);
   const { 
     ballPosition, 
     setBallPosition, 
@@ -50,9 +50,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       velocity.current.x += currentSteerForce;
     }
 
-    // Apply gravity and progressive forward movement
+    // Apply gravity and progressive backward movement (negative Z)
     velocity.current.y += gravity;
-    velocity.current.z = currentBallSpeed;
+    velocity.current.z = -currentBallSpeed;
 
     // Progressive damping for x movement (less damping = more responsive)
     velocity.current.x *= steerDamping;
@@ -76,15 +76,15 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       velocity.current.y = 0;
     }
 
-    // Track boundaries
-    if (Math.abs(newPosition.x) > 6) {
+    // Track boundaries (wider track)
+    if (Math.abs(newPosition.x) > 10) {
       endGame();
       return;
     }
 
     setBallPosition(newPosition);
     
-    // Update score based on distance (positive Z movement)
+    // Update score based on distance (negative Z movement)
     updateScore(Math.abs(newPosition.z * 10));
 
     // Update ball mesh position
@@ -92,7 +92,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
     // Move camera to follow ball (camera follows from behind)
     if (groupRef.current) {
-      groupRef.current.position.z = -newPosition.z - 10; // Camera stays behind ball
+      groupRef.current.position.z = -newPosition.z + 10; // Camera stays behind ball
     }
   });
 

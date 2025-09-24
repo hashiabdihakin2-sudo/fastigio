@@ -12,7 +12,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const obstaclesRef = useRef<{ position: Vector3; id: number; type: string; moveDirection: number }[]>([]);
 
   // Generate obstacles procedurally with progressive difficulty
-  const generateObstacles = (startZ: number = 20) => {
+  const generateObstacles = (startZ: number = -20) => {
     const obstacles = [];
     const distance = Math.abs(ballPosition.z);
     const difficultyMultiplier = 1 + (distance / 300);
@@ -22,8 +22,8 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     const numObstacles = Math.min(30, Math.floor(20 * difficultyMultiplier));
 
     for (let i = 0; i < numObstacles; i++) {
-      const z = startZ + (i * spacing);
-      const x = (Math.random() - 0.5) * 10;
+      const z = startZ - (i * spacing); // Negative direction
+      const x = (Math.random() - 0.5) * 16; // Wider spread for bigger track
       
       // Different obstacle types based on random chance
       const obstacleType = Math.random();
@@ -54,7 +54,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       if (obstacle.type === 'moving') {
         obstacle.position.x += obstacle.moveDirection * 0.02;
         // Reverse direction if hitting track bounds
-        if (Math.abs(obstacle.position.x) > 5) {
+        if (Math.abs(obstacle.position.x) > 8) {
           obstacle.moveDirection *= -1;
         }
       }
@@ -63,16 +63,16 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     // Check collision with obstacles
     obstaclesRef.current.forEach(obstacle => {
       const distance = ballPosition.distanceTo(obstacle.position);
-      const collisionRadius = obstacle.type === 'wall' ? 1.2 : 0.8;
+      const collisionRadius = obstacle.type === 'wall' ? 2.0 : 1.5; // Bigger collision
       if (distance < collisionRadius) {
         endGame();
       }
     });
 
-    // Generate new obstacles as ball moves forward with progressive difficulty
-    const furthestObstacle = Math.max(...obstaclesRef.current.map(o => o.position.z));
-    if (ballPosition.z > furthestObstacle - 100) {
-      const newObstacles = generateObstacles(furthestObstacle + 20);
+    // Generate new obstacles as ball moves backward with progressive difficulty
+    const furthestObstacle = Math.min(...obstaclesRef.current.map(o => o.position.z));
+    if (ballPosition.z < furthestObstacle + 100) {
+      const newObstacles = generateObstacles(furthestObstacle - 20);
       obstaclesRef.current = [
         ...obstaclesRef.current,
         ...newObstacles
@@ -92,7 +92,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       case 'spike':
         return (
           <mesh {...baseProps}>
-            <coneGeometry args={[0.8, 2, 6]} />
+            <coneGeometry args={[1.5, 3.5, 6]} />
             <meshPhongMaterial 
               color="#FF4444"
               emissive="#FF4444"
@@ -103,8 +103,8 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       
       case 'wall':
         return (
-          <mesh {...baseProps} position={[obstacle.position.x, 1.5, obstacle.position.z]}>
-            <boxGeometry args={[1.5, 3, 0.3]} />
+          <mesh {...baseProps} position={[obstacle.position.x, 2.5, obstacle.position.z]}>
+            <boxGeometry args={[2.5, 5, 0.5]} />
             <meshPhongMaterial 
               color="#8B0000"
               emissive="#8B0000"
@@ -116,7 +116,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       case 'moving':
         return (
           <mesh {...baseProps}>
-            <octahedronGeometry args={[0.8]} />
+            <octahedronGeometry args={[1.5]} />
             <meshPhongMaterial 
               color="#FF6600"
               emissive="#FF6600"
@@ -128,7 +128,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       default: // cube
         return (
           <mesh {...baseProps}>
-            <boxGeometry args={[1, 1, 1]} />
+            <boxGeometry args={[2, 2, 2]} />
             <meshPhongMaterial 
               color="#FF0040"
               emissive="#FF0040"
