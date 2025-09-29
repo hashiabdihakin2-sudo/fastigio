@@ -88,9 +88,10 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Move camera to follow ball (camera follows from behind)
+    // Move camera to follow ball (camera 180 degrees flipped)
     if (groupRef.current) {
-      groupRef.current.position.z = -newPosition.z - 10; // Camera stays behind ball
+      groupRef.current.position.z = -newPosition.z + 10; // Camera in front of ball
+      groupRef.current.rotation.y = Math.PI; // 180 degree rotation
     }
   });
 
