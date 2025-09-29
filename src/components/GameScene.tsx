@@ -1,11 +1,9 @@
 import { useFrame } from '@react-three/fiber';
 import { useRef, useEffect } from 'react';
-import { Vector3, Group } from 'three';
+import { Vector3, Group, Mesh } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
-
-import { StartingStation } from './StartingStation';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -14,7 +12,7 @@ interface GameSceneProps {
 
 export const GameScene = ({ controls }: GameSceneProps) => {
   const groupRef = useRef<Group>(null);
-  const ballRef = useRef<Group>(null);
+  const ballRef = useRef<Mesh>(null);
   const { 
     ballPosition, 
     setBallPosition, 
@@ -50,9 +48,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       velocity.current.x += currentSteerForce;
     }
 
-    // Apply gravity and progressive backward movement (negative Z)
+    // Apply gravity and progressive forward movement
     velocity.current.y += gravity;
-    velocity.current.z = -currentBallSpeed;
+    velocity.current.z = currentBallSpeed;
 
     // Progressive damping for x movement (less damping = more responsive)
     velocity.current.x *= steerDamping;
@@ -76,24 +74,23 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       velocity.current.y = 0;
     }
 
-    // Track boundaries (wider track)
-    if (Math.abs(newPosition.x) > 10) {
+    // Track boundaries
+    if (Math.abs(newPosition.x) > 6) {
       endGame();
       return;
     }
 
     setBallPosition(newPosition);
     
-    // Update score based on distance (negative Z movement)
+    // Update score based on distance (positive Z movement)
     updateScore(Math.abs(newPosition.z * 10));
 
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Camera behind the ball
+    // Move camera to follow ball (camera follows from behind)
     if (groupRef.current) {
-      groupRef.current.position.set(newPosition.x, newPosition.y + 2, newPosition.z + 8); // Camera behind ball
-      groupRef.current.lookAt(newPosition.x, newPosition.y, newPosition.z); // Look at the ball
+      groupRef.current.position.z = -newPosition.z - 10; // Camera stays behind ball
     }
   });
 
@@ -107,34 +104,23 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   return (
     <group ref={groupRef}>
-      {/* Improved Lighting for better ball visibility */}
-      <ambientLight intensity={0.6} color="#4A90E2" />
+      {/* Lighting */}
+      <ambientLight intensity={0.3} color="#4A90E2" />
       <directionalLight
-        position={[0, 15, 10]}
-        intensity={1.2}
+        position={[10, 20, 5]}
+        intensity={1}
         color="#ffffff"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-far={50}
-        shadow-camera-left={-25}
-        shadow-camera-right={25}
-        shadow-camera-top={25}
-        shadow-camera-bottom={-25}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
       />
-      <pointLight position={[0, 8, 5]} intensity={0.8} color="#9D4EDD" />
-      <spotLight 
-        position={[0, 10, 5]} 
-        intensity={0.5} 
-        angle={Math.PI / 3}
-        penumbra={0.5}
-        color="#ffffff"
-      />
+      <pointLight position={[0, 10, 0]} intensity={0.5} color="#9D4EDD" />
 
-      
-      {/* Starting station */}
-      <StartingStation />
-      
       {/* Game objects */}
       <Ball ref={ballRef} />
       <Track ballPosition={ballPosition} />
