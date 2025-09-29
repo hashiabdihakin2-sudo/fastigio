@@ -90,6 +90,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
     // Move camera to follow ball (camera 180 degrees flipped)
     if (groupRef.current) {
+      // Camera follows ball position in all axes
+      groupRef.current.position.x = -newPosition.x; // Follow X movement (inverted due to 180° rotation)
+      groupRef.current.position.y = newPosition.y + 2; // Follow Y movement with offset
       groupRef.current.position.z = -newPosition.z + 10; // Camera in front of ball
       groupRef.current.rotation.y = Math.PI; // 180 degree rotation
     }
