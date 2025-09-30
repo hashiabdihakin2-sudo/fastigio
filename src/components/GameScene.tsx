@@ -69,14 +69,14 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       return;
     }
 
-    // Simple ground collision (track surface)
-    if (newPosition.y < 0.5) {
-      newPosition.y = 0.5;
+    // Simple ground collision (track surface) - adjusted for larger ball
+    if (newPosition.y < 0.6) { // Adjusted for larger ball radius
+      newPosition.y = 0.6;
       velocity.current.y = 0;
     }
 
-    // Track boundaries
-    if (Math.abs(newPosition.x) > 6) {
+    // Track boundaries (wider field)
+    if (Math.abs(newPosition.x) > 8) { // Wider boundaries
       endGame();
       return;
     }
