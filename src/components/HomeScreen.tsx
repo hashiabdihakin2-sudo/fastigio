@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { CameraSelection } from './CameraSelection';
 
 interface HomeScreenProps {
   onStartGame: () => void;
@@ -8,9 +9,9 @@ interface HomeScreenProps {
 export const HomeScreen = ({ onStartGame, highScore }: HomeScreenProps) => {
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex items-center justify-center z-10">
-      <div className="text-center space-y-8 p-8">
+      <div className="max-w-2xl w-full space-y-8 p-8">
         {/* Logo */}
-        <div className="space-y-4">
+        <div className="text-center space-y-4">
           <h1 className="text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
             fastig.io
           </h1>
@@ -21,14 +22,21 @@ export const HomeScreen = ({ onStartGame, highScore }: HomeScreenProps) => {
 
         {/* High Score */}
         {highScore > 0 && (
-          <div className="space-y-2">
+          <div className="text-center space-y-2">
             <p className="text-sm text-muted-foreground">Best Score</p>
             <p className="text-3xl font-bold text-primary">{Math.floor(highScore)}</p>
           </div>
         )}
 
+        {/* Camera Selection */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-md">
+            <CameraSelection />
+          </div>
+        </div>
+
         {/* Start Button */}
-        <div className="space-y-4">
+        <div className="text-center space-y-4">
           <Button 
             onClick={onStartGame}
             size="lg"
@@ -40,7 +48,8 @@ export const HomeScreen = ({ onStartGame, highScore }: HomeScreenProps) => {
           {/* Controls */}
           <div className="space-y-2 text-sm text-muted-foreground">
             <p>Use arrow keys or A/D to steer</p>
-            <p>Avoid red obstacles and stay on track</p>
+            <p>Avoid blue obstacles and stay on track</p>
+            <p>Choose your preferred camera angle above</p>
           </div>
         </div>
       </div>

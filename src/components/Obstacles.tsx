@@ -27,40 +27,40 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
-    const difficultyMultiplier = 1 + (distance / 250); // Slower difficulty increase
+    const difficultyMultiplier = 1 + (distance / 350); // Even slower difficulty progression
     
-    // More generous spacing at the beginning
-    const baseSpacing = 18; // Increased base spacing
-    const spacing = Math.max(8, baseSpacing - (distance / 300)); // Slower spacing reduction
-    const numObstacles = Math.min(35, Math.floor(15 * difficultyMultiplier)); // Fewer obstacles initially
+    // More generous spacing for skill-based gameplay
+    const baseSpacing = 22; // Increased spacing further
+    const spacing = Math.max(12, baseSpacing - (distance / 400)); // Maintain wider gaps
+    const numObstacles = Math.min(30, Math.floor(12 * difficultyMultiplier)); // Fewer obstacles for fairness
 
     for (let i = 0; i < numObstacles; i++) {
       const z = startZ + (i * spacing);
       const x = (Math.random() - 0.5) * 14; // Wider field
       
-      // Random obstacle types based on difficulty - easier start
+      // Balanced obstacle types with fair reaction times
       const rand = Math.random();
-      const difficultyFactor = Math.min(distance / 500, 1); // Slower special obstacle introduction
+      const difficultyFactor = Math.min(distance / 600, 1); // Much slower special obstacle introduction
       
       let type: 'static' | 'moving' | 'disappearing' = 'static';
       let moveDirection = 0;
       let moveSpeed = 0;
       let size = new Vector3(1, 1, 1);
       
-      if (difficultyFactor > 0.4 && rand < 0.3) { // Later and less frequent moving obstacles
-        // Moving obstacles
+      if (difficultyFactor > 0.5 && rand < 0.25) { // Much later and less frequent
+        // Moving obstacles with slower, more predictable movement
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.02 + (difficultyFactor * 0.03);
-      } else if (difficultyFactor > 0.6 && rand < 0.5) { // Later disappearing platforms
-        // Disappearing platforms
+        moveSpeed = 0.015 + (difficultyFactor * 0.02); // Slower movement for fairness
+      } else if (difficultyFactor > 0.7 && rand < 0.4) { // Later introduction
+        // Disappearing platforms with longer warning time
         type = 'disappearing';
         size = new Vector3(2, 0.2, 1);
-      } else if (difficultyFactor > 0.7 && rand < 0.2) {
-        // Large moving blocks
+      } else if (difficultyFactor > 0.8 && rand < 0.15) { // Very late introduction
+        // Large moving blocks - rare and slower
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.015 + (difficultyFactor * 0.02);
+        moveSpeed = 0.01 + (difficultyFactor * 0.015); // Much slower for reaction time
         size = new Vector3(1.5, 1.5, 1);
       }
       
@@ -99,19 +99,19 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
         }
       }
       
-      // Disappearing platforms
+      // Disappearing platforms with longer warning
       if (obstacle.type === 'disappearing' && obstacle.disappearTimer !== undefined) {
-        // Check if ball is near to trigger disappearing
+        // Check if ball is near to trigger disappearing - increased warning distance
         const distanceToBall = Math.abs(obstacle.position.z - ballPosition.z);
-        if (distanceToBall < 8 && obstacle.visible) {
+        if (distanceToBall < 15 && obstacle.visible) { // Increased warning distance
           obstacle.disappearTimer -= delta;
           if (obstacle.disappearTimer <= 0) {
             obstacle.visible = false;
-            // Reappear after some time
+            // Longer reappear time for fairness
             setTimeout(() => {
               obstacle.visible = true;
-              obstacle.disappearTimer = 3 + Math.random() * 2;
-            }, 2000 + Math.random() * 1000);
+              obstacle.disappearTimer = 4 + Math.random() * 2; // Longer timer
+            }, 3000 + Math.random() * 2000); // Longer reappear time
           }
         }
       }
