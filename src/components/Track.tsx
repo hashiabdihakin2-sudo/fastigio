@@ -26,7 +26,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
       <group key={i} position={[0, 0, z]}>
         {/* Main track surface with grid pattern */}
         <mesh position={[0, -0.1, 0]} receiveShadow>
-          <boxGeometry args={[16, 0.2, segmentLength]} />
+          <boxGeometry args={[12, 0.2, segmentLength]} />
           <meshPhongMaterial 
             color="#0A0A0F"
             emissive="#001122"
@@ -35,8 +35,8 @@ export const Track = ({ ballPosition }: TrackProps) => {
         </mesh>
         
         {/* Futuristic grid lines */}
-        {[...Array(6)].map((_, gridIndex) => (
-          <mesh key={`grid-${gridIndex}`} position={[-5 + gridIndex * 2, 0.01, 0]}>
+        {[...Array(5)].map((_, gridIndex) => (
+          <mesh key={`grid-${gridIndex}`} position={[-4 + gridIndex * 2, 0.01, 0]}>
             <boxGeometry args={[0.05, 0.01, segmentLength]} />
             <meshBasicMaterial 
               color="#00FFFF"
@@ -49,7 +49,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         {/* Perpendicular grid lines */}
         {[...Array(Math.floor(segmentLength / 2))].map((_, gridIndex) => (
           <mesh key={`grid-perp-${gridIndex}`} position={[0, 0.01, -segmentLength/2 + gridIndex * 2]}>
-            <boxGeometry args={[16, 0.01, 0.05]} />
+            <boxGeometry args={[12, 0.01, 0.05]} />
             <meshBasicMaterial 
               color="#0066FF"
               transparent
@@ -59,7 +59,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         ))}
         
         {/* Enhanced track borders with sharp neon lines */}
-        <mesh position={[-8, 0.3, 0]}>
+        <mesh position={[-6, 0.3, 0]}>
           <boxGeometry args={[0.1, 0.8, segmentLength]} />
           <meshPhongMaterial 
             color="#00FFFF"
@@ -67,7 +67,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
             emissiveIntensity={1.2}
           />
         </mesh>
-        <mesh position={[8, 0.3, 0]}>
+        <mesh position={[6, 0.3, 0]}>
           <boxGeometry args={[0.1, 0.8, segmentLength]} />
           <meshPhongMaterial 
             color="#00FFFF"
@@ -77,7 +77,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         </mesh>
         
         {/* Glowing border effects */}
-        <mesh position={[-8, 0.3, 0]}>
+        <mesh position={[-6, 0.3, 0]}>
           <boxGeometry args={[0.3, 1, segmentLength]} />
           <meshBasicMaterial 
             color="#00FFFF"
@@ -85,7 +85,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
             opacity={0.2 + Math.sin(timeRef.current * 4 + i * 0.5) * 0.1}
           />
         </mesh>
-        <mesh position={[8, 0.3, 0]}>
+        <mesh position={[6, 0.3, 0]}>
           <boxGeometry args={[0.3, 1, segmentLength]} />
           <meshBasicMaterial 
             color="#00FFFF"
@@ -105,7 +105,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         </mesh>
         
         {/* Side accent lines */}
-        <mesh position={[-4, 0.01, 0]}>
+        <mesh position={[-3, 0.01, 0]}>
           <boxGeometry args={[0.1, 0.01, segmentLength]} />
           <meshBasicMaterial 
             color="#FF6B00"
@@ -113,7 +113,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
             opacity={0.8 + Math.sin(timeRef.current * 3 + i * 0.4) * 0.2}
           />
         </mesh>
-        <mesh position={[4, 0.01, 0]}>
+        <mesh position={[3, 0.01, 0]}>
           <boxGeometry args={[0.1, 0.01, segmentLength]} />
           <meshBasicMaterial 
             color="#FF6B00"
@@ -124,7 +124,7 @@ export const Track = ({ ballPosition }: TrackProps) => {
         
         {/* Digital rain effect - vertical lines */}
         {Math.random() > 0.7 && (
-          <mesh position={[(Math.random() - 0.5) * 14, 2 + Math.random() * 3, 0]}>
+          <mesh position={[(Math.random() - 0.5) * 10, 2 + Math.random() * 3, 0]}>
             <boxGeometry args={[0.02, 1, 0.02]} />
             <meshBasicMaterial 
               color="#00FF00"

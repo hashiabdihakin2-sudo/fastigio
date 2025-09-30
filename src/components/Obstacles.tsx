@@ -27,40 +27,40 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
-    const difficultyMultiplier = 1 + (distance / 350); // Even slower difficulty progression
+    const difficultyMultiplier = 1 + (distance / 150); // Faster difficulty increase
     
-    // More generous spacing for skill-based gameplay
-    const baseSpacing = 22; // Increased spacing further
-    const spacing = Math.max(12, baseSpacing - (distance / 400)); // Maintain wider gaps
-    const numObstacles = Math.min(30, Math.floor(12 * difficultyMultiplier)); // Fewer obstacles for fairness
+    // More aggressive spacing and density
+    const baseSpacing = 12;
+    const spacing = Math.max(4, baseSpacing - (distance / 200)); // Much closer obstacles
+    const numObstacles = Math.min(40, Math.floor(25 * difficultyMultiplier)); // More obstacles
 
     for (let i = 0; i < numObstacles; i++) {
       const z = startZ + (i * spacing);
-      const x = (Math.random() - 0.5) * 14; // Wider field
+      const x = (Math.random() - 0.5) * 10;
       
-      // Balanced obstacle types with fair reaction times
+      // Random obstacle types based on difficulty
       const rand = Math.random();
-      const difficultyFactor = Math.min(distance / 600, 1); // Much slower special obstacle introduction
+      const difficultyFactor = Math.min(distance / 300, 1);
       
       let type: 'static' | 'moving' | 'disappearing' = 'static';
       let moveDirection = 0;
       let moveSpeed = 0;
       let size = new Vector3(1, 1, 1);
       
-      if (difficultyFactor > 0.5 && rand < 0.25) { // Much later and less frequent
-        // Moving obstacles with slower, more predictable movement
+      if (difficultyFactor > 0.3 && rand < 0.4) {
+        // Moving obstacles
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.015 + (difficultyFactor * 0.02); // Slower movement for fairness
-      } else if (difficultyFactor > 0.7 && rand < 0.4) { // Later introduction
-        // Disappearing platforms with longer warning time
+        moveSpeed = 0.02 + (difficultyFactor * 0.03);
+      } else if (difficultyFactor > 0.5 && rand < 0.6) {
+        // Disappearing platforms
         type = 'disappearing';
         size = new Vector3(2, 0.2, 1);
-      } else if (difficultyFactor > 0.8 && rand < 0.15) { // Very late introduction
-        // Large moving blocks - rare and slower
+      } else if (difficultyFactor > 0.7 && rand < 0.2) {
+        // Large moving blocks
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.01 + (difficultyFactor * 0.015); // Much slower for reaction time
+        moveSpeed = 0.015 + (difficultyFactor * 0.02);
         size = new Vector3(1.5, 1.5, 1);
       }
       
@@ -93,25 +93,25 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       if (obstacle.type === 'moving' && obstacle.moveDirection && obstacle.moveSpeed) {
         obstacle.position.x += obstacle.moveDirection * obstacle.moveSpeed;
         
-        // Bounce off track boundaries (wider field)
-        if (Math.abs(obstacle.position.x) > 7) { // Wider boundaries
+        // Bounce off track boundaries
+        if (Math.abs(obstacle.position.x) > 5) {
           obstacle.moveDirection *= -1;
         }
       }
       
-      // Disappearing platforms with longer warning
+      // Disappearing platforms
       if (obstacle.type === 'disappearing' && obstacle.disappearTimer !== undefined) {
-        // Check if ball is near to trigger disappearing - increased warning distance
+        // Check if ball is near to trigger disappearing
         const distanceToBall = Math.abs(obstacle.position.z - ballPosition.z);
-        if (distanceToBall < 15 && obstacle.visible) { // Increased warning distance
+        if (distanceToBall < 8 && obstacle.visible) {
           obstacle.disappearTimer -= delta;
           if (obstacle.disappearTimer <= 0) {
             obstacle.visible = false;
-            // Longer reappear time for fairness
+            // Reappear after some time
             setTimeout(() => {
               obstacle.visible = true;
-              obstacle.disappearTimer = 4 + Math.random() * 2; // Longer timer
-            }, 3000 + Math.random() * 2000); // Longer reappear time
+              obstacle.disappearTimer = 3 + Math.random() * 2;
+            }, 2000 + Math.random() * 1000);
           }
         }
       }
@@ -122,7 +122,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       if (!obstacle.visible) return;
       
       const distance = ballPosition.distanceTo(obstacle.position);
-      const collisionRadius = obstacle.type === 'disappearing' ? 1.4 : 1.1; // Adjusted for larger ball
+      const collisionRadius = obstacle.type === 'disappearing' ? 1.2 : 0.9;
       
       if (distance < collisionRadius) {
         endGame();
@@ -153,9 +153,8 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
         )
         .map(obstacle => {
           const pulseIntensity = 0.8 + Math.sin(timeRef.current * 3) * 0.3;
-          // All obstacles are now blue variants
-          const glowColor = obstacle.type === 'moving' ? '#0080FF' : 
-                           obstacle.type === 'disappearing' ? '#4040FF' : '#0066FF';
+          const glowColor = obstacle.type === 'moving' ? '#00FFFF' : 
+                           obstacle.type === 'disappearing' ? '#FF6B00' : '#FF0080';
           
           return (
             <group key={obstacle.id}>

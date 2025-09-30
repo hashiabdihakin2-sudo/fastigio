@@ -7,14 +7,12 @@ interface GameState {
   highScore: number;
   ballPosition: Vector3;
   isGameRunning: boolean;
-  cameraMode: 'first-person' | 'third-person' | 'top-down';
   
   // Actions
   setBallPosition: (position: Vector3) => void;
   updateScore: (newScore: number) => void;
   endGame: () => void;
   restartGame: () => void;
-  setCameraMode: (mode: 'first-person' | 'third-person' | 'top-down') => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -24,7 +22,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     Number(localStorage.getItem('slopeHighScore') || '0') : 0,
   ballPosition: new Vector3(0, 1, 0),
   isGameRunning: false,
-  cameraMode: 'third-person',
 
   setBallPosition: (position) => set({ ballPosition: position }),
 
@@ -55,7 +52,5 @@ export const useGameStore = create<GameState>((set, get) => ({
       ballPosition: new Vector3(0, 1, 0),
       isGameRunning: true
     });
-  },
-
-  setCameraMode: (mode) => set({ cameraMode: mode })
+  }
 }));

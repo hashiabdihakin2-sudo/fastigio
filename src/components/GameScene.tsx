@@ -13,7 +13,6 @@ interface GameSceneProps {
 
 export const GameScene = ({ controls }: GameSceneProps) => {
   const groupRef = useRef<Group>(null);
-  const cameraGroupRef = useRef<Group>(null);
   const ballRef = useRef<Mesh>(null);
   const { 
     ballPosition, 
@@ -21,27 +20,26 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     gameState, 
     updateScore, 
     endGame,
-    isGameRunning,
-    cameraMode
+    isGameRunning
   } = useGameStore();
 
   const velocity = useRef(new Vector3(0, 0, 0));
-  const baseBallSpeed = 0.08; // Slower base speed for skill-based gameplay
-  const gravity = -0.02; // Gentler gravity
-  const baseSteerForce = 0.18; // More responsive steering for precision
+  const baseBallSpeed = 0.15; // Increased base speed
+  const gravity = -0.03; // Slightly stronger gravity
+  const baseSteerForce = 0.15; // More responsive steering
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Slower, more skill-based progression
+    // Calculate progressive difficulty based on distance - much faster progression
     const distance = Math.abs(ballPosition.z);
-    const progressMultiplier = 1 + (distance / 200); // Slower speed increase
-    const difficultyMultiplier = Math.min(progressMultiplier, 3); // Lower cap for fairness
+    const progressMultiplier = 1 + (distance / 100); // Speed increases every 100 units (faster)
+    const difficultyMultiplier = Math.min(progressMultiplier, 5); // Cap at 5x speed (higher)
     
-    // Smoother, more precise controls
-    const currentBallSpeed = baseBallSpeed * Math.min(progressMultiplier, 2.5);
-    const currentSteerForce = baseSteerForce * Math.min(1.3, 1 + (distance / 800)); // Better precision
-    const steerDamping = Math.max(0.88, 0.96 - (distance / 1500)); // Smoother damping
+    // Dynamic values based on progress
+    const currentBallSpeed = baseBallSpeed * progressMultiplier;
+    const currentSteerForce = baseSteerForce * Math.min(1.5, 1 + (distance / 500)); // Better steering with progress
+    const steerDamping = Math.max(0.85, 0.95 - (distance / 1000)); // Less damping = more responsive
 
     // Apply steering with improved responsiveness
     if (controls.left) {
@@ -71,14 +69,14 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       return;
     }
 
-    // Simple ground collision (track surface) - adjusted for larger ball
-    if (newPosition.y < 0.6) { // Adjusted for larger ball radius
-      newPosition.y = 0.6;
+    // Simple ground collision (track surface)
+    if (newPosition.y < 0.5) {
+      newPosition.y = 0.5;
       velocity.current.y = 0;
     }
 
-    // Track boundaries (wider field)
-    if (Math.abs(newPosition.x) > 8) { // Wider boundaries
+    // Track boundaries
+    if (Math.abs(newPosition.x) > 6) {
       endGame();
       return;
     }
@@ -91,25 +89,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Update ball mesh position
     ballRef.current.position.copy(newPosition);
 
-    // Dynamic camera system based on selected mode
+    // Move camera to follow ball (camera follows from behind)
     if (groupRef.current) {
-      switch (cameraMode) {
-        case 'first-person':
-          // Camera at ball position, looking forward
-          groupRef.current.position.set(-newPosition.x, -newPosition.y + 0.2, -newPosition.z);
-          groupRef.current.rotation.set(0, 0, 0);
-          break;
-        case 'third-person':
-          // Camera behind ball
-          groupRef.current.position.set(-newPosition.x * 0.3, 0, -newPosition.z - 12);
-          groupRef.current.rotation.set(0, 0, 0);
-          break;
-        case 'top-down':
-          // Camera above looking down
-          groupRef.current.position.set(-newPosition.x * 0.5, -25, -newPosition.z + 5);
-          groupRef.current.rotation.set(Math.PI / 2.2, 0, 0);
-          break;
-      }
+      groupRef.current.position.z = -newPosition.z - 10; // Camera stays behind ball
     }
   });
 
@@ -122,23 +104,22 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   }, [gameState]);
 
   return (
-    <group ref={cameraGroupRef}>
-      <group ref={groupRef}>
-        {/* Enhanced futuristic lighting */}
-        <ambientLight intensity={0.2} color="#0066FF" />
-        <directionalLight
-          position={[15, 25, 10]}
-          intensity={1.2}
-          color="#00CCFF"
-          castShadow
-          shadow-mapSize-width={4096}
-          shadow-mapSize-height={4096}
-          shadow-camera-far={100}
-          shadow-camera-left={-30}
-          shadow-camera-right={30}
-          shadow-camera-top={30}
-          shadow-camera-bottom={-30}
-        />
+    <group ref={groupRef}>
+      {/* Enhanced futuristic lighting */}
+      <ambientLight intensity={0.2} color="#0066FF" />
+      <directionalLight
+        position={[15, 25, 10]}
+        intensity={1.2}
+        color="#00CCFF"
+        castShadow
+        shadow-mapSize-width={4096}
+        shadow-mapSize-height={4096}
+        shadow-camera-far={100}
+        shadow-camera-left={-30}
+        shadow-camera-right={30}
+        shadow-camera-top={30}
+        shadow-camera-bottom={-30}
+      />
       <pointLight position={[0, 15, 0]} intensity={0.8} color="#FF0080" />
       <pointLight position={[-10, 8, 0]} intensity={0.6} color="#00FFFF" />
       <pointLight position={[10, 8, 0]} intensity={0.6} color="#FF6B00" />
@@ -154,12 +135,11 @@ export const GameScene = ({ controls }: GameSceneProps) => {
         castShadow
       />
 
-        {/* Game objects */}
-        <CyberBackground ballPosition={ballPosition} />
-        <Ball ref={ballRef} />
-        <Track ballPosition={ballPosition} />
-        <Obstacles ballPosition={ballPosition} />
-      </group>
+      {/* Game objects */}
+      <CyberBackground ballPosition={ballPosition} />
+      <Ball ref={ballRef} />
+      <Track ballPosition={ballPosition} />
+      <Obstacles ballPosition={ballPosition} />
     </group>
   );
 };
