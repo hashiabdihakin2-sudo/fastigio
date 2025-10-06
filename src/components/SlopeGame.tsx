@@ -62,7 +62,7 @@ export const SlopeGame = () => {
         className="bg-gradient-to-b from-cyber-dark to-background"
         gl={{ antialias: true, alpha: false }}
       >
-        <PerspectiveCamera makeDefault position={[0, 15, 8]} fov={60} rotation={[-1.1, 0, 0]} />
+        <PerspectiveCamera makeDefault position={[0, 8, 8]} fov={60} />
         <Suspense fallback={null}>
           <GameScene controls={controls} />
         </Suspense>

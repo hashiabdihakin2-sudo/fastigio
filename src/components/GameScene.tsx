@@ -4,7 +4,6 @@ import { Vector3, Group, Mesh } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
-import { CyberBackground } from './CyberBackground';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -24,49 +23,37 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   } = useGameStore();
 
   const velocity = useRef(new Vector3(0, 0, 0));
-  const baseBallSpeed = 0.15;
-  const gravity = -0.03;
-  
-  // Lane-based movement
-  const NUM_LANES = 10;
-  const LANE_WIDTH = 1.0;
-  const currentLane = useRef(4); // Start in middle lane (0-9, so 4 is middle)
-  const canSwitch = useRef(true);
-  const switchCooldown = 150; // ms between lane switches
-  
-  const getLanePosition = (lane: number) => {
-    return (lane - 4.5) * LANE_WIDTH; // Center lanes around 0
-  };
+  const baseBallSpeed = 0.1;
+  const gravity = -0.025;
+  const baseSteerForce = 0.12;
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Calculate progressive difficulty
+    // Calculate progressive difficulty based on distance
     const distance = Math.abs(ballPosition.z);
-    const progressMultiplier = 1 + (distance / 100);
+    const progressMultiplier = 1 + (distance / 200); // Speed increases every 200 units
+    const difficultyMultiplier = Math.min(progressMultiplier, 3); // Cap at 3x speed
+    
+    // Dynamic values based on progress
     const currentBallSpeed = baseBallSpeed * progressMultiplier;
+    const currentSteerForce = baseSteerForce * Math.min(1.5, 1 + (distance / 500)); // Better steering with progress
+    const steerDamping = Math.max(0.85, 0.95 - (distance / 1000)); // Less damping = more responsive
 
-    // Handle lane switching
-    if (canSwitch.current) {
-      if (controls.left && currentLane.current > 0) {
-        currentLane.current -= 1;
-        canSwitch.current = false;
-        setTimeout(() => { canSwitch.current = true; }, switchCooldown);
-      } else if (controls.right && currentLane.current < NUM_LANES - 1) {
-        currentLane.current += 1;
-        canSwitch.current = false;
-        setTimeout(() => { canSwitch.current = true; }, switchCooldown);
-      }
+    // Apply steering with improved responsiveness
+    if (controls.left) {
+      velocity.current.x -= currentSteerForce;
+    }
+    if (controls.right) {
+      velocity.current.x += currentSteerForce;
     }
 
-    // Smoothly move to target lane
-    const targetX = getLanePosition(currentLane.current);
-    const laneTransitionSpeed = 0.2;
-    velocity.current.x = (targetX - ballPosition.x) * laneTransitionSpeed;
-
-    // Apply gravity and forward movement
+    // Apply gravity and progressive forward movement
     velocity.current.y += gravity;
-    velocity.current.z = -currentBallSpeed;
+    velocity.current.z = currentBallSpeed;
+
+    // Progressive damping for x movement (less damping = more responsive)
+    velocity.current.x *= steerDamping;
 
     // Update ball position
     const newPosition = new Vector3(
@@ -111,46 +98,30 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   useEffect(() => {
     if (gameState === 'waiting' && ballRef.current) {
       velocity.current.set(0, 0, 0);
-      currentLane.current = 4; // Reset to middle lane
-      canSwitch.current = true;
       ballRef.current.position.set(0, 1, 0);
     }
   }, [gameState]);
 
   return (
     <group ref={groupRef}>
-      {/* Enhanced futuristic lighting */}
-      <ambientLight intensity={0.2} color="#0066FF" />
+      {/* Lighting */}
+      <ambientLight intensity={0.3} color="#4A90E2" />
       <directionalLight
-        position={[15, 25, 10]}
-        intensity={1.2}
-        color="#00CCFF"
-        castShadow
-        shadow-mapSize-width={4096}
-        shadow-mapSize-height={4096}
-        shadow-camera-far={100}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
-      />
-      <pointLight position={[0, 15, 0]} intensity={0.8} color="#FF0080" />
-      <pointLight position={[-10, 8, 0]} intensity={0.6} color="#00FFFF" />
-      <pointLight position={[10, 8, 0]} intensity={0.6} color="#FF6B00" />
-      
-      {/* Dynamic rim lighting */}
-      <spotLight
-        position={[0, 20, ballPosition.z + 5]}
-        target-position={[0, 0, ballPosition.z]}
+        position={[10, 20, 5]}
         intensity={1}
-        color="#FFFFFF"
-        angle={0.3}
-        penumbra={0.5}
+        color="#ffffff"
         castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-far={50}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
       />
+      <pointLight position={[0, 10, 0]} intensity={0.5} color="#9D4EDD" />
 
       {/* Game objects */}
-      <CyberBackground ballPosition={ballPosition} />
       <Ball ref={ballRef} />
       <Track ballPosition={ballPosition} />
       <Obstacles ballPosition={ballPosition} />
