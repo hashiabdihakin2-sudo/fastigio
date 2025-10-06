@@ -24,37 +24,49 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   } = useGameStore();
 
   const velocity = useRef(new Vector3(0, 0, 0));
-  const baseBallSpeed = 0.15; // Increased base speed
-  const gravity = -0.03; // Slightly stronger gravity
-  const baseSteerForce = 0.18; // Enhanced steering responsiveness
+  const baseBallSpeed = 0.15;
+  const gravity = -0.03;
+  
+  // Lane-based movement
+  const NUM_LANES = 10;
+  const LANE_WIDTH = 1.0;
+  const currentLane = useRef(4); // Start in middle lane (0-9, so 4 is middle)
+  const canSwitch = useRef(true);
+  const switchCooldown = 150; // ms between lane switches
+  
+  const getLanePosition = (lane: number) => {
+    return (lane - 4.5) * LANE_WIDTH; // Center lanes around 0
+  };
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Calculate progressive difficulty based on distance - much faster progression
+    // Calculate progressive difficulty
     const distance = Math.abs(ballPosition.z);
-    const progressMultiplier = 1 + (distance / 100); // Speed increases every 100 units (faster)
-    const difficultyMultiplier = Math.min(progressMultiplier, 5); // Cap at 5x speed (higher)
-    
-    // Dynamic values based on progress
+    const progressMultiplier = 1 + (distance / 100);
     const currentBallSpeed = baseBallSpeed * progressMultiplier;
-    const currentSteerForce = baseSteerForce * Math.min(1.3, 1 + (distance / 600)); // Smoother steering progression
-    const steerDamping = 0.90; // Balanced damping for precise control
 
-    // Apply steering with improved responsiveness
-    if (controls.left) {
-      velocity.current.x -= currentSteerForce;
-    }
-    if (controls.right) {
-      velocity.current.x += currentSteerForce;
+    // Handle lane switching
+    if (canSwitch.current) {
+      if (controls.left && currentLane.current > 0) {
+        currentLane.current -= 1;
+        canSwitch.current = false;
+        setTimeout(() => { canSwitch.current = true; }, switchCooldown);
+      } else if (controls.right && currentLane.current < NUM_LANES - 1) {
+        currentLane.current += 1;
+        canSwitch.current = false;
+        setTimeout(() => { canSwitch.current = true; }, switchCooldown);
+      }
     }
 
-    // Apply gravity and progressive backward movement
+    // Smoothly move to target lane
+    const targetX = getLanePosition(currentLane.current);
+    const laneTransitionSpeed = 0.2;
+    velocity.current.x = (targetX - ballPosition.x) * laneTransitionSpeed;
+
+    // Apply gravity and forward movement
     velocity.current.y += gravity;
     velocity.current.z = -currentBallSpeed;
-
-    // Progressive damping for x movement (less damping = more responsive)
-    velocity.current.x *= steerDamping;
 
     // Update ball position
     const newPosition = new Vector3(
@@ -99,6 +111,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   useEffect(() => {
     if (gameState === 'waiting' && ballRef.current) {
       velocity.current.set(0, 0, 0);
+      currentLane.current = 4; // Reset to middle lane
+      canSwitch.current = true;
       ballRef.current.position.set(0, 1, 0);
     }
   }, [gameState]);
