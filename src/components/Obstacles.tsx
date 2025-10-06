@@ -24,7 +24,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const timeRef = useRef(0);
 
   // Generate obstacles procedurally with enhanced difficulty
-  const generateObstacles = (startZ: number = 20) => {
+  const generateObstacles = (startZ: number = -20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
     const difficultyMultiplier = 1 + (distance / 150); // Faster difficulty increase
@@ -35,7 +35,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     const numObstacles = Math.min(40, Math.floor(25 * difficultyMultiplier)); // More obstacles
 
     for (let i = 0; i < numObstacles; i++) {
-      const z = startZ + (i * spacing);
+      const z = startZ - (i * spacing);
       const x = (Math.random() - 0.5) * 10;
       
       // Random obstacle types based on difficulty
@@ -130,9 +130,9 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     });
 
     // Generate new obstacles with more frequency
-    const furthestObstacle = Math.max(...obstaclesRef.current.map(o => o.position.z));
-    if (ballPosition.z > furthestObstacle - 80) {
-      const newObstacles = generateObstacles(furthestObstacle + 15);
+    const furthestObstacle = Math.min(...obstaclesRef.current.map(o => o.position.z));
+    if (ballPosition.z < furthestObstacle + 80) {
+      const newObstacles = generateObstacles(furthestObstacle - 15);
       obstaclesRef.current = [
         ...obstaclesRef.current,
         ...newObstacles
@@ -141,7 +141,7 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
 
     // Clean up distant obstacles
     obstaclesRef.current = obstaclesRef.current.filter(
-      obstacle => obstacle.position.z > ballPosition.z - 100
+      obstacle => obstacle.position.z < ballPosition.z + 100
     );
   });
 
