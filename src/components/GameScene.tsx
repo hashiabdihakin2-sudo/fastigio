@@ -26,7 +26,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   const velocity = useRef(new Vector3(0, 0, 0));
   const baseBallSpeed = 0.15; // Increased base speed
   const gravity = -0.03; // Slightly stronger gravity
-  const baseSteerForce = 0.08; // Less sensitive steering
+  const baseSteerForce = 0.12; // Balanced steering responsiveness
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
@@ -39,7 +39,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     // Dynamic values based on progress
     const currentBallSpeed = baseBallSpeed * progressMultiplier;
     const currentSteerForce = baseSteerForce * Math.min(1.5, 1 + (distance / 500)); // Better steering with progress
-    const steerDamping = Math.max(0.85, 0.95 - (distance / 1000)); // Less damping = more responsive
+    const steerDamping = 0.88; // Improved control precision
 
     // Apply steering with improved responsiveness
     if (controls.left) {
