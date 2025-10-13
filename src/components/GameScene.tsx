@@ -22,7 +22,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     isJumping,
     setIsJumping,
     endGame,
-    isGameRunning
+    isGameRunning,
+    updateScore
   } = useGameStore();
 
   const jumpStartY = useRef(0);
@@ -33,8 +34,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   const FORWARD_SPEED = 0.1;
   const JUMP_HEIGHT = 1.5;
   const JUMP_DURATION = 20; // frames
-  const LANE_WIDTH = 2;
-  const NUM_LANES = 5; // -2, -1, 0, 1, 2
+  const LANE_WIDTH = 1.5;
+  const NUM_LANES = 7; // -3, -2, -1, 0, 1, 2, 3
   const currentLane = useRef(0);
 
   useFrame(() => {
@@ -44,6 +45,10 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     const newZ = ballPosition.z + FORWARD_SPEED;
     let newX = ballPosition.x;
     let newY = ballPosition.y;
+
+    // Update score based on distance
+    const currentScore = Math.floor(Math.abs(newZ) * 10);
+    updateScore(currentScore);
 
     if (isJumping) {
       jumpProgress.current++;
@@ -94,8 +99,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       if (isJumping || !isGameRunning) return;
       
       const newLane = direction === 'left' 
-        ? Math.max(-2, currentLane.current - 1)
-        : Math.min(2, currentLane.current + 1);
+        ? Math.max(-3, currentLane.current - 1)
+        : Math.min(3, currentLane.current + 1);
       
       if (newLane === currentLane.current) return;
       

@@ -93,8 +93,8 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       if (obstacle.type === 'moving' && obstacle.moveDirection && obstacle.moveSpeed) {
         obstacle.position.x += obstacle.moveDirection * obstacle.moveSpeed;
         
-        // Bounce off track boundaries
-        if (Math.abs(obstacle.position.x) > 5) {
+        // Bounce off track boundaries (wider track now)
+        if (Math.abs(obstacle.position.x) > 5.5) {
           obstacle.moveDirection *= -1;
         }
       }

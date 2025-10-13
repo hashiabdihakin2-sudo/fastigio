@@ -2,11 +2,13 @@ import { create } from 'zustand';
 import { Vector3 } from 'three';
 
 interface GameState {
-  gameState: 'waiting' | 'playing' | 'gameOver' | 'levelComplete';
+  gameState: 'waiting' | 'playing' | 'gameOver';
   currentSection: number;
   ballPosition: Vector3;
   isJumping: boolean;
   isGameRunning: boolean;
+  score: number;
+  highScore: number;
   
   // Actions
   setBallPosition: (position: Vector3) => void;
@@ -14,7 +16,7 @@ interface GameState {
   setIsJumping: (jumping: boolean) => void;
   endGame: () => void;
   restartGame: () => void;
-  completeLevel: () => void;
+  updateScore: (score: number) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -23,31 +25,26 @@ export const useGameStore = create<GameState>((set, get) => ({
   ballPosition: new Vector3(0, 1, 0),
   isJumping: false,
   isGameRunning: false,
+  score: 0,
+  highScore: 0,
 
   setBallPosition: (position) => set({ ballPosition: position }),
 
   setIsJumping: (jumping) => set({ isJumping: jumping }),
 
+  updateScore: (score) => set({ score }),
+
   nextSection: () => {
     const { currentSection } = get();
-    if (currentSection >= 8) {
-      get().completeLevel();
-    } else {
-      set({ currentSection: currentSection + 1 });
-    }
-  },
-
-  completeLevel: () => {
-    set({ 
-      gameState: 'levelComplete',
-      isGameRunning: false
-    });
+    set({ currentSection: currentSection + 1 });
   },
 
   endGame: () => {
+    const { score, highScore } = get();
     set({ 
       gameState: 'gameOver',
-      isGameRunning: false
+      isGameRunning: false,
+      highScore: Math.max(score, highScore)
     });
   },
 
@@ -57,7 +54,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       currentSection: 0,
       ballPosition: new Vector3(0, 1, 0),
       isGameRunning: true,
-      isJumping: false
+      isJumping: false,
+      score: 0
     });
   }
 }));

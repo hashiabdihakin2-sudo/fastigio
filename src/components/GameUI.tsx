@@ -1,20 +1,26 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
+import { useGameStore } from '../store/gameStore';
 
 interface GameUIProps {
   currentSection: number;
-  gameState: 'waiting' | 'playing' | 'gameOver' | 'levelComplete';
+  gameState: 'waiting' | 'playing' | 'gameOver';
   onRestart: () => void;
 }
 
 export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) => {
+  const { score, highScore } = useGameStore();
+  
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {/* Section progress */}
+      {/* Score display */}
       <div className="absolute top-8 left-8 pointer-events-auto">
         <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
-          <div className="text-lg font-bold text-neon-blue">
-            Sektion: {currentSection + 1} / 9
+          <div className="text-2xl font-bold text-neon-blue">
+            {score}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Rekord: {highScore}
           </div>
         </Card>
       </div>
@@ -39,7 +45,7 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
               HOPP SPEL
             </h1>
             <p className="text-lg text-muted-foreground mb-6">
-              Hoppa genom 9 sektioner för att vinna!
+              Undvik hinder och överlev så länge du kan!
             </p>
             <Button 
               variant="default" 
@@ -53,38 +59,6 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
         </div>
       )}
 
-      {/* Level complete screen */}
-      {gameState === 'levelComplete' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
-          <Card className="cyber-border p-8 bg-card/90 backdrop-blur-md text-center glow-effect">
-            <h2 className="text-3xl font-bold mb-4 text-game-success">
-              🎉 DU VANN! 🎉
-            </h2>
-            <div className="mb-6">
-              <div className="text-xl font-semibold text-neon-blue mb-2">
-                Level Complete!
-              </div>
-              <div className="text-muted-foreground">
-                Du hoppade genom alla 9 sektioner!
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Button 
-                variant="default" 
-                size="lg" 
-                onClick={onRestart}
-                className="w-full glow-effect bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold"
-              >
-                SPELA IGEN
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Eller klicka/tryck mellanslag
-              </div>
-            </div>
-          </Card>
-        </div>
-      )}
-
       {/* Game over screen */}
       {gameState === 'gameOver' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
@@ -94,7 +68,10 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
             </h2>
             <div className="mb-6">
               <div className="text-xl font-semibold text-neon-blue mb-2">
-                Du nådde sektion: {currentSection + 1}
+                Poäng: {score}
+              </div>
+              <div className="text-muted-foreground">
+                Bästa: {highScore}
               </div>
             </div>
             <div className="space-y-2">

@@ -5,26 +5,24 @@ interface TrackProps {
 }
 
 export const Track = ({ ballPosition }: TrackProps) => {
-  const NUM_SECTIONS = 9;
   const SECTION_LENGTH = 4;
-  const TRACK_WIDTH = 6;
+  const TRACK_WIDTH = 12;
+  const RENDER_DISTANCE = 50; // How far ahead to render
   
   const sections = [];
   
-  for (let i = 0; i < NUM_SECTIONS; i++) {
+  // Calculate which sections to render based on ball position
+  const startSection = Math.floor((ballPosition.z - 10) / SECTION_LENGTH);
+  const endSection = Math.floor((ballPosition.z + RENDER_DISTANCE) / SECTION_LENGTH);
+  
+  for (let i = startSection; i <= endSection; i++) {
     const zPos = i * SECTION_LENGTH + SECTION_LENGTH / 2;
     
-    // Alternate colors for visual distinction
+    // Cycle through colors
+    const colorIndex = ((i % 9) + 9) % 9; // Handle negative indices
     const colors = [
-      '#1a237e', // dark blue
-      '#283593', // medium blue
-      '#3949ab', // light blue
-      '#5c6bc0', // lighter blue
-      '#7986cb', // very light blue
-      '#9fa8da', // pale blue
-      '#c5cae9', // very pale blue
-      '#e8eaf6', // almost white blue
-      '#f3e5f5', // pinkish white
+      '#1a237e', '#283593', '#3949ab', '#5c6bc0',
+      '#7986cb', '#9fa8da', '#c5cae9', '#e8eaf6', '#f3e5f5',
     ];
     
     sections.push(
@@ -33,8 +31,8 @@ export const Track = ({ ballPosition }: TrackProps) => {
         <mesh receiveShadow position={[0, -0.1, 0]}>
           <boxGeometry args={[TRACK_WIDTH, 0.2, SECTION_LENGTH - 0.2]} />
           <meshStandardMaterial 
-            color={colors[i]}
-            emissive={colors[i]}
+            color={colors[colorIndex]}
+            emissive={colors[colorIndex]}
             emissiveIntensity={0.2}
           />
         </mesh>
@@ -54,18 +52,6 @@ export const Track = ({ ballPosition }: TrackProps) => {
             color="#00FFFF"
             emissive="#00FFFF"
             emissiveIntensity={0.5}
-          />
-        </mesh>
-        
-        {/* Section number indicator */}
-        <mesh position={[0, 0.05, 0]}>
-          <planeGeometry args={[1, 1]} />
-          <meshStandardMaterial 
-            color="#FFFFFF"
-            emissive="#FFFFFF"
-            emissiveIntensity={0.3}
-            transparent
-            opacity={0.5}
           />
         </mesh>
       </group>

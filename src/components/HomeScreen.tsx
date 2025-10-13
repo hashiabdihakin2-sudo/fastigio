@@ -14,7 +14,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
             Hopp Spel
           </h1>
           <p className="text-xl text-muted-foreground">
-            Hoppa genom 9 sektioner
+            Undvik hinder och samla poäng!
           </p>
         </div>
 
