@@ -27,16 +27,23 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   const jumpStartY = useRef(0);
   const jumpProgress = useRef(0);
-  const jumpStartZ = useRef(0);
-  const jumpTargetZ = useRef(0);
+  const jumpStartX = useRef(0);
+  const jumpTargetX = useRef(0);
   
-  const SECTION_LENGTH = 4;
-  const JUMP_HEIGHT = 2;
-  const JUMP_DURATION = 30; // frames
-  const gravity = -0.02;
+  const FORWARD_SPEED = 0.1;
+  const JUMP_HEIGHT = 1.5;
+  const JUMP_DURATION = 20; // frames
+  const LANE_WIDTH = 2;
+  const NUM_LANES = 5; // -2, -1, 0, 1, 2
+  const currentLane = useRef(0);
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
+
+    // Continuous forward movement
+    const newZ = ballPosition.z + FORWARD_SPEED;
+    let newX = ballPosition.x;
+    let newY = ballPosition.y;
 
     if (isJumping) {
       jumpProgress.current++;
@@ -45,24 +52,23 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       
       // Parabolic jump arc
       const heightProgress = Math.sin(t * Math.PI);
-      const newY = jumpStartY.current + heightProgress * JUMP_HEIGHT;
+      newY = jumpStartY.current + heightProgress * JUMP_HEIGHT;
       
-      // Linear forward movement
-      const newZ = jumpStartZ.current + (jumpTargetZ.current - jumpStartZ.current) * t;
-      
-      const newPosition = new Vector3(0, newY, newZ);
-      setBallPosition(newPosition);
-      ballRef.current.position.copy(newPosition);
+      // Linear sideways movement
+      newX = jumpStartX.current + (jumpTargetX.current - jumpStartX.current) * t;
       
       // End jump
       if (jumpProgress.current >= JUMP_DURATION) {
         setIsJumping(false);
         jumpProgress.current = 0;
-        const landPosition = new Vector3(0, 0.5, jumpTargetZ.current);
-        setBallPosition(landPosition);
-        ballRef.current.position.copy(landPosition);
+        newY = 0.5;
+        newX = jumpTargetX.current;
       }
     }
+
+    const newPosition = new Vector3(newX, newY, newZ);
+    setBallPosition(newPosition);
+    ballRef.current.position.copy(newPosition);
 
     // Camera follows ball
     if (groupRef.current) {
@@ -78,19 +84,31 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       ballRef.current.position.copy(startPosition);
       setIsJumping(false);
       jumpProgress.current = 0;
+      currentLane.current = 0;
     }
   }, [gameState, setBallPosition, setIsJumping]);
 
-  // Start jump when section changes
+  // Expose jump left/right function
   useEffect(() => {
-    if (isGameRunning && !isJumping && ballRef.current) {
+    const handleJump = (direction: 'left' | 'right') => {
+      if (isJumping || !isGameRunning) return;
+      
+      const newLane = direction === 'left' 
+        ? Math.max(-2, currentLane.current - 1)
+        : Math.min(2, currentLane.current + 1);
+      
+      if (newLane === currentLane.current) return;
+      
       jumpStartY.current = ballPosition.y;
-      jumpStartZ.current = ballPosition.z;
-      jumpTargetZ.current = currentSection * SECTION_LENGTH + SECTION_LENGTH;
+      jumpStartX.current = ballPosition.x;
+      jumpTargetX.current = newLane * LANE_WIDTH;
       jumpProgress.current = 0;
+      currentLane.current = newLane;
       setIsJumping(true);
-    }
-  }, [currentSection]);
+    };
+
+    (window as any).jumpBall = handleJump;
+  }, [isJumping, isGameRunning, ballPosition]);
 
   return (
     <group ref={groupRef}>

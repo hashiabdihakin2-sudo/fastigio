@@ -24,8 +24,8 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
         <div className="absolute top-8 right-8 pointer-events-auto">
           <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
             <div className="text-sm text-muted-foreground text-right">
-              <div>Klicka eller tryck mellanslag</div>
-              <div className="text-neon-purple">för att hoppa framåt</div>
+              <div>Piltangenter ← →</div>
+              <div className="text-neon-purple">för att hoppa åt sidan</div>
             </div>
           </Card>
         </div>

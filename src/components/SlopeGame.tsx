@@ -11,23 +11,28 @@ export const SlopeGame = () => {
   const [controls, setControls] = useState({ left: false, right: false });
 
   useEffect(() => {
-    const handleJump = () => {
-      if (isGameRunning && !isJumping) {
-        nextSection();
-      } else if (!isGameRunning) {
-        restartGame();
-      }
-    };
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === ' ') {
+      if (!isGameRunning) {
+        if (e.key === ' ') {
+          e.preventDefault();
+          restartGame();
+        }
+        return;
+      }
+
+      if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        handleJump();
+        (window as any).jumpBall?.('left');
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        (window as any).jumpBall?.('right');
       }
     };
 
     const handleClick = () => {
-      handleJump();
+      if (!isGameRunning) {
+        restartGame();
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -37,7 +42,7 @@ export const SlopeGame = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('click', handleClick);
     };
-  }, [isGameRunning, isJumping, restartGame, nextSection]);
+  }, [isGameRunning, restartGame]);
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-background">

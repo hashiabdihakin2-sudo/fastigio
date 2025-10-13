@@ -30,8 +30,8 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           
           {/* Controls */}
           <div className="space-y-2 text-sm text-muted-foreground">
-            <p>Klicka med musen eller tryck mellanslag</p>
-            <p>för att hoppa framåt till nästa sektion</p>
+            <p>Använd piltangenterna ← → för att hoppa åt sidan</p>
+            <p>Bollen rullar framåt automatiskt!</p>
           </div>
         </div>
       </div>
