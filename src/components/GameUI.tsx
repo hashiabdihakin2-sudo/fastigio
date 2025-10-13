@@ -2,34 +2,30 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 
 interface GameUIProps {
-  score: number;
-  highScore: number;
-  gameState: 'waiting' | 'playing' | 'gameOver';
+  currentSection: number;
+  gameState: 'waiting' | 'playing' | 'gameOver' | 'levelComplete';
   onRestart: () => void;
 }
 
-export const GameUI = ({ score, highScore, gameState, onRestart }: GameUIProps) => {
+export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) => {
   return (
     <div className="absolute inset-0 pointer-events-none">
-      {/* Score display */}
+      {/* Section progress */}
       <div className="absolute top-8 left-8 pointer-events-auto">
         <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
           <div className="text-lg font-bold text-neon-blue">
-            Score: {Math.floor(score)}
-          </div>
-          <div className="text-sm text-muted-foreground">
-            Best: {Math.floor(highScore)}
+            Sektion: {currentSection + 1} / 9
           </div>
         </Card>
       </div>
 
       {/* Controls hint */}
-      {gameState === 'waiting' && (
+      {gameState === 'playing' && (
         <div className="absolute top-8 right-8 pointer-events-auto">
           <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
             <div className="text-sm text-muted-foreground text-right">
-              <div>Use ← → or A D to steer</div>
-              <div className="text-neon-purple">Press SPACE to start</div>
+              <div>Klicka eller tryck mellanslag</div>
+              <div className="text-neon-purple">för att hoppa framåt</div>
             </div>
           </Card>
         </div>
@@ -40,10 +36,10 @@ export const GameUI = ({ score, highScore, gameState, onRestart }: GameUIProps) 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
           <Card className="cyber-border p-8 bg-card/90 backdrop-blur-md text-center glow-effect">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
-              SLOPE RUSH
+              HOPP SPEL
             </h1>
             <p className="text-lg text-muted-foreground mb-6">
-              Roll down the endless slope and avoid the red obstacles!
+              Hoppa genom 9 sektioner för att vinna!
             </p>
             <Button 
               variant="default" 
@@ -51,8 +47,40 @@ export const GameUI = ({ score, highScore, gameState, onRestart }: GameUIProps) 
               onClick={onRestart}
               className="glow-effect bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold"
             >
-              START GAME
+              STARTA SPEL
             </Button>
+          </Card>
+        </div>
+      )}
+
+      {/* Level complete screen */}
+      {gameState === 'levelComplete' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
+          <Card className="cyber-border p-8 bg-card/90 backdrop-blur-md text-center glow-effect">
+            <h2 className="text-3xl font-bold mb-4 text-game-success">
+              🎉 DU VANN! 🎉
+            </h2>
+            <div className="mb-6">
+              <div className="text-xl font-semibold text-neon-blue mb-2">
+                Level Complete!
+              </div>
+              <div className="text-muted-foreground">
+                Du hoppade genom alla 9 sektioner!
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Button 
+                variant="default" 
+                size="lg" 
+                onClick={onRestart}
+                className="w-full glow-effect bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold"
+              >
+                SPELA IGEN
+              </Button>
+              <div className="text-sm text-muted-foreground">
+                Eller klicka/tryck mellanslag
+              </div>
+            </div>
           </Card>
         </div>
       )}
@@ -66,13 +94,7 @@ export const GameUI = ({ score, highScore, gameState, onRestart }: GameUIProps) 
             </h2>
             <div className="mb-6">
               <div className="text-xl font-semibold text-neon-blue mb-2">
-                Score: {Math.floor(score)}
-              </div>
-              {score > highScore && (
-                <div className="text-game-success font-bold">NEW HIGH SCORE!</div>
-              )}
-              <div className="text-muted-foreground">
-                Best: {Math.floor(highScore)}
+                Du nådde sektion: {currentSection + 1}
               </div>
             </div>
             <div className="space-y-2">
@@ -82,10 +104,10 @@ export const GameUI = ({ score, highScore, gameState, onRestart }: GameUIProps) 
                 onClick={onRestart}
                 className="w-full glow-effect bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold"
               >
-                PLAY AGAIN
+                FÖRSÖK IGEN
               </Button>
               <div className="text-sm text-muted-foreground">
-                Or press SPACE
+                Eller klicka/tryck mellanslag
               </div>
             </div>
           </Card>

@@ -7,54 +7,42 @@ import { HomeScreen } from './HomeScreen';
 import { useGameStore } from '../store/gameStore';
 
 export const SlopeGame = () => {
-  const { gameState, score, highScore, isGameRunning, restartGame } = useGameStore();
+  const { gameState, currentSection, isGameRunning, isJumping, restartGame, nextSection } = useGameStore();
   const [controls, setControls] = useState({ left: false, right: false });
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key.toLowerCase()) {
-        case 'arrowleft':
-        case 'a':
-          setControls(prev => ({ ...prev, left: true }));
-          break;
-        case 'arrowright':
-        case 'd':
-          setControls(prev => ({ ...prev, right: true }));
-          break;
+    const handleJump = () => {
+      if (isGameRunning && !isJumping) {
+        nextSection();
+      } else if (!isGameRunning) {
+        restartGame();
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      switch (e.key.toLowerCase()) {
-        case 'arrowleft':
-        case 'a':
-          setControls(prev => ({ ...prev, left: false }));
-          break;
-        case 'arrowright':
-        case 'd':
-          setControls(prev => ({ ...prev, right: false }));
-          break;
-        case ' ':
-          if (!isGameRunning) {
-            restartGame();
-          }
-          break;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === ' ') {
+        e.preventDefault();
+        handleJump();
       }
+    };
+
+    const handleClick = () => {
+      handleJump();
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('click', handleClick);
     };
-  }, [isGameRunning, restartGame]);
+  }, [isGameRunning, isJumping, restartGame, nextSection]);
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-background">
       {gameState === 'waiting' && (
-        <HomeScreen onStartGame={restartGame} highScore={highScore} />
+        <HomeScreen onStartGame={restartGame} />
       )}
       
       <Canvas 
@@ -75,8 +63,7 @@ export const SlopeGame = () => {
       </Canvas>
       
       <GameUI 
-        score={score}
-        highScore={highScore}
+        currentSection={currentSection}
         gameState={gameState}
         onRestart={restartGame}
       />

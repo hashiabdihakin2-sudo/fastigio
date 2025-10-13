@@ -1,141 +1,76 @@
 import { Vector3 } from 'three';
-import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
 
 interface TrackProps {
   ballPosition: Vector3;
 }
 
 export const Track = ({ ballPosition }: TrackProps) => {
-  const timeRef = useRef(0);
-  const trackSegments = [];
-  const segmentLength = 10;
-  const numSegments = 15; // More segments for better depth
-
-  useFrame((state, delta) => {
-    timeRef.current += delta;
-  });
-
-  // Generate track segments ahead of the ball (positive Z direction)
-  for (let i = 0; i < numSegments; i++) {
-    const z = ballPosition.z + (i * segmentLength);
-    const pulseIntensity = 0.3 + Math.sin(timeRef.current * 2 + i * 0.5) * 0.2;
-    const gridOpacity = 0.6 + Math.sin(timeRef.current * 3 + i * 0.3) * 0.3;
+  const NUM_SECTIONS = 9;
+  const SECTION_LENGTH = 4;
+  const TRACK_WIDTH = 6;
+  
+  const sections = [];
+  
+  for (let i = 0; i < NUM_SECTIONS; i++) {
+    const zPos = i * SECTION_LENGTH + SECTION_LENGTH / 2;
     
-    trackSegments.push(
-      <group key={i} position={[0, 0, z]}>
-        {/* Main track surface with grid pattern */}
-        <mesh position={[0, -0.1, 0]} receiveShadow>
-          <boxGeometry args={[12, 0.2, segmentLength]} />
-          <meshPhongMaterial 
-            color="#0A0A0F"
-            emissive="#001122"
-            emissiveIntensity={pulseIntensity}
+    // Alternate colors for visual distinction
+    const colors = [
+      '#1a237e', // dark blue
+      '#283593', // medium blue
+      '#3949ab', // light blue
+      '#5c6bc0', // lighter blue
+      '#7986cb', // very light blue
+      '#9fa8da', // pale blue
+      '#c5cae9', // very pale blue
+      '#e8eaf6', // almost white blue
+      '#f3e5f5', // pinkish white
+    ];
+    
+    sections.push(
+      <group key={i} position={[0, 0, zPos]}>
+        {/* Main platform */}
+        <mesh receiveShadow position={[0, -0.1, 0]}>
+          <boxGeometry args={[TRACK_WIDTH, 0.2, SECTION_LENGTH - 0.2]} />
+          <meshStandardMaterial 
+            color={colors[i]}
+            emissive={colors[i]}
+            emissiveIntensity={0.2}
           />
         </mesh>
         
-        {/* Futuristic grid lines */}
-        {[...Array(5)].map((_, gridIndex) => (
-          <mesh key={`grid-${gridIndex}`} position={[-4 + gridIndex * 2, 0.01, 0]}>
-            <boxGeometry args={[0.05, 0.01, segmentLength]} />
-            <meshBasicMaterial 
-              color="#00FFFF"
-              transparent
-              opacity={gridOpacity * 0.7}
-            />
-          </mesh>
-        ))}
-        
-        {/* Perpendicular grid lines */}
-        {[...Array(Math.floor(segmentLength / 2))].map((_, gridIndex) => (
-          <mesh key={`grid-perp-${gridIndex}`} position={[0, 0.01, -segmentLength/2 + gridIndex * 2]}>
-            <boxGeometry args={[12, 0.01, 0.05]} />
-            <meshBasicMaterial 
-              color="#0066FF"
-              transparent
-              opacity={gridOpacity * 0.5}
-            />
-          </mesh>
-        ))}
-        
-        {/* Enhanced track borders with sharp neon lines */}
-        <mesh position={[-6, 0.3, 0]}>
-          <boxGeometry args={[0.1, 0.8, segmentLength]} />
-          <meshPhongMaterial 
+        {/* Platform borders */}
+        <mesh position={[TRACK_WIDTH / 2, 0, 0]}>
+          <boxGeometry args={[0.2, 0.5, SECTION_LENGTH]} />
+          <meshStandardMaterial 
             color="#00FFFF"
             emissive="#00FFFF"
-            emissiveIntensity={1.2}
+            emissiveIntensity={0.5}
           />
         </mesh>
-        <mesh position={[6, 0.3, 0]}>
-          <boxGeometry args={[0.1, 0.8, segmentLength]} />
-          <meshPhongMaterial 
+        <mesh position={[-TRACK_WIDTH / 2, 0, 0]}>
+          <boxGeometry args={[0.2, 0.5, SECTION_LENGTH]} />
+          <meshStandardMaterial 
             color="#00FFFF"
             emissive="#00FFFF"
-            emissiveIntensity={1.2}
+            emissiveIntensity={0.5}
           />
         </mesh>
         
-        {/* Glowing border effects */}
-        <mesh position={[-6, 0.3, 0]}>
-          <boxGeometry args={[0.3, 1, segmentLength]} />
-          <meshBasicMaterial 
-            color="#00FFFF"
+        {/* Section number indicator */}
+        <mesh position={[0, 0.05, 0]}>
+          <planeGeometry args={[1, 1]} />
+          <meshStandardMaterial 
+            color="#FFFFFF"
+            emissive="#FFFFFF"
+            emissiveIntensity={0.3}
             transparent
-            opacity={0.2 + Math.sin(timeRef.current * 4 + i * 0.5) * 0.1}
+            opacity={0.5}
           />
         </mesh>
-        <mesh position={[6, 0.3, 0]}>
-          <boxGeometry args={[0.3, 1, segmentLength]} />
-          <meshBasicMaterial 
-            color="#00FFFF"
-            transparent
-            opacity={0.2 + Math.sin(timeRef.current * 4 + i * 0.5) * 0.1}
-          />
-        </mesh>
-
-        {/* Central racing line with pulsing effect */}
-        <mesh position={[0, 0.01, 0]}>
-          <boxGeometry args={[0.2, 0.02, segmentLength]} />
-          <meshPhongMaterial 
-            color="#FF0080"
-            emissive="#FF0080"
-            emissiveIntensity={0.8 + Math.sin(timeRef.current * 5 + i * 0.8) * 0.4}
-          />
-        </mesh>
-        
-        {/* Side accent lines */}
-        <mesh position={[-3, 0.01, 0]}>
-          <boxGeometry args={[0.1, 0.01, segmentLength]} />
-          <meshBasicMaterial 
-            color="#FF6B00"
-            transparent
-            opacity={0.8 + Math.sin(timeRef.current * 3 + i * 0.4) * 0.2}
-          />
-        </mesh>
-        <mesh position={[3, 0.01, 0]}>
-          <boxGeometry args={[0.1, 0.01, segmentLength]} />
-          <meshBasicMaterial 
-            color="#FF6B00"
-            transparent
-            opacity={0.8 + Math.sin(timeRef.current * 3 + i * 0.4) * 0.2}
-          />
-        </mesh>
-        
-        {/* Digital rain effect - vertical lines */}
-        {Math.random() > 0.7 && (
-          <mesh position={[(Math.random() - 0.5) * 10, 2 + Math.random() * 3, 0]}>
-            <boxGeometry args={[0.02, 1, 0.02]} />
-            <meshBasicMaterial 
-              color="#00FF00"
-              transparent
-              opacity={0.7}
-            />
-          </mesh>
-        )}
       </group>
     );
   }
-
-  return <>{trackSegments}</>;
+  
+  return <>{sections}</>;
 };
