@@ -23,16 +23,16 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
 
-  // Generate obstacles procedurally - anpassat för långsammare spel
+  // Generate obstacles procedurally - fler hinder
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
-    const difficultyMultiplier = 1 + (distance / 200); // Långsammare svårighetsökning
+    const difficultyMultiplier = 1 + (distance / 150); // Snabbare svårighetsökning
     
-    // Mer avstånd mellan hinder för långsammare spel
-    const baseSpacing = 15;
-    const spacing = Math.max(8, baseSpacing - (distance / 300)); // Större avstånd
-    const numObstacles = Math.min(35, Math.floor(20 * difficultyMultiplier)); // Färre hinder
+    // Mindre avstånd mellan hinder
+    const baseSpacing = 10;
+    const spacing = Math.max(5, baseSpacing - (distance / 200)); // Mindre avstånd
+    const numObstacles = Math.min(60, Math.floor(35 * difficultyMultiplier)); // Fler hinder
 
     for (let i = 0; i < numObstacles; i++) {
       const z = startZ + (i * spacing);

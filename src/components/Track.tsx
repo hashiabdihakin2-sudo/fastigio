@@ -18,16 +18,8 @@ export const Track = ({ ballPosition }: TrackProps) => {
   for (let i = startSection; i <= endSection; i++) {
     const zPos = i * SECTION_LENGTH + SECTION_LENGTH / 2;
     
-    // Neon gradient colors - mer levande färger
-    const colorIndex = ((i % 6) + 6) % 6;
-    const neonColors = [
-      '#FF00FF', // Magenta
-      '#00FFFF', // Cyan
-      '#FF0080', // Pink
-      '#00FF00', // Green
-      '#FFFF00', // Yellow
-      '#FF6B00', // Orange
-    ];
+    // Enfärgad neon - cyan
+    const neonColor = '#00FFFF'; // Bright cyan
     
     sections.push(
       <group key={i} position={[0, 0, zPos]}>
@@ -35,11 +27,11 @@ export const Track = ({ ballPosition }: TrackProps) => {
         <mesh receiveShadow position={[0, -0.1, 0]}>
           <boxGeometry args={[TRACK_WIDTH, 0.2, SECTION_LENGTH - 0.2]} />
           <meshStandardMaterial 
-            color={neonColors[colorIndex]}
-            emissive={neonColors[colorIndex]}
-            emissiveIntensity={0.6}
-            metalness={0.3}
-            roughness={0.4}
+            color={neonColor}
+            emissive={neonColor}
+            emissiveIntensity={0.8}
+            metalness={0.5}
+            roughness={0.2}
           />
         </mesh>
         

@@ -13,7 +13,7 @@ interface GameSceneProps {
 
 export const GameScene = ({ controls }: GameSceneProps) => {
   const groupRef = useRef<Group>(null);
-  const ballRef = useRef<Mesh>(null);
+  const ballRef = useRef<Group>(null);
   const { 
     ballPosition, 
     setBallPosition, 
@@ -27,8 +27,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   } = useGameStore();
 
   const velocityX = useRef(0);
-  const BASE_FORWARD_SPEED = 0.05; // Långsammare
-  const GLIDE_IMPULSE = 0.08; // Impulse när man trycker på piltangent
+  const BASE_FORWARD_SPEED = 0.08; // Snabbare
+  const GLIDE_IMPULSE = 0.15; // Snabbare impulse
   const FRICTION = 0.92; // Friktion för smooth gliding
   const LANE_WIDTH = 1.5;
   const NUM_LANES = 7;
@@ -38,9 +38,9 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Calculate speed multiplier based on score - mycket långsammare progression
+    // Calculate speed multiplier based on score
     const currentScore = Math.floor(Math.abs(ballPosition.z) * 10);
-    const speedMultiplier = 1 + (currentScore / 5000); // Mycket långsammare ökning
+    const speedMultiplier = 1 + (currentScore / 3000); // Snabbare progression
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
 
     // Continuous forward movement
