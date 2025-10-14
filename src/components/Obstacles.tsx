@@ -27,12 +27,12 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
-    const difficultyMultiplier = 1 + (distance / 150); // Faster difficulty increase
+    const difficultyMultiplier = 1 + (distance / 100); // Much faster difficulty increase
     
-    // More aggressive spacing and density
-    const baseSpacing = 12;
-    const spacing = Math.max(4, baseSpacing - (distance / 200)); // Much closer obstacles
-    const numObstacles = Math.min(40, Math.floor(25 * difficultyMultiplier)); // More obstacles
+    // Much more aggressive spacing and density
+    const baseSpacing = 10;
+    const spacing = Math.max(3, baseSpacing - (distance / 150)); // Way closer obstacles
+    const numObstacles = Math.min(50, Math.floor(30 * difficultyMultiplier)); // Even more obstacles
 
     for (let i = 0; i < numObstacles; i++) {
       const z = startZ + (i * spacing);
@@ -47,21 +47,21 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       let moveSpeed = 0;
       let size = new Vector3(1, 1, 1);
       
-      if (difficultyFactor > 0.3 && rand < 0.4) {
-        // Moving obstacles
+      if (difficultyFactor > 0.2 && rand < 0.5) {
+        // Moving obstacles - more common and faster
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.02 + (difficultyFactor * 0.03);
-      } else if (difficultyFactor > 0.5 && rand < 0.6) {
-        // Disappearing platforms
+        moveSpeed = 0.03 + (difficultyFactor * 0.05); // Much faster
+      } else if (difficultyFactor > 0.4 && rand < 0.7) {
+        // Disappearing platforms - more common
         type = 'disappearing';
         size = new Vector3(2, 0.2, 1);
-      } else if (difficultyFactor > 0.7 && rand < 0.2) {
-        // Large moving blocks
+      } else if (difficultyFactor > 0.6 && rand < 0.3) {
+        // Large moving blocks - bigger and faster
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.015 + (difficultyFactor * 0.02);
-        size = new Vector3(1.5, 1.5, 1);
+        moveSpeed = 0.025 + (difficultyFactor * 0.04); // Faster
+        size = new Vector3(2, 2, 1.2); // Bigger
       }
       
       obstacles.push({

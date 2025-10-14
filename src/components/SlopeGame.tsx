@@ -22,10 +22,18 @@ export const SlopeGame = () => {
 
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        (window as any).jumpBall?.('left');
+        setControls(prev => ({ ...prev, left: true }));
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        (window as any).jumpBall?.('right');
+        setControls(prev => ({ ...prev, right: true }));
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        setControls(prev => ({ ...prev, left: false }));
+      } else if (e.key === 'ArrowRight') {
+        setControls(prev => ({ ...prev, right: false }));
       }
     };
 
@@ -36,10 +44,12 @@ export const SlopeGame = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('click', handleClick);
     };
   }, [isGameRunning, restartGame]);

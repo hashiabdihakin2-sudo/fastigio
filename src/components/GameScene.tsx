@@ -26,49 +26,34 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     updateScore
   } = useGameStore();
 
-  const jumpStartY = useRef(0);
-  const jumpProgress = useRef(0);
-  const jumpStartX = useRef(0);
-  const jumpTargetX = useRef(0);
-  
-  const FORWARD_SPEED = 0.1;
-  const JUMP_HEIGHT = 1.5;
-  const JUMP_DURATION = 20; // frames
+  const BASE_FORWARD_SPEED = 0.1;
+  const GLIDE_SPEED = 0.12; // Smooth sideways gliding speed
   const LANE_WIDTH = 1.5;
   const NUM_LANES = 7; // -3, -2, -1, 0, 1, 2, 3
-  const currentLane = useRef(0);
+  const MAX_X = 3 * LANE_WIDTH; // Maximum sideways position
+  const MIN_X = -3 * LANE_WIDTH; // Minimum sideways position
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Continuous forward movement
+    // Calculate speed multiplier based on score
+    const currentScore = Math.floor(Math.abs(ballPosition.z) * 10);
+    const speedMultiplier = 1 + (currentScore / 1000); // Speed increases gradually
+    const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
+
+    // Continuous forward movement with progressive speed
     const newZ = ballPosition.z + FORWARD_SPEED;
     let newX = ballPosition.x;
-    let newY = ballPosition.y;
+    const newY = 0.5; // Keep ball at constant height for smoother gliding
 
     // Update score based on distance
-    const currentScore = Math.floor(Math.abs(newZ) * 10);
     updateScore(currentScore);
 
-    if (isJumping) {
-      jumpProgress.current++;
-      
-      const t = jumpProgress.current / JUMP_DURATION;
-      
-      // Parabolic jump arc
-      const heightProgress = Math.sin(t * Math.PI);
-      newY = jumpStartY.current + heightProgress * JUMP_HEIGHT;
-      
-      // Linear sideways movement
-      newX = jumpStartX.current + (jumpTargetX.current - jumpStartX.current) * t;
-      
-      // End jump
-      if (jumpProgress.current >= JUMP_DURATION) {
-        setIsJumping(false);
-        jumpProgress.current = 0;
-        newY = 0.5;
-        newX = jumpTargetX.current;
-      }
+    // Smooth continuous sideways gliding movement
+    if (controls.left) {
+      newX = Math.max(MIN_X, ballPosition.x - GLIDE_SPEED);
+    } else if (controls.right) {
+      newX = Math.min(MAX_X, ballPosition.x + GLIDE_SPEED);
     }
 
     const newPosition = new Vector3(newX, newY, newZ);
@@ -87,33 +72,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       const startPosition = new Vector3(0, 0.5, 0);
       setBallPosition(startPosition);
       ballRef.current.position.copy(startPosition);
-      setIsJumping(false);
-      jumpProgress.current = 0;
-      currentLane.current = 0;
     }
-  }, [gameState, setBallPosition, setIsJumping]);
-
-  // Expose jump left/right function
-  useEffect(() => {
-    const handleJump = (direction: 'left' | 'right') => {
-      if (isJumping || !isGameRunning) return;
-      
-      const newLane = direction === 'left' 
-        ? Math.max(-3, currentLane.current - 1)
-        : Math.min(3, currentLane.current + 1);
-      
-      if (newLane === currentLane.current) return;
-      
-      jumpStartY.current = ballPosition.y;
-      jumpStartX.current = ballPosition.x;
-      jumpTargetX.current = newLane * LANE_WIDTH;
-      jumpProgress.current = 0;
-      currentLane.current = newLane;
-      setIsJumping(true);
-    };
-
-    (window as any).jumpBall = handleJump;
-  }, [isJumping, isGameRunning, ballPosition]);
+  }, [gameState, setBallPosition]);
 
   return (
     <group ref={groupRef}>
