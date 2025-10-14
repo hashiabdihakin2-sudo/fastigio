@@ -153,8 +153,8 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
         )
         .map(obstacle => {
           const pulseIntensity = 0.8 + Math.sin(timeRef.current * 3) * 0.3;
-          const glowColor = obstacle.type === 'moving' ? '#00FFFF' : 
-                           obstacle.type === 'disappearing' ? '#FF6B00' : '#FF0080';
+          const glowColor = obstacle.type === 'moving' ? '#FF00FF' : 
+                           obstacle.type === 'disappearing' ? '#FF6B00' : '#00FF00';
           
           return (
             <group key={obstacle.id}>

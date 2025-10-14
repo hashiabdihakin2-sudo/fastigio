@@ -8,8 +8,8 @@ export const Ball = forwardRef<Group>((props, ref) => {
       <mesh castShadow receiveShadow>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshPhongMaterial 
-          color="#FFFF00"
-          emissive="#FFAA00"
+          color="#00BFFF"
+          emissive="#4DD0E1"
           emissiveIntensity={0.5}
           shininess={100}
         />
