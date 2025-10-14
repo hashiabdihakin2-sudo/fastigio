@@ -23,16 +23,16 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
 
-  // Generate obstacles procedurally with enhanced difficulty
+  // Generate obstacles procedurally - anpassat för långsammare spel
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
-    const difficultyMultiplier = 1 + (distance / 100); // Much faster difficulty increase
+    const difficultyMultiplier = 1 + (distance / 200); // Långsammare svårighetsökning
     
-    // Much more aggressive spacing and density
-    const baseSpacing = 10;
-    const spacing = Math.max(3, baseSpacing - (distance / 150)); // Way closer obstacles
-    const numObstacles = Math.min(50, Math.floor(30 * difficultyMultiplier)); // Even more obstacles
+    // Mer avstånd mellan hinder för långsammare spel
+    const baseSpacing = 15;
+    const spacing = Math.max(8, baseSpacing - (distance / 300)); // Större avstånd
+    const numObstacles = Math.min(35, Math.floor(20 * difficultyMultiplier)); // Färre hinder
 
     for (let i = 0; i < numObstacles; i++) {
       const z = startZ + (i * spacing);
@@ -47,21 +47,21 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       let moveSpeed = 0;
       let size = new Vector3(1, 1, 1);
       
-      if (difficultyFactor > 0.2 && rand < 0.5) {
-        // Moving obstacles - more common and faster
+      if (difficultyFactor > 0.3 && rand < 0.4) {
+        // Moving obstacles - långsammare
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.03 + (difficultyFactor * 0.05); // Much faster
-      } else if (difficultyFactor > 0.4 && rand < 0.7) {
-        // Disappearing platforms - more common
+        moveSpeed = 0.015 + (difficultyFactor * 0.025); // Långsammare
+      } else if (difficultyFactor > 0.5 && rand < 0.6) {
+        // Disappearing platforms
         type = 'disappearing';
         size = new Vector3(2, 0.2, 1);
-      } else if (difficultyFactor > 0.6 && rand < 0.3) {
-        // Large moving blocks - bigger and faster
+      } else if (difficultyFactor > 0.7 && rand < 0.25) {
+        // Large moving blocks
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.025 + (difficultyFactor * 0.04); // Faster
-        size = new Vector3(2, 2, 1.2); // Bigger
+        moveSpeed = 0.012 + (difficultyFactor * 0.02); // Långsammare
+        size = new Vector3(1.8, 1.8, 1.1);
       }
       
       obstacles.push({

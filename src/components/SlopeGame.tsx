@@ -22,18 +22,10 @@ export const SlopeGame = () => {
 
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        setControls(prev => ({ ...prev, left: true }));
+        (window as any).handleGlide?.('left');
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        setControls(prev => ({ ...prev, right: true }));
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        setControls(prev => ({ ...prev, left: false }));
-      } else if (e.key === 'ArrowRight') {
-        setControls(prev => ({ ...prev, right: false }));
+        (window as any).handleGlide?.('right');
       }
     };
 
@@ -44,12 +36,10 @@ export const SlopeGame = () => {
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
     window.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('click', handleClick);
     };
   }, [isGameRunning, restartGame]);
@@ -65,7 +55,7 @@ export const SlopeGame = () => {
         className="bg-gradient-to-b from-cyber-dark to-background"
         gl={{ antialias: true, alpha: false }}
       >
-        <PerspectiveCamera makeDefault position={[0, 8, 8]} fov={60} />
+        <PerspectiveCamera makeDefault position={[0, 6, 12]} fov={60} />
         <Suspense fallback={null}>
           <GameScene controls={controls} />
         </Suspense>

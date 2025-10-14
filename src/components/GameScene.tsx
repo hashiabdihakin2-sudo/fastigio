@@ -26,41 +26,42 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     updateScore
   } = useGameStore();
 
-  const BASE_FORWARD_SPEED = 0.1;
-  const GLIDE_SPEED = 0.12; // Smooth sideways gliding speed
+  const velocityX = useRef(0);
+  const BASE_FORWARD_SPEED = 0.05; // Långsammare
+  const GLIDE_IMPULSE = 0.08; // Impulse när man trycker på piltangent
+  const FRICTION = 0.92; // Friktion för smooth gliding
   const LANE_WIDTH = 1.5;
-  const NUM_LANES = 7; // -3, -2, -1, 0, 1, 2, 3
-  const MAX_X = 3 * LANE_WIDTH; // Maximum sideways position
-  const MIN_X = -3 * LANE_WIDTH; // Minimum sideways position
+  const NUM_LANES = 7;
+  const MAX_X = 3 * LANE_WIDTH;
+  const MIN_X = -3 * LANE_WIDTH;
 
   useFrame(() => {
     if (!isGameRunning || !ballRef.current) return;
 
-    // Calculate speed multiplier based on score
+    // Calculate speed multiplier based on score - mycket långsammare progression
     const currentScore = Math.floor(Math.abs(ballPosition.z) * 10);
-    const speedMultiplier = 1 + (currentScore / 1000); // Speed increases gradually
+    const speedMultiplier = 1 + (currentScore / 5000); // Mycket långsammare ökning
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
 
-    // Continuous forward movement with progressive speed
+    // Continuous forward movement
     const newZ = ballPosition.z + FORWARD_SPEED;
-    let newX = ballPosition.x;
-    const newY = 0.5; // Keep ball at constant height for smoother gliding
+    const newY = 0.5;
 
-    // Update score based on distance
+    // Update score
     updateScore(currentScore);
 
-    // Smooth continuous sideways gliding movement
-    if (controls.left) {
-      newX = Math.max(MIN_X, ballPosition.x - GLIDE_SPEED);
-    } else if (controls.right) {
-      newX = Math.min(MAX_X, ballPosition.x + GLIDE_SPEED);
-    }
+    // Apply friction to velocity for smooth gliding
+    velocityX.current *= FRICTION;
+
+    // Calculate new X position with velocity
+    let newX = ballPosition.x + velocityX.current;
+    newX = Math.max(MIN_X, Math.min(MAX_X, newX)); // Clamp to boundaries
 
     const newPosition = new Vector3(newX, newY, newZ);
     setBallPosition(newPosition);
     ballRef.current.position.copy(newPosition);
 
-    // Camera follows ball
+    // Camera follows ball from behind
     if (groupRef.current) {
       groupRef.current.position.z = -ballPosition.z;
     }
@@ -72,8 +73,24 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       const startPosition = new Vector3(0, 0.5, 0);
       setBallPosition(startPosition);
       ballRef.current.position.copy(startPosition);
+      velocityX.current = 0;
     }
   }, [gameState, setBallPosition]);
+
+  // Handle gliding impulse on key press
+  useEffect(() => {
+    const handleGlide = (direction: 'left' | 'right') => {
+      if (!isGameRunning) return;
+      
+      if (direction === 'left') {
+        velocityX.current = -GLIDE_IMPULSE;
+      } else {
+        velocityX.current = GLIDE_IMPULSE;
+      }
+    };
+
+    (window as any).handleGlide = handleGlide;
+  }, [isGameRunning]);
 
   return (
     <group ref={groupRef}>
