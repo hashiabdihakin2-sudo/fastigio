@@ -88,18 +88,18 @@ const CameraController = () => {
   useEffect(() => {
     if (!isGameRunning) return;
     
-    // Smooth camera positioning behind and above the ball
+    // Camera positioned further behind to keep ball always visible
     const targetX = ballPosition.x;
-    const targetY = ballPosition.y + 5; // 5 units above ball
-    const targetZ = ballPosition.z - 10; // 10 units behind ball
+    const targetY = ballPosition.y + 6; // 6 units above ball
+    const targetZ = ballPosition.z - 12; // 12 units behind ball (further back)
 
-    // Smooth lerp for camera movement
-    camera.position.x += (targetX - camera.position.x) * 0.1;
-    camera.position.y += (targetY - camera.position.y) * 0.1;
-    camera.position.z += (targetZ - camera.position.z) * 0.1;
+    // Slower lerp for smoother camera movement (ball will appear faster)
+    camera.position.x += (targetX - camera.position.x) * 0.08;
+    camera.position.y += (targetY - camera.position.y) * 0.08;
+    camera.position.z += (targetZ - camera.position.z) * 0.08;
 
-    // Look slightly ahead of the ball
-    camera.lookAt(ballPosition.x, ballPosition.y, ballPosition.z + 5);
+    // Look at the ball directly
+    camera.lookAt(ballPosition.x, ballPosition.y, ballPosition.z);
   });
 
   return null;

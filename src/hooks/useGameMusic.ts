@@ -26,22 +26,24 @@ export const useGameMusic = (isPlaying: boolean) => {
         ctx.resume();
       }
 
-      // Create a cheerful, upbeat melody
+      // Create an exciting, fast-paced melody
       const melody = [
-        { freq: 523.25, duration: 0.3 }, // C5
-        { freq: 587.33, duration: 0.3 }, // D5
-        { freq: 659.25, duration: 0.3 }, // E5
-        { freq: 783.99, duration: 0.3 }, // G5
-        { freq: 659.25, duration: 0.3 }, // E5
-        { freq: 587.33, duration: 0.3 }, // D5
-        { freq: 523.25, duration: 0.6 }, // C5
-        { freq: 587.33, duration: 0.3 }, // D5
-        { freq: 659.25, duration: 0.3 }, // E5
-        { freq: 783.99, duration: 0.3 }, // G5
-        { freq: 880.00, duration: 0.6 }, // A5
-        { freq: 783.99, duration: 0.3 }, // G5
-        { freq: 659.25, duration: 0.3 }, // E5
-        { freq: 587.33, duration: 0.6 }, // D5
+        { freq: 659.25, duration: 0.15 }, // E5
+        { freq: 783.99, duration: 0.15 }, // G5
+        { freq: 880.00, duration: 0.15 }, // A5
+        { freq: 1046.50, duration: 0.15 }, // C6
+        { freq: 880.00, duration: 0.1 }, // A5
+        { freq: 1046.50, duration: 0.1 }, // C6
+        { freq: 1174.66, duration: 0.2 }, // D6
+        { freq: 1046.50, duration: 0.15 }, // C6
+        { freq: 880.00, duration: 0.15 }, // A5
+        { freq: 783.99, duration: 0.15 }, // G5
+        { freq: 880.00, duration: 0.1 }, // A5
+        { freq: 1046.50, duration: 0.1 }, // C6
+        { freq: 1318.51, duration: 0.3 }, // E6
+        { freq: 1174.66, duration: 0.15 }, // D6
+        { freq: 1046.50, duration: 0.15 }, // C6
+        { freq: 880.00, duration: 0.2 }, // A5
       ];
 
       let currentTime = ctx.currentTime;
