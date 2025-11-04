@@ -7,12 +7,12 @@ interface TrackProps {
 export const Track = ({ ballPosition }: TrackProps) => {
   const SECTION_LENGTH = 4;
   const TRACK_WIDTH = 12;
-  const RENDER_DISTANCE = 80; // How far ahead to render (increased for infinite effect)
+  const RENDER_DISTANCE = 50; // How far ahead to render
   
   const sections = [];
   
-  // Calculate which sections to render based on ball position - infinite track
-  const startSection = Math.floor((ballPosition.z - 20) / SECTION_LENGTH);
+  // Calculate which sections to render based on ball position
+  const startSection = Math.floor((ballPosition.z - 10) / SECTION_LENGTH);
   const endSection = Math.floor((ballPosition.z + RENDER_DISTANCE) / SECTION_LENGTH);
   
   for (let i = startSection; i <= endSection; i++) {

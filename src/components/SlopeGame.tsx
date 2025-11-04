@@ -1,18 +1,14 @@
-import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { Suspense, useEffect, useState } from 'react';
 import { GameScene } from './GameScene';
 import { GameUI } from './GameUI';
 import { HomeScreen } from './HomeScreen';
 import { useGameStore } from '../store/gameStore';
-import { useGameMusic } from '../hooks/useGameMusic';
 
 export const SlopeGame = () => {
   const { gameState, currentSection, isGameRunning, isJumping, restartGame, nextSection } = useGameStore();
   const [controls, setControls] = useState({ left: false, right: false });
-
-  // Play music when game is running
-  useGameMusic(isGameRunning);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -59,7 +55,7 @@ export const SlopeGame = () => {
         className="bg-gradient-to-b from-cyber-dark to-background"
         gl={{ antialias: true, alpha: false }}
       >
-        <CameraController />
+        <PerspectiveCamera makeDefault position={[0, 6, 12]} fov={60} />
         <Suspense fallback={null}>
           <GameScene controls={controls} />
         </Suspense>
@@ -78,29 +74,4 @@ export const SlopeGame = () => {
       />
     </div>
   );
-};
-
-// Camera controller that follows the ball from behind with smooth movement
-const CameraController = () => {
-  const { camera } = useThree();
-  const { ballPosition, isGameRunning } = useGameStore();
-
-  useEffect(() => {
-    if (!isGameRunning) return;
-    
-    // Camera positioned to always keep ball visible in front
-    const targetX = ballPosition.x;
-    const targetY = ballPosition.y + 4; // 4 units above ball
-    const targetZ = ballPosition.z - 8; // 8 units behind ball
-
-    // Smooth camera movement
-    camera.position.x += (targetX - camera.position.x) * 0.12;
-    camera.position.y += (targetY - camera.position.y) * 0.12;
-    camera.position.z += (targetZ - camera.position.z) * 0.12;
-
-    // Look at point slightly ahead of ball
-    camera.lookAt(ballPosition.x, ballPosition.y + 0.5, ballPosition.z + 3);
-  });
-
-  return null;
 };
