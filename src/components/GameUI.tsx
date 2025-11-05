@@ -1,15 +1,17 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 
 interface GameUIProps {
   currentSection: number;
   gameState: 'waiting' | 'playing' | 'gameOver';
   onRestart: () => void;
+  isMuted: boolean;
+  onToggleMute: () => void;
 }
 
-export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) => {
+export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggleMute }: GameUIProps) => {
   const { score, highScore } = useGameStore();
   
   const handleMobileControl = (direction: 'left' | 'right') => {
@@ -30,9 +32,17 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
         </Card>
       </div>
 
-      {/* Controls hint */}
+      {/* Controls hint and mute button */}
       {gameState === 'playing' && (
-        <div className="absolute top-8 right-8 pointer-events-auto">
+        <div className="absolute top-8 right-8 pointer-events-auto flex items-start gap-2">
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={onToggleMute}
+            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card"
+          >
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </Button>
           <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
             <div className="text-sm text-muted-foreground text-right">
               <div>Piltangenter ← →</div>

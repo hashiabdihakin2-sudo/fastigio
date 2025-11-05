@@ -5,10 +5,12 @@ import { GameScene } from './GameScene';
 import { GameUI } from './GameUI';
 import { HomeScreen } from './HomeScreen';
 import { useGameStore } from '../store/gameStore';
+import { useGameMusic } from '../hooks/useGameMusic';
 
 export const SlopeGame = () => {
   const { gameState, currentSection, isGameRunning, isJumping, restartGame, nextSection } = useGameStore();
   const [controls, setControls] = useState({ left: false, right: false });
+  const { isMuted, toggleMute } = useGameMusic(isGameRunning);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,6 +73,8 @@ export const SlopeGame = () => {
         currentSection={currentSection}
         gameState={gameState}
         onRestart={restartGame}
+        isMuted={isMuted}
+        onToggleMute={toggleMute}
       />
     </div>
   );
