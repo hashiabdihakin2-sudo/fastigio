@@ -27,6 +27,13 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
+    
+    // Hinder börjar alltid vid 100 poäng (z = 10)
+    const OBSTACLE_START_THRESHOLD = 10;
+    if (distance < OBSTACLE_START_THRESHOLD) {
+      return obstacles; // Inga hinder innan 100 poäng
+    }
+    
     const difficultyMultiplier = 1 + (distance / 150); // Snabbare svårighetsökning
     
     // Mindre avstånd mellan hinder
@@ -79,9 +86,9 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
     return obstacles;
   };
 
-  // Initialize obstacles
+  // Initialize obstacles - börjar tom tills spelaren når 100 poäng
   if (obstaclesRef.current.length === 0) {
-    obstaclesRef.current = generateObstacles();
+    obstaclesRef.current = [];
   }
 
   useFrame((state, delta) => {
