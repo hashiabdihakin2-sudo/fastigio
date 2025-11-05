@@ -25,32 +25,43 @@ export const useGameMusic = (isPlaying: boolean) => {
     masterGain.connect(audioContext.destination);
     masterGainRef.current = masterGain;
 
-    // Dark techno bassline (inspired by FEIN)
+    // Cute, playful bassline
     const bassNotes = [
-      { freq: 55, duration: 0.5 },    // A1
-      { freq: 55, duration: 0.5 },    // A1
-      { freq: 65.41, duration: 0.5 }, // C2
-      { freq: 73.42, duration: 0.5 }, // D2
-      { freq: 55, duration: 0.5 },    // A1
-      { freq: 55, duration: 0.5 },    // A1
-      { freq: 49, duration: 0.5 },    // G1
-      { freq: 55, duration: 0.5 },    // A1
+      { freq: 130.81, duration: 0.4 },   // C3
+      { freq: 146.83, duration: 0.2 },   // D3
+      { freq: 164.81, duration: 0.4 },   // E3
+      { freq: 146.83, duration: 0.2 },   // D3
+      { freq: 130.81, duration: 0.4 },   // C3
+      { freq: 110, duration: 0.2 },      // A2
+      { freq: 123.47, duration: 0.4 },   // B2
+      { freq: 130.81, duration: 0.4 },   // C3
     ];
 
-    // Aggressive synth melody
+    // Cheerful, bouncy melody
     const melodyNotes = [
-      { freq: 220, duration: 0.25 },   // A3
-      { freq: 261.63, duration: 0.25 }, // C4
-      { freq: 293.66, duration: 0.25 }, // D4
-      { freq: 329.63, duration: 0.25 }, // E4
-      { freq: 293.66, duration: 0.25 }, // D4
-      { freq: 261.63, duration: 0.25 }, // C4
-      { freq: 220, duration: 0.5 },     // A3
-      { freq: 0, duration: 0.25 },      // Rest
+      { freq: 523.25, duration: 0.2 },   // C5
+      { freq: 587.33, duration: 0.2 },   // D5
+      { freq: 659.25, duration: 0.3 },   // E5
+      { freq: 587.33, duration: 0.1 },   // D5
+      { freq: 523.25, duration: 0.2 },   // C5
+      { freq: 659.25, duration: 0.2 },   // E5
+      { freq: 783.99, duration: 0.4 },   // G5
+      { freq: 659.25, duration: 0.2 },   // E5
+      { freq: 523.25, duration: 0.3 },   // C5
+      { freq: 0, duration: 0.1 },        // Rest
+    ];
+    
+    // Harmony layer
+    const harmonyNotes = [
+      { freq: 329.63, duration: 0.6 },   // E4
+      { freq: 392, duration: 0.4 },      // G4
+      { freq: 329.63, duration: 0.4 },   // E4
+      { freq: 293.66, duration: 0.6 },   // D4
     ];
 
     let bassTime = audioContext.currentTime;
     let melodyTime = audioContext.currentTime;
+    let harmonyTime = audioContext.currentTime;
 
     const playBass = () => {
       bassNotes.forEach((note) => {
@@ -58,13 +69,13 @@ export const useGameMusic = (isPlaying: boolean) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
           
-          osc.type = 'sawtooth';
+          osc.type = 'sine';
           osc.frequency.value = note.freq;
           
-          // Hard attack, sustained release
+          // Soft, bouncy envelope
           gain.gain.setValueAtTime(0, bassTime);
-          gain.gain.linearRampToValueAtTime(0.8, bassTime + 0.01);
-          gain.gain.setValueAtTime(0.8, bassTime + note.duration - 0.05);
+          gain.gain.linearRampToValueAtTime(0.3, bassTime + 0.02);
+          gain.gain.setValueAtTime(0.3, bassTime + note.duration - 0.1);
           gain.gain.linearRampToValueAtTime(0, bassTime + note.duration);
           
           osc.connect(gain);
@@ -83,12 +94,12 @@ export const useGameMusic = (isPlaying: boolean) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
           
-          osc.type = 'square';
+          osc.type = 'triangle';
           osc.frequency.value = note.freq;
           
-          // Sharp attack
+          // Bright, cheerful attack
           gain.gain.setValueAtTime(0, melodyTime);
-          gain.gain.linearRampToValueAtTime(0.3, melodyTime + 0.005);
+          gain.gain.linearRampToValueAtTime(0.25, melodyTime + 0.01);
           gain.gain.exponentialRampToValueAtTime(0.01, melodyTime + note.duration);
           
           osc.connect(gain);
@@ -100,44 +111,69 @@ export const useGameMusic = (isPlaying: boolean) => {
         melodyTime += note.duration;
       });
     };
+    
+    const playHarmony = () => {
+      harmonyNotes.forEach((note) => {
+        if (note.freq > 0) {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          
+          osc.type = 'sine';
+          osc.frequency.value = note.freq;
+          
+          // Smooth pad-like envelope
+          gain.gain.setValueAtTime(0, harmonyTime);
+          gain.gain.linearRampToValueAtTime(0.15, harmonyTime + 0.1);
+          gain.gain.setValueAtTime(0.15, harmonyTime + note.duration - 0.1);
+          gain.gain.linearRampToValueAtTime(0, harmonyTime + note.duration);
+          
+          osc.connect(gain);
+          gain.connect(masterGain);
+          
+          osc.start(harmonyTime);
+          osc.stop(harmonyTime + note.duration);
+        }
+        harmonyTime += note.duration;
+      });
+    };
 
-    // 808-style kick drum
+    // Soft kick drum
     const playKick = () => {
-      const kickInterval = 0.5;
+      const kickInterval = 0.4;
       let kickTime = audioContext.currentTime;
       
-      for (let i = 0; i < 32; i++) {
+      for (let i = 0; i < 40; i++) {
         const osc = audioContext.createOscillator();
         const gain = audioContext.createGain();
         
-        osc.frequency.setValueAtTime(150, kickTime);
-        osc.frequency.exponentialRampToValueAtTime(40, kickTime + 0.1);
+        osc.frequency.setValueAtTime(120, kickTime);
+        osc.frequency.exponentialRampToValueAtTime(50, kickTime + 0.08);
         
-        gain.gain.setValueAtTime(1, kickTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, kickTime + 0.3);
+        gain.gain.setValueAtTime(0.6, kickTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, kickTime + 0.2);
         
         osc.connect(gain);
         gain.connect(masterGain);
         
         osc.start(kickTime);
-        osc.stop(kickTime + 0.3);
+        osc.stop(kickTime + 0.2);
         
         kickTime += kickInterval;
       }
     };
 
-    // Hi-hat pattern
+    // Gentle hi-hat pattern
     const playHiHat = () => {
-      const hiHatInterval = 0.25;
+      const hiHatInterval = 0.2;
       let hiHatTime = audioContext.currentTime;
       
-      for (let i = 0; i < 64; i++) {
-        const bufferSize = audioContext.sampleRate * 0.1;
+      for (let i = 0; i < 80; i++) {
+        const bufferSize = audioContext.sampleRate * 0.05;
         const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
         const data = buffer.getChannelData(0);
         
         for (let j = 0; j < bufferSize; j++) {
-          data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.1));
+          data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.15));
         }
         
         const noise = audioContext.createBufferSource();
@@ -146,11 +182,11 @@ export const useGameMusic = (isPlaying: boolean) => {
         
         noise.buffer = buffer;
         filter.type = 'highpass';
-        filter.frequency.value = 7000;
+        filter.frequency.value = 8000;
         
-        const intensity = i % 4 === 0 ? 0.3 : 0.15;
+        const intensity = i % 4 === 0 ? 0.15 : 0.08;
         gain.gain.setValueAtTime(intensity, hiHatTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, hiHatTime + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, hiHatTime + 0.08);
         
         noise.connect(filter);
         filter.connect(gain);
@@ -167,6 +203,7 @@ export const useGameMusic = (isPlaying: boolean) => {
     playHiHat();
     playBass();
     playMelody();
+    playHarmony();
 
     // Loop the music
     const totalDuration = 4; // 4 seconds loop
@@ -174,10 +211,12 @@ export const useGameMusic = (isPlaying: boolean) => {
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         bassTime = audioContext.currentTime;
         melodyTime = audioContext.currentTime;
+        harmonyTime = audioContext.currentTime;
         playKick();
         playHiHat();
         playBass();
         playMelody();
+        playHarmony();
       }
     }, totalDuration * 1000);
 
