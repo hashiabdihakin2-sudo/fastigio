@@ -22,14 +22,14 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
   const { endGame } = useGameStore();
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
+  const OBSTACLE_START_THRESHOLD = 10; // Starta hinder vid ~100 poäng (z ≈ 10)
 
   // Generate obstacles procedurally - fler hinder
   const generateObstacles = (startZ: number = 20) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
     
-    // Hinder börjar alltid vid 100 poäng (z = 10)
-    const OBSTACLE_START_THRESHOLD = 10;
+    // Hinder börjar alltid vid 100 poäng (z ≈ 10)
     if (distance < OBSTACLE_START_THRESHOLD) {
       return obstacles; // Inga hinder innan 100 poäng
     }
@@ -136,14 +136,23 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       }
     });
 
-    // Generate new obstacles with more frequency
-    const furthestObstacle = Math.max(...obstaclesRef.current.map(o => o.position.z));
-    if (ballPosition.z > furthestObstacle - 80) {
-      const newObstacles = generateObstacles(furthestObstacle + 15);
-      obstaclesRef.current = [
-        ...obstaclesRef.current,
-        ...newObstacles
-      ];
+    // Generate new obstacles precisely at threshold and onward
+    const distance = Math.abs(ballPosition.z);
+    const furthestObstacle =
+      obstaclesRef.current.length > 0
+        ? Math.max(...obstaclesRef.current.map((o) => o.position.z))
+        : ballPosition.z;
+
+    if (distance >= OBSTACLE_START_THRESHOLD) {
+      const needInitialBatch = obstaclesRef.current.length === 0;
+      const nearEnd = ballPosition.z > furthestObstacle - 80;
+      if (needInitialBatch || nearEnd) {
+        const startZ = needInitialBatch ? ballPosition.z + 15 : furthestObstacle + 15;
+        const newObstacles = generateObstacles(startZ);
+        if (newObstacles.length > 0) {
+          obstaclesRef.current = [...obstaclesRef.current, ...newObstacles];
+        }
+      }
     }
 
     // Clean up distant obstacles
