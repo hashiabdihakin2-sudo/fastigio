@@ -1,6 +1,7 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface GameUIProps {
   currentSection: number;
@@ -10,6 +11,10 @@ interface GameUIProps {
 
 export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) => {
   const { score, highScore } = useGameStore();
+  
+  const handleMobileControl = (direction: 'left' | 'right') => {
+    (window as any).handleGlide?.(direction);
+  };
   
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -88,6 +93,36 @@ export const GameUI = ({ currentSection, gameState, onRestart }: GameUIProps) =>
               </div>
             </div>
           </Card>
+        </div>
+      )}
+
+      {/* Mobile controls */}
+      {gameState === 'playing' && (
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 pointer-events-auto px-4">
+          <Button
+            size="icon"
+            variant="default"
+            className="w-16 h-16 rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleMobileControl('left');
+            }}
+            onClick={() => handleMobileControl('left')}
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </Button>
+          <Button
+            size="icon"
+            variant="default"
+            className="w-16 h-16 rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              handleMobileControl('right');
+            }}
+            onClick={() => handleMobileControl('right')}
+          >
+            <ChevronRight className="w-8 h-8" />
+          </Button>
         </div>
       )}
     </div>
