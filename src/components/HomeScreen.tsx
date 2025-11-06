@@ -8,11 +8,15 @@ interface HomeScreenProps {
 }
 
 const SKINS = [
-  { id: 'classic' as const, name: 'Klassisk', color: '#00BFFF', emoji: '⚡' },
-  { id: 'fire' as const, name: 'Eld', color: '#FF4500', emoji: '🔥' },
-  { id: 'ice' as const, name: 'Is', color: '#87CEEB', emoji: '❄️' },
-  { id: 'rainbow' as const, name: 'Regnbåge', color: '#FF1493', emoji: '🌈' },
-  { id: 'golden' as const, name: 'Guld', color: '#FFD700', emoji: '⭐' },
+  { id: 'classic' as const, name: 'Classic', color: '#00BFFF', emoji: '⚪' },
+  { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥' },
+  { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️' },
+  { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈' },
+  { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑' },
+  { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷' },
+  { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
+  { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️' },
+  { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {

@@ -9,10 +9,14 @@ interface HighScore {
 
 const SKIN_PRICES = {
   classic: 0,
-  fire: 50,
-  ice: 50,
-  rainbow: 100,
-  golden: 150,
+  fire: 500,
+  ice: 500,
+  rainbow: 1000,
+  golden: 1500,
+  ninja: 2000,
+  robot: 2500,
+  pirate: 3000,
+  wizard: 3500,
 };
 
 
@@ -26,8 +30,8 @@ interface GameState {
   highScore: number;
   highScores: HighScore[];
   coins: number;
-  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden')[];
-  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden';
+  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard')[];
+  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard';
   
   // Actions
   setBallPosition: (position: Vector3) => void;
@@ -36,9 +40,9 @@ interface GameState {
   endGame: () => void;
   restartGame: () => void;
   updateScore: (score: number) => void;
-  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden') => void;
-  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden') => boolean;
-  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden') => number;
+  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => void;
+  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => boolean;
+  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => number;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -60,7 +64,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   updateScore: (score) => {
     const { coins } = get();
-    const newCoins = Math.floor(score / 10); // 10 coins per 100 poäng
+    const newCoins = Math.floor(score / 10); // Från poäng
     if (newCoins > coins) {
       set({ coins: newCoins });
       localStorage.setItem('coins', newCoins.toString());

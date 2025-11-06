@@ -77,10 +77,10 @@ export const Coins = ({ ballPosition }: CoinsProps) => {
         coin.collected = true;
         collectedCoinsRef.current += 1;
         
-        // Update coins in store
+        // Update coins in store - 100 coins per pickup
         const currentCoins = useGameStore.getState().coins;
-        useGameStore.setState({ coins: currentCoins + 1 });
-        localStorage.setItem('coins', (currentCoins + 1).toString());
+        useGameStore.setState({ coins: currentCoins + 100 });
+        localStorage.setItem('coins', (currentCoins + 100).toString());
       }
     });
 
