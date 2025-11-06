@@ -9,6 +9,7 @@ interface GameState {
   isGameRunning: boolean;
   score: number;
   highScore: number;
+  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden';
   
   // Actions
   setBallPosition: (position: Vector3) => void;
@@ -17,6 +18,7 @@ interface GameState {
   endGame: () => void;
   restartGame: () => void;
   updateScore: (score: number) => void;
+  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden') => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -27,12 +29,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   isGameRunning: false,
   score: 0,
   highScore: 0,
+  selectedSkin: 'classic',
 
   setBallPosition: (position) => set({ ballPosition: position }),
 
   setIsJumping: (jumping) => set({ isJumping: jumping }),
 
   updateScore: (score) => set({ score }),
+
+  setSelectedSkin: (skin) => set({ selectedSkin: skin }),
 
   nextSection: () => {
     const { currentSection } = get();
