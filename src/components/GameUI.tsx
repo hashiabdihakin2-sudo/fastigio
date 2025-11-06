@@ -1,7 +1,7 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
-import { ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Volume2, VolumeX, Coins } from 'lucide-react';
 
 interface GameUIProps {
   currentSection: number;
@@ -12,7 +12,7 @@ interface GameUIProps {
 }
 
 export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggleMute }: GameUIProps) => {
-  const { score, highScore } = useGameStore();
+  const { score, highScore, coins } = useGameStore();
   
   const handleMobileControl = (direction: 'left' | 'right') => {
     (window as any).handleGlide?.(direction);
@@ -28,6 +28,10 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
           </div>
           <div className="text-xs text-muted-foreground">
             Rekord: {highScore}
+          </div>
+          <div className="text-xs text-accent flex items-center gap-1 mt-1">
+            <Coins className="w-3 h-3" />
+            {coins} coins
           </div>
         </Card>
       </div>
@@ -74,37 +78,7 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
         </div>
       )}
 
-      {/* Game over screen */}
-      {gameState === 'gameOver' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-auto">
-          <Card className="cyber-border p-8 bg-card/90 backdrop-blur-md text-center glow-effect">
-            <h2 className="text-3xl font-bold mb-4 text-game-danger">
-              GAME OVER
-            </h2>
-            <div className="mb-6">
-              <div className="text-xl font-semibold text-neon-blue mb-2">
-                Poäng: {score}
-              </div>
-              <div className="text-muted-foreground">
-                Bästa: {highScore}
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Button 
-                variant="default" 
-                size="lg" 
-                onClick={onRestart}
-                className="w-full glow-effect bg-gradient-to-r from-primary to-secondary text-primary-foreground font-bold"
-              >
-                FÖRSÖK IGEN
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Eller klicka/tryck mellanslag
-              </div>
-            </div>
-          </Card>
-        </div>
-      )}
+      {/* Game over screen - now handled by GameOverScreen component */}
 
       {/* Mobile controls */}
       {gameState === 'playing' && (

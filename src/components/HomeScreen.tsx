@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useGameStore } from '@/store/gameStore';
 import { useState, useEffect } from 'react';
-import { Smartphone } from 'lucide-react';
+import { Smartphone, Coins } from 'lucide-react';
 
 interface HomeScreenProps {
   onStartGame: () => void;
@@ -16,7 +16,7 @@ const SKINS = [
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
-  const { selectedSkin, setSelectedSkin } = useGameStore();
+  const { selectedSkin, setSelectedSkin, coins, unlockedSkins, unlockSkin, getSkinPrice } = useGameStore();
   const [isMobile, setIsMobile] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
@@ -32,6 +32,18 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
     return () => window.removeEventListener('resize', checkOrientation);
   }, []);
 
+
+  const handleSkinSelect = (skinId: typeof SKINS[number]['id']) => {
+    if (unlockedSkins.includes(skinId)) {
+      setSelectedSkin(skinId);
+    } else {
+      const success = unlockSkin(skinId);
+      if (!success) {
+        alert(`Du behöver ${getSkinPrice(skinId)} coins för att köpa denna skin!`);
+      }
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex items-center justify-center z-10 overflow-y-auto">
       <div className="text-center space-y-8 p-8 max-w-2xl w-full">
@@ -43,6 +55,10 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           <p className="text-lg md:text-xl text-muted-foreground">
             Undvik hinder och samla poäng!
           </p>
+          <div className="flex items-center justify-center gap-2 text-accent">
+            <Coins className="w-5 h-5" />
+            <span className="font-bold text-xl">{coins} coins</span>
+          </div>
         </div>
 
         {/* Mobile Orientation Warning */}
@@ -59,28 +75,46 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-foreground">Välj ditt utseende</h2>
           <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
-            {SKINS.map((skin) => (
-              <button
-                key={skin.id}
-                onClick={() => setSelectedSkin(skin.id)}
-                className={`
-                  relative p-4 rounded-lg border-2 transition-all duration-200
-                  ${selectedSkin === skin.id 
-                    ? 'border-primary shadow-lg scale-110' 
-                    : 'border-border hover:border-primary/50 hover:scale-105'
-                  }
-                `}
-                style={{ backgroundColor: `${skin.color}20` }}
-              >
-                <div className="text-3xl mb-1">{skin.emoji}</div>
-                <div className="text-xs font-medium text-foreground">{skin.name}</div>
-                {selectedSkin === skin.id && (
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-xs">✓</span>
-                  </div>
-                )}
-              </button>
-            ))}
+            {SKINS.map((skin) => {
+              const isUnlocked = unlockedSkins.includes(skin.id);
+              const isSelected = selectedSkin === skin.id;
+              const price = getSkinPrice(skin.id);
+
+              return (
+                <button
+                  key={skin.id}
+                  onClick={() => handleSkinSelect(skin.id)}
+                  disabled={!isUnlocked && coins < price}
+                  className={`
+                    relative p-4 rounded-lg border-2 transition-all duration-200
+                    ${isSelected 
+                      ? 'border-primary shadow-lg scale-110 ring-2 ring-primary/50' 
+                      : isUnlocked
+                      ? 'border-border hover:border-primary/50 hover:scale-105'
+                      : 'border-muted opacity-60 hover:opacity-80'
+                    }
+                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
+                  `}
+                  style={{ backgroundColor: `${skin.color}20` }}
+                >
+                  <div className="text-3xl mb-1">{skin.emoji}</div>
+                  <div className="text-xs font-medium text-foreground">{skin.name}</div>
+                  
+                  {!isUnlocked && (
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                      <Coins className="w-3 h-3" />
+                      {price}
+                    </div>
+                  )}
+                  
+                  {isSelected && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                      <span className="text-xs">✓</span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 

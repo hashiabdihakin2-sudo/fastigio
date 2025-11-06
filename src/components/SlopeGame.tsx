@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { GameScene } from './GameScene';
 import { GameUI } from './GameUI';
 import { HomeScreen } from './HomeScreen';
+import { GameOverScreen } from './GameOverScreen';
 import { useGameStore } from '../store/gameStore';
 import { useGameMusic } from '../hooks/useGameMusic';
 
@@ -46,10 +47,21 @@ export const SlopeGame = () => {
     };
   }, [isGameRunning, restartGame]);
 
+  const handleBackToHome = () => {
+    useGameStore.setState({ gameState: 'waiting', isGameRunning: false });
+  };
+
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-background">
       {gameState === 'waiting' && (
         <HomeScreen onStartGame={restartGame} />
+      )}
+      
+      {gameState === 'gameOver' && (
+        <GameOverScreen 
+          onRestart={restartGame}
+          onBackToHome={handleBackToHome}
+        />
       )}
       
       <Canvas 
