@@ -4,6 +4,7 @@ import { Vector3, Group, Mesh } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
+import { Coins } from './Coins';
 import { CyberBackground } from './CyberBackground';
 import { useGameStore } from '../store/gameStore';
 
@@ -129,6 +130,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       <Ball ref={ballRef} />
       <Track ballPosition={ballPosition} />
       <Obstacles ballPosition={ballPosition} />
+      <Coins ballPosition={ballPosition} />
     </group>
   );
 };
