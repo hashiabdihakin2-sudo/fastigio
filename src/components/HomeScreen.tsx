@@ -153,11 +153,15 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         <div className="space-y-4">
           <Button 
             onClick={handleStartGame}
+            disabled={!tempName.trim()}
             size="lg"
-            className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow"
+            className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Starta Spel
           </Button>
+          {!tempName.trim() && (
+            <p className="text-sm text-muted-foreground">Ange ditt namn för att börja spela</p>
+          )}
           
           {/* Controls */}
           <div className="space-y-2 text-sm text-muted-foreground">

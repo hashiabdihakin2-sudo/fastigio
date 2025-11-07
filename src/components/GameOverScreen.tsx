@@ -1,7 +1,9 @@
 import { Button } from './ui/button';
+import { Input } from './ui/input';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
-import { Trophy, Coins } from 'lucide-react';
+import { Trophy, Coins, User } from 'lucide-react';
+import { useState } from 'react';
 
 interface GameOverScreenProps {
   onRestart: () => void;
@@ -26,7 +28,8 @@ const SKINS = [
 ];
 
 export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps) => {
-  const { score, highScore, highScores, coins, selectedSkin, setSelectedSkin, unlockedSkins, unlockSkin, getSkinPrice } = useGameStore();
+  const { score, highScore, highScores, coins, selectedSkin, setSelectedSkin, unlockedSkins, unlockSkin, getSkinPrice, playerName, setPlayerName } = useGameStore();
+  const [tempName, setTempName] = useState(playerName);
 
   const handleSkinSelect = (skinId: typeof SKINS[number]['id']) => {
     if (unlockedSkins.includes(skinId)) {
@@ -40,6 +43,20 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
   };
 
   const earnedCoins = Math.floor(score / 10);
+
+  const handleRestart = () => {
+    if (tempName.trim() && tempName !== playerName) {
+      setPlayerName(tempName.trim());
+    }
+    onRestart();
+  };
+
+  const handleBackToHome = () => {
+    if (tempName.trim() && tempName !== playerName) {
+      setPlayerName(tempName.trim());
+    }
+    onBackToHome();
+  };
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex items-center justify-center z-10 overflow-y-auto">
@@ -64,6 +81,27 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
             </Card>
           </div>
         </div>
+
+        {/* Player Name Input */}
+        <Card className="p-4 bg-card/80 backdrop-blur-md">
+          <div className="flex items-center gap-2 mb-3 justify-center">
+            <User className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-bold text-foreground">Ditt namn</h3>
+          </div>
+          <div className="max-w-md mx-auto">
+            <Input
+              type="text"
+              placeholder="Ange ditt namn..."
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+              maxLength={20}
+              className="text-center"
+            />
+            <p className="text-xs text-muted-foreground mt-2">
+              {tempName.trim() ? `Spelar som: ${tempName.trim()}` : 'Ange ett namn för topplistan'}
+            </p>
+          </div>
+        </Card>
 
         {/* Högpoänglista */}
         <Card className="p-6 bg-card/80 backdrop-blur-md">
@@ -160,20 +198,24 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
         {/* Action Buttons */}
         <div className="space-y-3 max-w-md mx-auto">
           <Button 
-            onClick={onRestart}
+            onClick={handleRestart}
+            disabled={!tempName.trim()}
             size="lg"
-            className="w-full text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow"
+            className="w-full text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Spela igen
           </Button>
           <Button 
-            onClick={onBackToHome}
+            onClick={handleBackToHome}
             variant="outline"
             size="lg"
             className="w-full"
           >
             Tillbaka till start
           </Button>
+          {!tempName.trim() && (
+            <p className="text-sm text-muted-foreground">Ange ditt namn för att fortsätta</p>
+          )}
         </div>
       </div>
     </div>
