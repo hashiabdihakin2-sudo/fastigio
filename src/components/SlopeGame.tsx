@@ -16,10 +16,6 @@ export const SlopeGame = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isGameRunning) {
-        if (e.key === ' ') {
-          e.preventDefault();
-          restartGame();
-        }
         return;
       }
 
@@ -32,18 +28,10 @@ export const SlopeGame = () => {
       }
     };
 
-    const handleClick = () => {
-      if (!isGameRunning) {
-        restartGame();
-      }
-    };
-
     window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('click', handleClick);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('click', handleClick);
     };
   }, [isGameRunning, restartGame]);
 

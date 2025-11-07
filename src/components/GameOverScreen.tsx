@@ -3,7 +3,8 @@ import { Input } from './ui/input';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
 import { Trophy, Coins, User } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface GameOverScreenProps {
   onRestart: () => void;
@@ -30,6 +31,67 @@ const SKINS = [
 export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps) => {
   const { score, highScore, highScores, coins, selectedSkin, setSelectedSkin, unlockedSkins, unlockSkin, getSkinPrice, playerName, setPlayerName } = useGameStore();
   const [tempName, setTempName] = useState(playerName);
+  const [globalHighScores, setGlobalHighScores] = useState<Array<{
+    id: string;
+    player_name: string;
+    score: number;
+    skin: string;
+    created_at: string;
+  }>>([]);
+
+  // Fetch global high scores
+  useEffect(() => {
+    const fetchGlobalHighScores = async () => {
+      const { data, error } = await supabase
+        .from('global_highscores')
+        .select('*')
+        .order('score', { ascending: false })
+        .limit(10);
+
+      if (data && !error) {
+        setGlobalHighScores(data);
+      }
+    };
+
+    fetchGlobalHighScores();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel('global-highscores-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'global_highscores'
+        },
+        () => {
+          fetchGlobalHighScores();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // Save score to global high scores when component mounts
+  useEffect(() => {
+    const saveGlobalScore = async () => {
+      if (score > 0 && playerName) {
+        await supabase
+          .from('global_highscores')
+          .insert({
+            player_name: playerName,
+            score: score,
+            skin: selectedSkin
+          });
+      }
+    };
+
+    saveGlobalScore();
+  }, []);
 
   const handleSkinSelect = (skinId: typeof SKINS[number]['id']) => {
     if (unlockedSkins.includes(skinId)) {
@@ -103,19 +165,19 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
           </div>
         </Card>
 
-        {/* Högpoänglista */}
+        {/* Global Högpoänglista */}
         <Card className="p-6 bg-card/80 backdrop-blur-md">
           <div className="flex items-center gap-2 mb-4 justify-center">
             <Trophy className="w-6 h-6 text-primary" />
-            <h3 className="text-xl font-bold text-foreground">Top 10 Högpoäng</h3>
+            <h3 className="text-xl font-bold text-foreground">Global Top 10</h3>
           </div>
           <div className="space-y-2 max-h-64 overflow-y-auto">
-            {highScores.length === 0 ? (
+            {globalHighScores.length === 0 ? (
               <p className="text-muted-foreground text-sm">Inga resultat än!</p>
             ) : (
-              highScores.map((hs, index) => (
+              globalHighScores.map((hs, index) => (
                 <div 
-                  key={index}
+                  key={hs.id}
                   className={`flex items-center justify-between p-3 rounded-lg ${
                     index === 0 ? 'bg-primary/20 border border-primary/40' :
                     index === 1 ? 'bg-accent/10 border border-accent/20' :
@@ -131,9 +193,11 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
                       {SKINS.find(s => s.id === hs.skin)?.emoji || '⚡'}
                     </span>
                     <div className="text-left">
-                      <div className="font-semibold text-foreground">{hs.playerName}</div>
+                      <div className="font-semibold text-foreground">{hs.player_name}</div>
                       <div className="text-sm text-foreground/80">{hs.score} poäng</div>
-                      <div className="text-xs text-muted-foreground">{hs.date}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {new Date(hs.created_at).toLocaleDateString('sv-SE')}
+                      </div>
                     </div>
                   </div>
                 </div>
