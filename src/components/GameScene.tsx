@@ -1,11 +1,12 @@
 import { useFrame } from '@react-three/fiber';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Vector3, Group, Mesh } from 'three';
 import { Ball } from './Ball';
 import { Track } from './Track';
 import { Obstacles } from './Obstacles';
 import { Coins } from './Coins';
 import { CyberBackground } from './CyberBackground';
+import { DeathAnimation } from './DeathAnimation';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -15,6 +16,8 @@ interface GameSceneProps {
 export const GameScene = ({ controls }: GameSceneProps) => {
   const groupRef = useRef<Group>(null);
   const ballRef = useRef<Group>(null);
+  const [showDeathAnimation, setShowDeathAnimation] = useState(false);
+  const [deathPosition, setDeathPosition] = useState<[number, number, number]>([0, 0, 0]);
   const { 
     ballPosition, 
     setBallPosition, 
@@ -75,8 +78,17 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       setBallPosition(startPosition);
       ballRef.current.position.copy(startPosition);
       velocityX.current = 0;
+      setShowDeathAnimation(false);
     }
   }, [gameState, setBallPosition]);
+
+  // Trigger death animation when game ends
+  useEffect(() => {
+    if (gameState === 'gameOver' && ballRef.current && !showDeathAnimation) {
+      setDeathPosition([ballPosition.x, ballPosition.y, ballPosition.z]);
+      setShowDeathAnimation(true);
+    }
+  }, [gameState, ballPosition, showDeathAnimation]);
 
   // Handle gliding impulse on key press
   useEffect(() => {
@@ -127,10 +139,18 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
       {/* Game objects */}
       <CyberBackground ballPosition={ballPosition} />
-      <Ball ref={ballRef} />
+      {!showDeathAnimation && <Ball ref={ballRef} />}
       <Track ballPosition={ballPosition} />
       <Obstacles ballPosition={ballPosition} />
       <Coins ballPosition={ballPosition} />
+      
+      {/* Death Animation */}
+      {showDeathAnimation && (
+        <DeathAnimation 
+          position={deathPosition} 
+          onComplete={() => {}} 
+        />
+      )}
     </group>
   );
 };

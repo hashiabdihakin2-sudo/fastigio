@@ -18,6 +18,11 @@ const SKINS = [
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
   { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️' },
   { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙' },
+  { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉' },
+  { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽' },
+  { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸' },
+  { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛' },
+  { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️' },
 ];
 
 export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps) => {
@@ -88,7 +93,8 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
                       {SKINS.find(s => s.id === hs.skin)?.emoji || '⚡'}
                     </span>
                     <div className="text-left">
-                      <div className="font-semibold text-foreground">{hs.score} poäng</div>
+                      <div className="font-semibold text-foreground">{hs.playerName}</div>
+                      <div className="text-sm text-foreground/80">{hs.score} poäng</div>
                       <div className="text-xs text-muted-foreground">{hs.date}</div>
                     </div>
                   </div>
@@ -104,7 +110,7 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
             <Coins className="w-5 h-5 text-accent" />
             <h3 className="text-lg font-bold text-foreground">Välj eller köp ny skin</h3>
           </div>
-          <div className="grid grid-cols-5 gap-3 max-w-md mx-auto mb-4">
+          <div className="grid grid-cols-5 gap-3 max-w-2xl mx-auto mb-4">
             {SKINS.map((skin) => {
               const isUnlocked = unlockedSkins.includes(skin.id);
               const isSelected = selectedSkin === skin.id;

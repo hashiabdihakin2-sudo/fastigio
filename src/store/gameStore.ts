@@ -5,18 +5,24 @@ interface HighScore {
   score: number;
   date: string;
   skin: string;
+  playerName: string;
 }
 
 const SKIN_PRICES = {
   classic: 0,
-  fire: 500,
-  ice: 500,
-  rainbow: 1000,
-  golden: 1500,
-  ninja: 2000,
-  robot: 2500,
-  pirate: 3000,
-  wizard: 3500,
+  fire: 800,
+  ice: 800,
+  rainbow: 1500,
+  golden: 2500,
+  ninja: 3500,
+  robot: 4500,
+  pirate: 5500,
+  wizard: 6500,
+  dragon: 8000,
+  alien: 9000,
+  superhero: 10000,
+  vampire: 11000,
+  knight: 12000,
 };
 
 
@@ -30,8 +36,9 @@ interface GameState {
   highScore: number;
   highScores: HighScore[];
   coins: number;
-  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard')[];
-  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard';
+  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight')[];
+  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight';
+  playerName: string;
   
   // Actions
   setBallPosition: (position: Vector3) => void;
@@ -40,9 +47,10 @@ interface GameState {
   endGame: () => void;
   restartGame: () => void;
   updateScore: (score: number) => void;
-  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => void;
-  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => boolean;
-  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard') => number;
+  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => void;
+  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => boolean;
+  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => number;
+  setPlayerName: (name: string) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -57,6 +65,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   coins: parseInt(localStorage.getItem('coins') || '0'),
   unlockedSkins: JSON.parse(localStorage.getItem('unlockedSkins') || '["classic"]'),
   selectedSkin: 'classic',
+  playerName: localStorage.getItem('playerName') || '',
 
   setBallPosition: (position) => set({ ballPosition: position }),
 
@@ -73,6 +82,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   setSelectedSkin: (skin) => set({ selectedSkin: skin }),
+
+  setPlayerName: (name) => {
+    set({ playerName: name });
+    localStorage.setItem('playerName', name);
+  },
 
   getSkinPrice: (skin) => SKIN_PRICES[skin],
 
@@ -104,14 +118,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   endGame: () => {
-    const { score, highScore, highScores, selectedSkin } = get();
+    const { score, highScore, highScores, selectedSkin, playerName } = get();
     const newHighScore = Math.max(score, highScore);
     
     // Lägg till i högpoänglistan
     const newHighScores = [...highScores, {
       score,
       date: new Date().toLocaleDateString('sv-SE'),
-      skin: selectedSkin
+      skin: selectedSkin,
+      playerName: playerName || 'Anonym'
     }]
       .sort((a, b) => b.score - a.score)
       .slice(0, 10);

@@ -65,6 +65,41 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 0.8,
     hat: 'wizardHat',
     accessory: 'magicWand'
+  },
+  dragon: {
+    color: '#DC143C',
+    emissive: '#FF4500',
+    emissiveIntensity: 1.0,
+    hat: 'dragonHorns',
+    accessory: 'dragonWings'
+  },
+  alien: {
+    color: '#7FFF00',
+    emissive: '#00FF00',
+    emissiveIntensity: 1.0,
+    hat: 'alienAntenna',
+    accessory: 'alienEyes'
+  },
+  superhero: {
+    color: '#1E90FF',
+    emissive: '#4169E1',
+    emissiveIntensity: 0.9,
+    hat: 'superheroCape',
+    accessory: 'superheroBelt'
+  },
+  vampire: {
+    color: '#8B0000',
+    emissive: '#DC143C',
+    emissiveIntensity: 0.7,
+    hat: 'vampireCape',
+    accessory: 'vampireFangs'
+  },
+  knight: {
+    color: '#708090',
+    emissive: '#B0C4DE',
+    emissiveIntensity: 0.6,
+    hat: 'knightHelmet',
+    accessory: 'knightShield'
   }
 };
 
@@ -335,6 +370,154 @@ export const Ball = forwardRef<Group>((props, ref) => {
           <mesh position={[0, 0.25, 0]}>
             <sphereGeometry args={[0.05, 8, 8]} />
             <meshPhongMaterial color="#9370DB" emissive="#9370DB" emissiveIntensity={1.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Dragon Hat */}
+      {skinConfig.hat === 'dragonHorns' && (
+        <group position={[0, 0.3, 0]}>
+          <mesh position={[-0.15, 0.1, 0]} rotation={[0, 0, -0.3]}>
+            <coneGeometry args={[0.06, 0.25, 8]} />
+            <meshPhongMaterial color="#DC143C" emissive="#FF4500" emissiveIntensity={0.8} />
+          </mesh>
+          <mesh position={[0.15, 0.1, 0]} rotation={[0, 0, 0.3]}>
+            <coneGeometry args={[0.06, 0.25, 8]} />
+            <meshPhongMaterial color="#DC143C" emissive="#FF4500" emissiveIntensity={0.8} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Dragon Wings */}
+      {skinConfig.accessory === 'dragonWings' && (
+        <group>
+          <mesh position={[-0.3, 0, -0.1]} rotation={[0, -0.5, 0]}>
+            <coneGeometry args={[0.15, 0.3, 3]} />
+            <meshPhongMaterial color="#8B0000" emissive="#DC143C" emissiveIntensity={0.6} transparent opacity={0.8} />
+          </mesh>
+          <mesh position={[0.3, 0, -0.1]} rotation={[0, 0.5, 0]}>
+            <coneGeometry args={[0.15, 0.3, 3]} />
+            <meshPhongMaterial color="#8B0000" emissive="#DC143C" emissiveIntensity={0.6} transparent opacity={0.8} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Alien Antenna */}
+      {skinConfig.hat === 'alienAntenna' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh position={[-0.1, 0, 0]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.25, 8]} />
+            <meshPhongMaterial color="#7FFF00" emissive="#00FF00" emissiveIntensity={0.8} />
+          </mesh>
+          <mesh position={[-0.1, 0.15, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshPhongMaterial color="#00FF00" emissive="#00FF00" emissiveIntensity={1.5} />
+          </mesh>
+          <mesh position={[0.1, 0, 0]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.25, 8]} />
+            <meshPhongMaterial color="#7FFF00" emissive="#00FF00" emissiveIntensity={0.8} />
+          </mesh>
+          <mesh position={[0.1, 0.15, 0]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshPhongMaterial color="#00FF00" emissive="#00FF00" emissiveIntensity={1.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Alien Eyes */}
+      {skinConfig.accessory === 'alienEyes' && (
+        <group>
+          <mesh position={[-0.12, 0.1, 0.25]}>
+            <sphereGeometry args={[0.06, 16, 16]} />
+            <meshPhongMaterial color="#000000" emissive="#00FF00" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0.12, 0.1, 0.25]}>
+            <sphereGeometry args={[0.06, 16, 16]} />
+            <meshPhongMaterial color="#000000" emissive="#00FF00" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Superhero Cape */}
+      {skinConfig.hat === 'superheroCape' && (
+        <group position={[0, 0.1, -0.3]} rotation={[0.3, 0, 0]}>
+          <mesh>
+            <boxGeometry args={[0.5, 0.6, 0.02]} />
+            <meshPhongMaterial color="#DC143C" emissive="#FF0000" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Superhero Belt */}
+      {skinConfig.accessory === 'superheroBelt' && (
+        <group position={[0, -0.15, 0]}>
+          <mesh>
+            <torusGeometry args={[0.32, 0.04, 8, 32]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Vampire Cape */}
+      {skinConfig.hat === 'vampireCape' && (
+        <group position={[0, 0.15, -0.3]} rotation={[0.2, 0, 0]}>
+          <mesh>
+            <boxGeometry args={[0.5, 0.7, 0.02]} />
+            <meshPhongMaterial color="#000000" />
+          </mesh>
+          <mesh position={[0, 0.3, 0]}>
+            <coneGeometry args={[0.15, 0.2, 32]} />
+            <meshPhongMaterial color="#000000" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Vampire Fangs */}
+      {skinConfig.accessory === 'vampireFangs' && (
+        <group position={[0, -0.08, 0.28]}>
+          <mesh position={[-0.08, 0, 0]}>
+            <coneGeometry args={[0.02, 0.08, 8]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          <mesh position={[0.08, 0, 0]}>
+            <coneGeometry args={[0.02, 0.08, 8]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Knight Helmet */}
+      {skinConfig.hat === 'knightHelmet' && (
+        <group position={[0, 0.25, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.22, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#708090" metalness={0.9} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0.05, 0.2]}>
+            <boxGeometry args={[0.3, 0.08, 0.02]} />
+            <meshStandardMaterial color="#708090" metalness={0.9} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0.15, 0]}>
+            <coneGeometry args={[0.05, 0.15, 4]} />
+            <meshPhongMaterial color="#DC143C" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Knight Shield */}
+      {skinConfig.accessory === 'knightShield' && (
+        <group position={[-0.4, 0, 0]} rotation={[0, Math.PI / 4, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.15, 0.15, 0.05, 6]} />
+            <meshStandardMaterial color="#708090" metalness={0.9} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, 0, 0.03]}>
+            <boxGeometry args={[0.15, 0.04, 0.02]} />
+            <meshPhongMaterial color="#DC143C" />
+          </mesh>
+          <mesh position={[0, 0, 0.03]} rotation={[0, 0, Math.PI / 2]}>
+            <boxGeometry args={[0.15, 0.04, 0.02]} />
+            <meshPhongMaterial color="#DC143C" />
           </mesh>
         </group>
       )}

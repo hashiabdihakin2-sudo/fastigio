@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useGameStore } from '@/store/gameStore';
 import { useState, useEffect } from 'react';
 import { Smartphone, Coins } from 'lucide-react';
@@ -17,12 +18,18 @@ const SKINS = [
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
   { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️' },
   { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙' },
+  { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉' },
+  { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽' },
+  { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸' },
+  { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛' },
+  { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
-  const { selectedSkin, setSelectedSkin, coins, unlockedSkins, unlockSkin, getSkinPrice } = useGameStore();
+  const { selectedSkin, setSelectedSkin, coins, unlockedSkins, unlockSkin, getSkinPrice, playerName, setPlayerName } = useGameStore();
   const [isMobile, setIsMobile] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
+  const [tempName, setTempName] = useState(playerName);
 
   useEffect(() => {
     const checkOrientation = () => {
@@ -48,6 +55,13 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
     }
   };
 
+  const handleStartGame = () => {
+    if (tempName.trim()) {
+      setPlayerName(tempName.trim());
+    }
+    onStartGame();
+  };
+
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex items-center justify-center z-10 overflow-y-auto">
       <div className="text-center space-y-8 p-8 max-w-2xl w-full">
@@ -65,6 +79,19 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         </div>
 
+        {/* Player Name Input */}
+        <div className="space-y-2 max-w-md mx-auto">
+          <label className="text-sm font-medium text-foreground">Ditt namn (för topplistan)</label>
+          <Input
+            type="text"
+            placeholder="Ange ditt namn..."
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+            maxLength={20}
+            className="text-center"
+          />
+        </div>
+
         {/* Mobile Orientation Warning */}
         {isMobile && !isLandscape && (
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex items-center gap-3">
@@ -78,7 +105,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         {/* Skin Selection */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-foreground">Välj ditt utseende</h2>
-          <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
+          <div className="grid grid-cols-5 gap-3 max-w-2xl mx-auto">
             {SKINS.map((skin) => {
               const isUnlocked = unlockedSkins.includes(skin.id);
               const isSelected = selectedSkin === skin.id;
@@ -125,7 +152,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         {/* Start Button */}
         <div className="space-y-4">
           <Button 
-            onClick={onStartGame}
+            onClick={handleStartGame}
             size="lg"
             className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow"
           >
