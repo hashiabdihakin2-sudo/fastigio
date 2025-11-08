@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useRef } from 'react';
 import { GameScene } from './GameScene';
 import { GameUI } from './GameUI';
 import { HomeScreen } from './HomeScreen';
@@ -12,6 +12,7 @@ export const SlopeGame = () => {
   const { gameState, currentSection, isGameRunning, isJumping, restartGame, nextSection } = useGameStore();
   const [controls, setControls] = useState({ left: false, right: false });
   const { isMuted, toggleMute } = useGameMusic(isGameRunning);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -40,7 +41,7 @@ export const SlopeGame = () => {
   };
 
   return (
-    <div className="h-screen w-screen relative overflow-hidden bg-background">
+    <div ref={containerRef} className="fullscreen-container h-[100dvh] w-screen relative overflow-hidden bg-background">
       {gameState === 'waiting' && (
         <HomeScreen onStartGame={restartGame} />
       )}
@@ -75,6 +76,7 @@ export const SlopeGame = () => {
         onRestart={restartGame}
         isMuted={isMuted}
         onToggleMute={toggleMute}
+        fullscreenTarget={containerRef}
       />
     </div>
   );

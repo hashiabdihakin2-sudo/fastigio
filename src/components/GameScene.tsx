@@ -18,6 +18,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   const ballRef = useRef<Group>(null);
   const [showDeathAnimation, setShowDeathAnimation] = useState(false);
   const [deathPosition, setDeathPosition] = useState<[number, number, number]>([0, 0, 0]);
+  const hasInit = useRef(false);
   const { 
     ballPosition, 
     setBallPosition, 
@@ -40,6 +41,17 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   const MIN_X = -3 * LANE_WIDTH;
 
   useFrame(() => {
+    // Initialize on (re)start once Ball is mounted
+    if (gameState === 'playing' && ballRef.current && !hasInit.current) {
+      const startPosition = new Vector3(0, 0.5, 0);
+      setBallPosition(startPosition);
+      ballRef.current.position.copy(startPosition);
+      velocityX.current = 0;
+      if (groupRef.current) groupRef.current.position.z = 0;
+      setShowDeathAnimation(false);
+      hasInit.current = true;
+    }
+
     if (!isGameRunning || !ballRef.current) return;
 
     // Calculate speed multiplier based on score
@@ -71,27 +83,19 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     }
   });
 
-  // Reset ball when game restarts
+  // Reset flag when leaving playing state
   useEffect(() => {
-    if (gameState === 'playing' && ballRef.current) {
-      const startPosition = new Vector3(0, 0.5, 0);
-      setBallPosition(startPosition);
-      ballRef.current.position.copy(startPosition);
-      velocityX.current = 0;
-      setShowDeathAnimation(false);
-      
-      // Reset group position
-      if (groupRef.current) {
-        groupRef.current.position.z = 0;
-      }
+    if (gameState !== 'playing') {
+      hasInit.current = false;
     }
-  }, [gameState, setBallPosition]);
+  }, [gameState]);
 
   // Trigger death animation when game ends
   useEffect(() => {
     if (gameState === 'gameOver' && ballRef.current && !showDeathAnimation) {
       setDeathPosition([ballPosition.x, ballPosition.y, ballPosition.z]);
       setShowDeathAnimation(true);
+      hasInit.current = false;
     }
   }, [gameState, ballPosition, showDeathAnimation]);
 

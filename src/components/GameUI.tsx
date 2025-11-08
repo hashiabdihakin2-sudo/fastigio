@@ -2,7 +2,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, Coins, Maximize } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type RefObject } from 'react';
 
 
 interface GameUIProps {
@@ -11,9 +11,10 @@ interface GameUIProps {
   onRestart: () => void;
   isMuted: boolean;
   onToggleMute: () => void;
+  fullscreenTarget?: RefObject<HTMLElement>;
 }
 
-export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggleMute }: GameUIProps) => {
+export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggleMute, fullscreenTarget }: GameUIProps) => {
   const { score, highScore, coins } = useGameStore();
   const [isLandscape, setIsLandscape] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -24,51 +25,63 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
     };
     
     const checkFullscreen = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const doc = document as any;
+      const inFS = !!(doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
+      const pseudo = document.body.classList.contains('pseudo-fullscreen');
+      setIsFullscreen(inFS || pseudo);
     };
 
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     document.addEventListener('fullscreenchange', checkFullscreen);
+    document.addEventListener('webkitfullscreenchange', checkFullscreen as any);
     
     return () => {
       window.removeEventListener('resize', checkOrientation);
       document.removeEventListener('fullscreenchange', checkFullscreen);
+      document.removeEventListener('webkitfullscreenchange', checkFullscreen as any);
     };
   }, []);
 
   const toggleFullscreen = async () => {
+    const doc = document as any;
+    const elem = (fullscreenTarget?.current || document.documentElement) as any;
+
+    const canNativeFS = !!(
+      elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen
+    );
+
     try {
-      const elem = document.documentElement as any;
-      const doc = document as any;
-      
-      if (!doc.fullscreenElement && 
-          !doc.webkitFullscreenElement && 
-          !doc.mozFullScreenElement && 
-          !doc.msFullscreenElement) {
-        // Enter fullscreen
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-          await elem.webkitRequestFullscreen();
-        } else if (elem.mozRequestFullScreen) {
-          await elem.mozRequestFullScreen();
-        } else if (elem.msRequestFullscreen) {
-          await elem.msRequestFullscreen();
+      if (
+        !doc.fullscreenElement &&
+        !doc.webkitFullscreenElement &&
+        !doc.mozFullScreenElement &&
+        !doc.msFullscreenElement
+      ) {
+        if (canNativeFS) {
+          if (elem.requestFullscreen) await elem.requestFullscreen();
+          else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
+          else if (elem.mozRequestFullScreen) await elem.mozRequestFullScreen();
+          else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
+        } else {
+          document.body.classList.add('pseudo-fullscreen');
+          setIsFullscreen(true);
+          window.scrollTo(0, 0);
         }
       } else {
-        // Exit fullscreen
-        if (doc.exitFullscreen) {
-          await doc.exitFullscreen();
-        } else if (doc.webkitExitFullscreen) {
-          await doc.webkitExitFullscreen();
-        } else if (doc.mozCancelFullScreen) {
-          await doc.mozCancelFullScreen();
-        } else if (doc.msExitFullscreen) {
-          await doc.msExitFullscreen();
+        if (doc.exitFullscreen) await doc.exitFullscreen();
+        else if (doc.webkitExitFullscreen) await doc.webkitExitFullscreen();
+        else if (doc.mozCancelFullScreen) await doc.mozCancelFullScreen();
+        else if (doc.msExitFullscreen) await doc.msExitFullscreen();
+        else {
+          document.body.classList.remove('pseudo-fullscreen');
+          setIsFullscreen(false);
         }
       }
     } catch (err) {
+      // Fallback if native request fails (e.g., iOS Safari inside iframe)
+      document.body.classList.toggle('pseudo-fullscreen');
+      setIsFullscreen(document.body.classList.contains('pseudo-fullscreen'));
       console.error('Fullscreen error:', err);
     }
   };

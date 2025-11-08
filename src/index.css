@@ -116,3 +116,21 @@ All colors MUST be HSL.
     backdrop-filter: blur(10px);
   }
 }
+
+/* Pseudo fullscreen fallback for mobile/iframes */
+body.pseudo-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body.pseudo-fullscreen #root {
+  height: 100dvh;
+}
+
+/* Ensure container fills viewport in pseudo fullscreen */
+.fullscreen-container {
+  height: 100dvh;
+}
