@@ -23,6 +23,12 @@ const SKIN_PRICES = {
   superhero: 10000,
   vampire: 11000,
   knight: 12000,
+  zombie: 800,
+  ghost: 1000,
+  samurai: 7000,
+  mummy: 6000,
+  cyber: 9500,
+  phoenix: 15000,
 };
 
 
@@ -36,8 +42,8 @@ interface GameState {
   highScore: number;
   highScores: HighScore[];
   coins: number;
-  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight')[];
-  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight';
+  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix')[];
+  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix';
   playerName: string;
   
   // Actions
@@ -47,9 +53,9 @@ interface GameState {
   endGame: () => void;
   restartGame: () => void;
   updateScore: (score: number) => void;
-  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => void;
-  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => boolean;
-  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight') => number;
+  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix') => void;
+  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix') => boolean;
+  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix') => number;
   setPlayerName: (name: string) => void;
 }
 

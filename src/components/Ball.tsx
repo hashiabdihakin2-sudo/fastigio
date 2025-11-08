@@ -100,6 +100,48 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 0.6,
     hat: 'knightHelmet',
     accessory: 'knightShield'
+  },
+  zombie: {
+    color: '#556B2F',
+    emissive: '#9ACD32',
+    emissiveIntensity: 0.5,
+    hat: 'zombieHead',
+    accessory: 'zombieArms'
+  },
+  ghost: {
+    color: '#F0F8FF',
+    emissive: '#FFFFFF',
+    emissiveIntensity: 0.9,
+    hat: 'ghostSheet',
+    accessory: 'ghostGlow'
+  },
+  samurai: {
+    color: '#8B0000',
+    emissive: '#DC143C',
+    emissiveIntensity: 0.7,
+    hat: 'samuraiHelmet',
+    accessory: 'katana'
+  },
+  mummy: {
+    color: '#DEB887',
+    emissive: '#F5DEB3',
+    emissiveIntensity: 0.4,
+    hat: 'mummyWraps',
+    accessory: 'ancientCurse'
+  },
+  cyber: {
+    color: '#00FFFF',
+    emissive: '#FF00FF',
+    emissiveIntensity: 1.2,
+    hat: 'cyberVisor',
+    accessory: 'dataStream'
+  },
+  phoenix: {
+    color: '#FF8C00',
+    emissive: '#FFD700',
+    emissiveIntensity: 1.0,
+    hat: 'phoenixCrest',
+    accessory: 'phoenixWings'
   }
 };
 
@@ -482,6 +524,7 @@ export const Ball = forwardRef<Group>((props, ref) => {
           <mesh position={[0.08, 0, 0]}>
             <coneGeometry args={[0.02, 0.08, 8]} />
             <meshPhongMaterial color="#FFFFFF" />
+            <meshPhongMaterial color="#FFFFFF" />
           </mesh>
         </group>
       )}
@@ -498,26 +541,194 @@ export const Ball = forwardRef<Group>((props, ref) => {
             <meshStandardMaterial color="#708090" metalness={0.9} roughness={0.2} />
           </mesh>
           <mesh position={[0, 0.15, 0]}>
-            <coneGeometry args={[0.05, 0.15, 4]} />
-            <meshPhongMaterial color="#DC143C" />
+            <coneGeometry args={[0.1, 0.2, 4]} />
+            <meshStandardMaterial color="#DC143C" metalness={0.5} roughness={0.3} />
           </mesh>
         </group>
       )}
 
       {/* Knight Shield */}
       {skinConfig.accessory === 'knightShield' && (
-        <group position={[-0.4, 0, 0]} rotation={[0, Math.PI / 4, 0]}>
+        <group position={[0.35, 0, 0]} rotation={[0, 0, 0]}>
           <mesh>
-            <cylinderGeometry args={[0.15, 0.15, 0.05, 6]} />
+            <boxGeometry args={[0.02, 0.25, 0.2]} />
             <meshStandardMaterial color="#708090" metalness={0.9} roughness={0.2} />
           </mesh>
-          <mesh position={[0, 0, 0.03]}>
-            <boxGeometry args={[0.15, 0.04, 0.02]} />
+          <mesh position={[0.01, 0, 0]}>
+            <boxGeometry args={[0.01, 0.15, 0.1]} />
             <meshPhongMaterial color="#DC143C" />
           </mesh>
-          <mesh position={[0, 0, 0.03]} rotation={[0, 0, Math.PI / 2]}>
-            <boxGeometry args={[0.15, 0.04, 0.02]} />
-            <meshPhongMaterial color="#DC143C" />
+        </group>
+      )}
+
+      {/* Zombie Head */}
+      {skinConfig.hat === 'zombieHead' && (
+        <group position={[0, 0.3, 0]}>
+          <mesh rotation={[0.2, 0, 0]}>
+            <boxGeometry args={[0.15, 0.1, 0.15]} />
+            <meshPhongMaterial color="#556B2F" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Zombie Arms */}
+      {skinConfig.accessory === 'zombieArms' && (
+        <group>
+          <mesh position={[-0.35, -0.1, 0.1]} rotation={[0, 0, -0.5]}>
+            <boxGeometry args={[0.08, 0.3, 0.08]} />
+            <meshPhongMaterial color="#556B2F" emissive="#9ACD32" emissiveIntensity={0.3} />
+          </mesh>
+          <mesh position={[0.35, -0.1, 0.1]} rotation={[0, 0, 0.5]}>
+            <boxGeometry args={[0.08, 0.3, 0.08]} />
+            <meshPhongMaterial color="#556B2F" emissive="#9ACD32" emissiveIntensity={0.3} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Ghost Sheet */}
+      {skinConfig.hat === 'ghostSheet' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh>
+            <coneGeometry args={[0.25, 0.4, 32]} />
+            <meshPhongMaterial color="#F0F8FF" emissive="#FFFFFF" emissiveIntensity={0.6} transparent opacity={0.8} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Ghost Glow */}
+      {skinConfig.accessory === 'ghostGlow' && (
+        <group>
+          {[0, 120, 240].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.4,
+              Math.sin(i * 0.3) * 0.1,
+              Math.sin((angle * Math.PI) / 180) * 0.4
+            ]}>
+              <sphereGeometry args={[0.06, 16, 16]} />
+              <meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={1.5} transparent opacity={0.5} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Samurai Helmet */}
+      {skinConfig.hat === 'samuraiHelmet' && (
+        <group position={[0, 0.3, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.22, 0.25, 0.15, 6]} />
+            <meshStandardMaterial color="#8B0000" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[-0.2, 0.1, 0]} rotation={[0, 0, 0.3]}>
+            <boxGeometry args={[0.15, 0.3, 0.02]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFA500" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0.2, 0.1, 0]} rotation={[0, 0, -0.3]}>
+            <boxGeometry args={[0.15, 0.3, 0.02]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFA500" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Katana */}
+      {skinConfig.accessory === 'katana' && (
+        <group position={[0.35, -0.1, -0.1]} rotation={[0.5, 0, 0.3]}>
+          <mesh>
+            <boxGeometry args={[0.02, 0.5, 0.02]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={1.0} roughness={0.1} />
+          </mesh>
+          <mesh position={[0, -0.27, 0]}>
+            <boxGeometry args={[0.03, 0.08, 0.03]} />
+            <meshPhongMaterial color="#8B0000" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Mummy Wraps */}
+      {skinConfig.hat === 'mummyWraps' && (
+        <group position={[0, 0.3, 0]}>
+          {[0, 0.08, 0.16].map((y, i) => (
+            <mesh key={i} position={[0, y - 0.08, 0]}>
+              <torusGeometry args={[0.32, 0.03, 6, 16]} />
+              <meshPhongMaterial color="#DEB887" />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Ancient Curse */}
+      {skinConfig.accessory === 'ancientCurse' && (
+        <group>
+          {[0, 90, 180, 270].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.35,
+              Math.sin(Date.now() * 0.001 + i) * 0.1,
+              Math.sin((angle * Math.PI) / 180) * 0.35
+            ]}>
+              <boxGeometry args={[0.05, 0.05, 0.05]} />
+              <meshPhongMaterial color="#F5DEB3" emissive="#DEB887" emissiveIntensity={0.8} transparent opacity={0.6} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Cyber Visor */}
+      {skinConfig.hat === 'cyberVisor' && (
+        <group position={[0, 0.15, 0]}>
+          <mesh>
+            <boxGeometry args={[0.35, 0.08, 0.25]} />
+            <meshStandardMaterial color="#00FFFF" emissive="#FF00FF" emissiveIntensity={1.0} metalness={0.9} roughness={0.1} transparent opacity={0.7} />
+          </mesh>
+          {[0, 1, 2].map((i) => (
+            <mesh key={i} position={[-0.15 + i * 0.15, 0, 0.13]}>
+              <boxGeometry args={[0.02, 0.04, 0.01]} />
+              <meshPhongMaterial color="#00FFFF" emissive="#00FFFF" emissiveIntensity={2.0} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Data Stream */}
+      {skinConfig.accessory === 'dataStream' && (
+        <group>
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.4,
+              Math.sin(Date.now() * 0.003 + i) * 0.2,
+              Math.sin((angle * Math.PI) / 180) * 0.4
+            ]}>
+              <boxGeometry args={[0.02, 0.08, 0.02]} />
+              <meshPhongMaterial color="#00FFFF" emissive="#FF00FF" emissiveIntensity={1.5} transparent opacity={0.8} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Phoenix Crest */}
+      {skinConfig.hat === 'phoenixCrest' && (
+        <group position={[0, 0.35, 0]}>
+          {[0, 1, 2].map((i) => (
+            <mesh key={i} position={[
+              (i - 1) * 0.1,
+              0.1 + (i === 1 ? 0.15 : 0),
+              0
+            ]} rotation={[0.2, 0, (i - 1) * 0.3]}>
+              <coneGeometry args={[0.08, 0.25, 8]} />
+              <meshPhongMaterial color="#FF8C00" emissive="#FFD700" emissiveIntensity={1.2} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Phoenix Wings */}
+      {skinConfig.accessory === 'phoenixWings' && (
+        <group>
+          <mesh position={[-0.35, 0, -0.1]} rotation={[0, -0.8, 0.2]}>
+            <coneGeometry args={[0.2, 0.4, 3]} />
+            <meshPhongMaterial color="#FF8C00" emissive="#FFD700" emissiveIntensity={1.0} transparent opacity={0.9} />
+          </mesh>
+          <mesh position={[0.35, 0, -0.1]} rotation={[0, 0.8, -0.2]}>
+            <coneGeometry args={[0.2, 0.4, 3]} />
+            <meshPhongMaterial color="#FF8C00" emissive="#FFD700" emissiveIntensity={1.0} transparent opacity={0.9} />
           </mesh>
         </group>
       )}

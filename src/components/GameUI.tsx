@@ -1,7 +1,9 @@
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { useGameStore } from '../store/gameStore';
-import { ChevronLeft, ChevronRight, Volume2, VolumeX, Coins } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Volume2, VolumeX, Coins, Maximize } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
 
 interface GameUIProps {
   currentSection: number;
@@ -13,10 +15,44 @@ interface GameUIProps {
 
 export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggleMute }: GameUIProps) => {
   const { score, highScore, coins } = useGameStore();
+  const [isLandscape, setIsLandscape] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const checkOrientation = () => {
+      setIsLandscape(window.innerWidth > window.innerHeight);
+    };
+    
+    const checkFullscreen = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    checkOrientation();
+    window.addEventListener('resize', checkOrientation);
+    document.addEventListener('fullscreenchange', checkFullscreen);
+    
+    return () => {
+      window.removeEventListener('resize', checkOrientation);
+      document.removeEventListener('fullscreenchange', checkFullscreen);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await document.documentElement.requestFullscreen();
+      } catch (err) {
+        console.error('Fullscreen error:', err);
+      }
+    } else {
+      await document.exitFullscreen();
+    }
+  };
   
   const handleMobileControl = (direction: 'left' | 'right') => {
     (window as any).handleGlide?.(direction);
   };
+
   
   return (
     <div className="absolute inset-0 pointer-events-none">
@@ -36,9 +72,18 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
         </Card>
       </div>
 
-      {/* Controls hint and mute button */}
+      {/* Controls hint, fullscreen and mute button */}
       {gameState === 'playing' && (
         <div className="absolute top-8 right-8 pointer-events-auto flex items-start gap-2">
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={toggleFullscreen}
+            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card"
+            title={isFullscreen ? "Avsluta fullskärm" : "Fullskärm"}
+          >
+            <Maximize className="w-5 h-5" />
+          </Button>
           <Button
             size="icon"
             variant="outline"
@@ -47,7 +92,7 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
           >
             {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
           </Button>
-          <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
+          <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md hidden md:block">
             <div className="text-sm text-muted-foreground text-right">
               <div>Piltangenter ← →</div>
               <div className="text-neon-purple">för att hoppa åt sidan</div>
@@ -82,30 +127,30 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
 
       {/* Mobile controls */}
       {gameState === 'playing' && (
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-8 pointer-events-auto px-4">
+        <div className={`absolute bottom-8 left-0 right-0 flex justify-center pointer-events-auto px-4 ${isLandscape ? 'gap-16' : 'gap-8'}`}>
           <Button
             size="icon"
             variant="default"
-            className="w-16 h-16 rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow"
+            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow ${isLandscape ? 'w-20 h-20' : 'w-16 h-16'}`}
             onTouchStart={(e) => {
               e.preventDefault();
               handleMobileControl('left');
             }}
             onClick={() => handleMobileControl('left')}
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className={isLandscape ? 'w-10 h-10' : 'w-8 h-8'} />
           </Button>
           <Button
             size="icon"
             variant="default"
-            className="w-16 h-16 rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow"
+            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow ${isLandscape ? 'w-20 h-20' : 'w-16 h-16'}`}
             onTouchStart={(e) => {
               e.preventDefault();
               handleMobileControl('right');
             }}
             onClick={() => handleMobileControl('right')}
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className={isLandscape ? 'w-10 h-10' : 'w-8 h-8'} />
           </Button>
         </div>
       )}

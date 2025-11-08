@@ -23,6 +23,12 @@ const SKINS = [
   { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸' },
   { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛' },
   { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️' },
+  { id: 'zombie' as const, name: 'Zombie', color: '#556B2F', emoji: '🧟' },
+  { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻' },
+  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '🗾' },
+  { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺' },
+  { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖' },
+  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
@@ -105,7 +111,8 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         {/* Skin Selection */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-foreground">Välj ditt utseende</h2>
-          <div className="grid grid-cols-5 gap-3 max-w-2xl mx-auto">
+          <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-7 gap-3 max-w-4xl mx-auto">
+
             {SKINS.map((skin) => {
               const isUnlocked = unlockedSkins.includes(skin.id);
               const isSelected = selectedSkin === skin.id;
