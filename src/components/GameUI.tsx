@@ -38,14 +38,38 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
   }, []);
 
   const toggleFullscreen = async () => {
-    if (!document.fullscreenElement) {
-      try {
-        await document.documentElement.requestFullscreen();
-      } catch (err) {
-        console.error('Fullscreen error:', err);
+    try {
+      const elem = document.documentElement as any;
+      const doc = document as any;
+      
+      if (!doc.fullscreenElement && 
+          !doc.webkitFullscreenElement && 
+          !doc.mozFullScreenElement && 
+          !doc.msFullscreenElement) {
+        // Enter fullscreen
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          await elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+          await elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+          await elem.msRequestFullscreen();
+        }
+      } else {
+        // Exit fullscreen
+        if (doc.exitFullscreen) {
+          await doc.exitFullscreen();
+        } else if (doc.webkitExitFullscreen) {
+          await doc.webkitExitFullscreen();
+        } else if (doc.mozCancelFullScreen) {
+          await doc.mozCancelFullScreen();
+        } else if (doc.msExitFullscreen) {
+          await doc.msExitFullscreen();
+        }
       }
-    } else {
-      await document.exitFullscreen();
+    } catch (err) {
+      console.error('Fullscreen error:', err);
     }
   };
   

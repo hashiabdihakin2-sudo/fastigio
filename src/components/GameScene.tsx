@@ -73,12 +73,17 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   // Reset ball when game restarts
   useEffect(() => {
-    if (gameState === 'waiting' && ballRef.current) {
+    if (gameState === 'playing' && ballRef.current) {
       const startPosition = new Vector3(0, 0.5, 0);
       setBallPosition(startPosition);
       ballRef.current.position.copy(startPosition);
       velocityX.current = 0;
       setShowDeathAnimation(false);
+      
+      // Reset group position
+      if (groupRef.current) {
+        groupRef.current.position.z = 0;
+      }
     }
   }, [gameState, setBallPosition]);
 
