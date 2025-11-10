@@ -226,6 +226,27 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 0.7,
     hat: 'baseballCap',
     accessory: 'baseballSeams'
+  },
+  diamond: {
+    color: '#B9F2FF',
+    emissive: '#00FFFF',
+    emissiveIntensity: 1.5,
+    hat: 'diamondCrown',
+    accessory: 'crystalShards'
+  },
+  cosmic: {
+    color: '#4B0082',
+    emissive: '#9370DB',
+    emissiveIntensity: 1.3,
+    hat: 'galaxyHalo',
+    accessory: 'planetRings'
+  },
+  legendary: {
+    color: '#FFD700',
+    emissive: '#FFA500',
+    emissiveIntensity: 1.8,
+    hat: 'legendaryAura',
+    accessory: 'lightningBolts'
   }
 };
 
@@ -1230,6 +1251,118 @@ export const Ball = forwardRef<Group>((props, ref) => {
             <torusGeometry args={[0.25, 0.01, 4, 32, Math.PI * 1.3]} />
             <meshPhongMaterial color="#DC143C" emissive="#DC143C" emissiveIntensity={0.5} />
           </mesh>
+        </group>
+      )}
+
+      {/* Diamond Crown - Premium */}
+      {skinConfig.hat === 'diamondCrown' && (
+        <group position={[0, 0.4, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.2, 0.22, 0.2, 8]} />
+            <meshStandardMaterial color="#B9F2FF" metalness={0.9} roughness={0.1} emissive="#00FFFF" emissiveIntensity={1.2} />
+          </mesh>
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.2,
+              0.15,
+              Math.sin((angle * Math.PI) / 180) * 0.2
+            ]}>
+              <coneGeometry args={[0.04, 0.12, 4]} />
+              <meshStandardMaterial color="#00FFFF" metalness={1} roughness={0} emissive="#B9F2FF" emissiveIntensity={1.5} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Crystal Shards - Premium */}
+      {skinConfig.accessory === 'crystalShards' && (
+        <group>
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.35,
+              Math.sin((i * 0.3)),
+              Math.sin((angle * Math.PI) / 180) * 0.35
+            ]} rotation={[0, (angle * Math.PI) / 180, 0.3]}>
+              <coneGeometry args={[0.03, 0.15, 4]} />
+              <meshStandardMaterial color="#B9F2FF" metalness={0.9} roughness={0.1} emissive="#00FFFF" emissiveIntensity={1.5} transparent opacity={0.9} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Galaxy Halo - Premium */}
+      {skinConfig.hat === 'galaxyHalo' && (
+        <group position={[0, 0.45, 0]}>
+          <mesh>
+            <torusGeometry args={[0.25, 0.08, 16, 32]} />
+            <meshStandardMaterial color="#4B0082" emissive="#9370DB" emissiveIntensity={1.5} transparent opacity={0.8} />
+          </mesh>
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.25,
+              0,
+              Math.sin((angle * Math.PI) / 180) * 0.25
+            ]}>
+              <sphereGeometry args={[0.02, 8, 8]} />
+              <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={2} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Planet Rings - Premium */}
+      {skinConfig.accessory === 'planetRings' && (
+        <group rotation={[Math.PI / 4, 0, 0]}>
+          <mesh>
+            <torusGeometry args={[0.4, 0.02, 8, 32]} />
+            <meshStandardMaterial color="#9370DB" emissive="#4B0082" emissiveIntensity={1} transparent opacity={0.7} />
+          </mesh>
+          {[0, 90, 180, 270].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.4,
+              0,
+              Math.sin((angle * Math.PI) / 180) * 0.4
+            ]}>
+              <sphereGeometry args={[0.04, 8, 8]} />
+              <meshStandardMaterial color="#FF00FF" emissive="#FF00FF" emissiveIntensity={1.5} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Legendary Aura - Premium */}
+      {skinConfig.hat === 'legendaryAura' && (
+        <group position={[0, 0, 0]}>
+          {[0.4, 0.5, 0.6].map((radius, i) => (
+            <mesh key={i}>
+              <torusGeometry args={[radius, 0.03, 8, 32]} />
+              <meshStandardMaterial 
+                color="#FFD700" 
+                emissive="#FFA500" 
+                emissiveIntensity={2 - i * 0.4} 
+                transparent 
+                opacity={0.5 - i * 0.1} 
+              />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Lightning Bolts - Premium */}
+      {skinConfig.accessory === 'lightningBolts' && (
+        <group>
+          {[0, 120, 240].map((angle, i) => (
+            <group key={i} rotation={[0, (angle * Math.PI) / 180, 0]}>
+              <mesh position={[0.35, 0.1, 0]} rotation={[0, 0, -0.3]}>
+                <coneGeometry args={[0.03, 0.25, 4]} />
+                <meshStandardMaterial color="#FFFF00" emissive="#FFFF00" emissiveIntensity={2} />
+              </mesh>
+              <mesh position={[0.4, -0.05, 0]} rotation={[0, 0, 0.3]}>
+                <coneGeometry args={[0.025, 0.15, 4]} />
+                <meshStandardMaterial color="#FFA500" emissive="#FFD700" emissiveIntensity={2} />
+              </mesh>
+            </group>
+          ))}
         </group>
       )}
     </group>

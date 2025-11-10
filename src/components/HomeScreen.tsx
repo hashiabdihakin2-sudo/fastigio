@@ -134,7 +134,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
                 <button
                   key={skin.id}
                   onClick={() => handleSkinSelect(skin.id)}
-                  disabled={!isUnlocked && coins < price}
+                  disabled={!isUnlocked && (typeof price === 'number' && coins < price)}
                   className={`
                     relative p-4 rounded-lg border-2 transition-all duration-200
                     ${isSelected 
@@ -143,14 +143,14 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
                       ? 'border-border hover:border-primary/50 hover:scale-105'
                       : 'border-muted opacity-60 hover:opacity-80'
                     }
-                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
+                    ${!isUnlocked && (typeof price === 'number' && coins < price) ? 'cursor-not-allowed' : 'cursor-pointer'}
                   `}
                   style={{ backgroundColor: `${skin.color}20` }}
                 >
                   <div className="text-3xl mb-1">{skin.emoji}</div>
                   <div className="text-xs font-medium text-foreground">{skin.name}</div>
                   
-                  {!isUnlocked && (
+                  {!isUnlocked && typeof price === 'number' && (
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                       <Coins className="w-3 h-3" />
                       {price}

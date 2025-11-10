@@ -5,6 +5,7 @@ import { useGameStore } from '../store/gameStore';
 import { Trophy, Coins, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { PremiumShop } from './PremiumShop';
 
 interface GameOverScreenProps {
   onRestart: () => void;
@@ -97,9 +98,14 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
     if (unlockedSkins.includes(skinId)) {
       setSelectedSkin(skinId);
     } else {
+      const price = getSkinPrice(skinId);
+      if (price === 'premium') {
+        alert('Denna skin kan endast köpas med riktiga pengar. Se Premium Shop nedan!');
+        return;
+      }
       const success = unlockSkin(skinId);
       if (!success) {
-        alert(`Du behöver ${getSkinPrice(skinId)} coins för att köpa denna skin!`);
+        alert(`Du behöver ${price} coins för att köpa denna skin!`);
       }
     }
   };
@@ -210,7 +216,7 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
         <Card className="p-6 bg-card/80 backdrop-blur-md">
           <div className="flex items-center gap-2 mb-4 justify-center">
             <Coins className="w-5 h-5 text-accent" />
-            <h3 className="text-lg font-bold text-foreground">Välj eller köp ny skin</h3>
+            <h3 className="text-lg font-bold text-foreground">Välj eller köp ny skin (Coins)</h3>
           </div>
           <div className="grid grid-cols-5 gap-3 max-w-2xl mx-auto mb-4">
             {SKINS.map((skin) => {
@@ -222,7 +228,7 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
                 <button
                   key={skin.id}
                   onClick={() => handleSkinSelect(skin.id)}
-                  disabled={!isUnlocked && coins < price}
+                  disabled={!isUnlocked && (typeof price === 'number' && coins < price)}
                   className={`
                     relative p-3 rounded-lg border-2 transition-all duration-200
                     ${isSelected 
@@ -231,14 +237,14 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
                       ? 'border-border hover:border-primary/50 hover:scale-105'
                       : 'border-muted opacity-60 hover:opacity-80'
                     }
-                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
+                    ${!isUnlocked && (typeof price === 'number' && coins < price) ? 'cursor-not-allowed' : 'cursor-pointer'}
                   `}
                   style={{ backgroundColor: `${skin.color}20` }}
                 >
                   <div className="text-2xl mb-1">{skin.emoji}</div>
                   <div className="text-xs font-medium text-foreground">{skin.name}</div>
                   
-                  {!isUnlocked && (
+                  {!isUnlocked && typeof price === 'number' && (
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                       <Coins className="w-3 h-3" />
                       {price}
@@ -258,6 +264,9 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
             Du har {coins} coins. Spela mer för att tjäna fler!
           </p>
         </Card>
+
+        {/* Premium Shop */}
+        <PremiumShop />
 
         {/* Action Buttons */}
         <div className="space-y-3 max-w-md mx-auto">
