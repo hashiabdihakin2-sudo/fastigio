@@ -29,6 +29,18 @@ const SKINS = [
   { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺' },
   { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖' },
   { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥' },
+  { id: 'christmas' as const, name: 'Jul', color: '#C41E3A', emoji: '🎄' },
+  { id: 'santa' as const, name: 'Tomte', color: '#DC143C', emoji: '🎅' },
+  { id: 'snowman' as const, name: 'Snögubbe', color: '#FFFFFF', emoji: '⛄' },
+  { id: 'gingerbread' as const, name: 'Peppar', color: '#8B4513', emoji: '🍪' },
+  { id: 'easter' as const, name: 'Påsk', color: '#FF69B4', emoji: '🌸' },
+  { id: 'bunny' as const, name: 'Påskhare', color: '#FFB6C1', emoji: '🐰' },
+  { id: 'egg' as const, name: 'Påskägg', color: '#FFEB3B', emoji: '🥚' },
+  { id: 'football' as const, name: 'Fotboll', color: '#8B4513', emoji: '🏈' },
+  { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽' },
+  { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀' },
+  { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾' },
+  { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {

@@ -142,6 +142,90 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 1.0,
     hat: 'phoenixCrest',
     accessory: 'phoenixWings'
+  },
+  christmas: {
+    color: '#C41E3A',
+    emissive: '#00A84F',
+    emissiveIntensity: 0.8,
+    hat: 'christmasTree',
+    accessory: 'ornaments'
+  },
+  santa: {
+    color: '#DC143C',
+    emissive: '#FF0000',
+    emissiveIntensity: 0.9,
+    hat: 'santaHat',
+    accessory: 'santaBelt'
+  },
+  snowman: {
+    color: '#FFFFFF',
+    emissive: '#E0F0FF',
+    emissiveIntensity: 0.6,
+    hat: 'topHat',
+    accessory: 'carrotNose'
+  },
+  gingerbread: {
+    color: '#8B4513',
+    emissive: '#CD853F',
+    emissiveIntensity: 0.7,
+    hat: 'gingerbreadHat',
+    accessory: 'icingButtons'
+  },
+  easter: {
+    color: '#FF69B4',
+    emissive: '#FFB6C1',
+    emissiveIntensity: 0.8,
+    hat: 'easterBonnet',
+    accessory: 'springFlowers'
+  },
+  bunny: {
+    color: '#FFB6C1',
+    emissive: '#FFC0CB',
+    emissiveIntensity: 0.7,
+    hat: 'bunnyEars',
+    accessory: 'cottonTail'
+  },
+  egg: {
+    color: '#FFEB3B',
+    emissive: '#FFC107',
+    emissiveIntensity: 0.9,
+    hat: 'eggShell',
+    accessory: 'eggPattern'
+  },
+  football: {
+    color: '#8B4513',
+    emissive: '#A0522D',
+    emissiveIntensity: 0.7,
+    hat: 'footballHelmet',
+    accessory: 'footballLaces'
+  },
+  soccer: {
+    color: '#FFFFFF',
+    emissive: '#E0E0E0',
+    emissiveIntensity: 0.8,
+    hat: 'soccerCap',
+    accessory: 'soccerPattern'
+  },
+  basketball: {
+    color: '#FF8C00',
+    emissive: '#FFA500',
+    emissiveIntensity: 0.9,
+    hat: 'basketballHoop',
+    accessory: 'basketballLines'
+  },
+  tennis: {
+    color: '#FFFF00',
+    emissive: '#F0E68C',
+    emissiveIntensity: 0.8,
+    hat: 'tennisCap',
+    accessory: 'tennisRacket'
+  },
+  baseball: {
+    color: '#FFFFFF',
+    emissive: '#F5F5F5',
+    emissiveIntensity: 0.7,
+    hat: 'baseballCap',
+    accessory: 'baseballSeams'
   }
 };
 
@@ -729,6 +813,422 @@ export const Ball = forwardRef<Group>((props, ref) => {
           <mesh position={[0.35, 0, -0.1]} rotation={[0, 0.8, -0.2]}>
             <coneGeometry args={[0.2, 0.4, 3]} />
             <meshPhongMaterial color="#FF8C00" emissive="#FFD700" emissiveIntensity={1.0} transparent opacity={0.9} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Christmas Tree Hat */}
+      {skinConfig.hat === 'christmasTree' && (
+        <group position={[0, 0.4, 0]}>
+          <mesh>
+            <coneGeometry args={[0.2, 0.35, 8]} />
+            <meshPhongMaterial color="#00A84F" emissive="#228B22" emissiveIntensity={0.6} />
+          </mesh>
+          <mesh position={[0, 0.2, 0]}>
+            <sphereGeometry args={[0.04, 8, 8]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={1.5} />
+          </mesh>
+          {[0, 120, 240].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.15,
+              -0.05,
+              Math.sin((angle * Math.PI) / 180) * 0.15
+            ]}>
+              <sphereGeometry args={[0.03, 8, 8]} />
+              <meshPhongMaterial color="#FF0000" emissive="#FF0000" emissiveIntensity={1.0} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Christmas Ornaments */}
+      {skinConfig.accessory === 'ornaments' && (
+        <group>
+          {[0, 90, 180, 270].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.35,
+              Math.sin(i * 0.5) * 0.1,
+              Math.sin((angle * Math.PI) / 180) * 0.35
+            ]}>
+              <sphereGeometry args={[0.05, 12, 12]} />
+              <meshStandardMaterial 
+                color={i % 2 === 0 ? '#FFD700' : '#DC143C'} 
+                emissive={i % 2 === 0 ? '#FFD700' : '#DC143C'} 
+                emissiveIntensity={1.2} 
+                metalness={0.8}
+                roughness={0.2}
+              />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Santa Hat */}
+      {skinConfig.hat === 'santaHat' && (
+        <group position={[0, 0.35, 0]} rotation={[0.1, 0, 0.05]}>
+          <mesh>
+            <coneGeometry args={[0.22, 0.4, 32]} />
+            <meshPhongMaterial color="#DC143C" emissive="#FF0000" emissiveIntensity={0.7} />
+          </mesh>
+          <mesh position={[0, -0.22, 0]}>
+            <torusGeometry args={[0.22, 0.04, 8, 16]} />
+            <meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0, 0.25, 0]}>
+            <sphereGeometry args={[0.06, 16, 16]} />
+            <meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Santa Belt */}
+      {skinConfig.accessory === 'santaBelt' && (
+        <group position={[0, -0.1, 0]}>
+          <mesh>
+            <torusGeometry args={[0.32, 0.05, 8, 32]} />
+            <meshPhongMaterial color="#000000" />
+          </mesh>
+          <mesh position={[0, 0, 0.32]}>
+            <boxGeometry args={[0.08, 0.08, 0.03]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} emissive="#FFA500" emissiveIntensity={0.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Top Hat */}
+      {skinConfig.hat === 'topHat' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.18, 0.18, 0.3, 32]} />
+            <meshPhongMaterial color="#000000" />
+          </mesh>
+          <mesh position={[0, -0.18, 0]}>
+            <cylinderGeometry args={[0.25, 0.25, 0.03, 32]} />
+            <meshPhongMaterial color="#000000" />
+          </mesh>
+          <mesh position={[0, 0, 0.19]}>
+            <boxGeometry args={[0.15, 0.08, 0.02]} />
+            <meshPhongMaterial color="#DC143C" emissive="#DC143C" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Carrot Nose */}
+      {skinConfig.accessory === 'carrotNose' && (
+        <group position={[0, 0, 0.3]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <coneGeometry args={[0.04, 0.15, 8]} />
+            <meshPhongMaterial color="#FF8C00" emissive="#FFA500" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[-0.1, 0.05, 0]} rotation={[0, 0, -0.2]}>
+            <boxGeometry args={[0.02, 0.08, 0.02]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          <mesh position={[0.1, 0.05, 0]} rotation={[0, 0, 0.2]}>
+            <boxGeometry args={[0.02, 0.08, 0.02]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Gingerbread Hat */}
+      {skinConfig.hat === 'gingerbreadHat' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.12, 0.15, 0.12, 6]} />
+            <meshPhongMaterial color="#8B4513" emissive="#CD853F" emissiveIntensity={0.5} />
+          </mesh>
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.13,
+              0,
+              Math.sin((angle * Math.PI) / 180) * 0.13
+            ]}>
+              <sphereGeometry args={[0.02, 8, 8]} />
+              <meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={0.8} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Icing Buttons */}
+      {skinConfig.accessory === 'icingButtons' && (
+        <group>
+          {[0, -0.15, -0.3].map((y, i) => (
+            <mesh key={i} position={[0, y, 0.3]}>
+              <sphereGeometry args={[0.04, 16, 16]} />
+              <meshPhongMaterial color="#FFFFFF" emissive="#E0F0FF" emissiveIntensity={0.8} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Easter Bonnet */}
+      {skinConfig.hat === 'easterBonnet' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh>
+            <cylinderGeometry args={[0.25, 0.25, 0.08, 32]} />
+            <meshPhongMaterial color="#FF69B4" emissive="#FFB6C1" emissiveIntensity={0.6} />
+          </mesh>
+          <mesh position={[0, 0.1, 0]}>
+            <cylinderGeometry args={[0.15, 0.18, 0.15, 32]} />
+            <meshPhongMaterial color="#FF69B4" emissive="#FFB6C1" emissiveIntensity={0.6} />
+          </mesh>
+          {[0, 90, 180, 270].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.2,
+              0.15,
+              Math.sin((angle * Math.PI) / 180) * 0.2
+            ]}>
+              <sphereGeometry args={[0.03, 8, 8]} />
+              <meshPhongMaterial color="#FFEB3B" emissive="#FFEB3B" emissiveIntensity={1.0} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Spring Flowers */}
+      {skinConfig.accessory === 'springFlowers' && (
+        <group>
+          {[0, 120, 240].map((angle, i) => (
+            <group key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.35,
+              0.1,
+              Math.sin((angle * Math.PI) / 180) * 0.35
+            ]}>
+              <mesh>
+                <sphereGeometry args={[0.03, 8, 8]} />
+                <meshPhongMaterial color="#FFEB3B" emissive="#FFEB3B" emissiveIntensity={1.0} />
+              </mesh>
+              {[0, 72, 144, 216, 288].map((petalAngle, j) => (
+                <mesh key={j} position={[
+                  Math.cos((petalAngle * Math.PI) / 180) * 0.05,
+                  0,
+                  Math.sin((petalAngle * Math.PI) / 180) * 0.05
+                ]}>
+                  <sphereGeometry args={[0.02, 6, 6]} />
+                  <meshPhongMaterial 
+                    color={i === 0 ? '#FF69B4' : i === 1 ? '#9C27B0' : '#4CAF50'} 
+                    emissive={i === 0 ? '#FF69B4' : i === 1 ? '#9C27B0' : '#4CAF50'} 
+                    emissiveIntensity={0.8} 
+                  />
+                </mesh>
+              ))}
+            </group>
+          ))}
+        </group>
+      )}
+
+      {/* Bunny Ears */}
+      {skinConfig.hat === 'bunnyEars' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh position={[-0.12, 0.15, 0]}>
+            <capsuleGeometry args={[0.05, 0.25, 8, 16]} />
+            <meshPhongMaterial color="#FFB6C1" emissive="#FFC0CB" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[-0.12, 0.18, 0]}>
+            <capsuleGeometry args={[0.03, 0.15, 6, 12]} />
+            <meshPhongMaterial color="#FF69B4" emissive="#FF69B4" emissiveIntensity={0.4} />
+          </mesh>
+          <mesh position={[0.12, 0.15, 0]}>
+            <capsuleGeometry args={[0.05, 0.25, 8, 16]} />
+            <meshPhongMaterial color="#FFB6C1" emissive="#FFC0CB" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0.12, 0.18, 0]}>
+            <capsuleGeometry args={[0.03, 0.15, 6, 12]} />
+            <meshPhongMaterial color="#FF69B4" emissive="#FF69B4" emissiveIntensity={0.4} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Cotton Tail */}
+      {skinConfig.accessory === 'cottonTail' && (
+        <group position={[0, -0.05, -0.3]}>
+          <mesh>
+            <sphereGeometry args={[0.1, 16, 16]} />
+            <meshPhongMaterial color="#FFFFFF" emissive="#F0F0F0" emissiveIntensity={0.4} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Egg Shell Hat */}
+      {skinConfig.hat === 'eggShell' && (
+        <group position={[0, 0.3, 0]}>
+          <mesh rotation={[0.2, 0, 0]}>
+            <sphereGeometry args={[0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshPhongMaterial color="#FFFFFF" emissive="#FFFACD" emissiveIntensity={0.3} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Egg Pattern */}
+      {skinConfig.accessory === 'eggPattern' && (
+        <group>
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.31,
+              Math.sin(i * 0.3) * 0.05,
+              Math.sin((angle * Math.PI) / 180) * 0.31
+            ]}>
+              <sphereGeometry args={[0.03, 8, 8]} />
+              <meshPhongMaterial 
+                color={i % 3 === 0 ? '#FF69B4' : i % 3 === 1 ? '#9C27B0' : '#4CAF50'} 
+                emissive={i % 3 === 0 ? '#FF69B4' : i % 3 === 1 ? '#9C27B0' : '#4CAF50'} 
+                emissiveIntensity={0.9} 
+              />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Football Helmet */}
+      {skinConfig.hat === 'footballHelmet' && (
+        <group position={[0, 0.25, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.22, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#8B4513" metalness={0.5} roughness={0.3} />
+          </mesh>
+          <mesh position={[0, 0.05, 0.18]}>
+            <boxGeometry args={[0.15, 0.12, 0.02]} />
+            <meshStandardMaterial color="#FFFFFF" transparent opacity={0.6} metalness={0.3} />
+          </mesh>
+          <mesh position={[-0.2, 0.05, 0]}>
+            <boxGeometry args={[0.02, 0.08, 0.15]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFA500" emissiveIntensity={0.6} />
+          </mesh>
+          <mesh position={[0.2, 0.05, 0]}>
+            <boxGeometry args={[0.02, 0.08, 0.15]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFA500" emissiveIntensity={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Football Laces */}
+      {skinConfig.accessory === 'footballLaces' && (
+        <group>
+          {[-0.08, -0.04, 0, 0.04, 0.08].map((y, i) => (
+            <mesh key={i} position={[0, y, 0.3]}>
+              <boxGeometry args={[0.06, 0.01, 0.01]} />
+              <meshPhongMaterial color="#FFFFFF" />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Soccer Cap */}
+      {skinConfig.hat === 'soccerCap' && (
+        <group position={[0, 0.3, 0]} rotation={[0.1, 0, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2.5]} />
+            <meshPhongMaterial color="#DC143C" emissive="#FF0000" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh position={[0, -0.05, 0.2]}>
+            <boxGeometry args={[0.25, 0.02, 0.15]} />
+            <meshPhongMaterial color="#DC143C" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Soccer Pattern */}
+      {skinConfig.accessory === 'soccerPattern' && (
+        <group>
+          {[0, 72, 144, 216, 288].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.28,
+              0,
+              Math.sin((angle * Math.PI) / 180) * 0.28
+            ]}>
+              <sphereGeometry args={[0.06, 6, 6]} />
+              <meshPhongMaterial color="#000000" />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Basketball Hoop */}
+      {skinConfig.hat === 'basketballHoop' && (
+        <group position={[0, 0.5, 0]}>
+          <mesh>
+            <torusGeometry args={[0.15, 0.02, 8, 16]} />
+            <meshStandardMaterial color="#FF8C00" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0, -0.15, 0]}>
+            <cylinderGeometry args={[0.01, 0.01, 0.15, 8]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.9} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Basketball Lines */}
+      {skinConfig.accessory === 'basketballLines' && (
+        <group>
+          {[0, 60, 120].map((angle, i) => (
+            <mesh key={i} rotation={[0, (angle * Math.PI) / 180, 0]}>
+              <torusGeometry args={[0.3, 0.01, 4, 32, Math.PI]} />
+              <meshPhongMaterial color="#000000" />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Tennis Cap */}
+      {skinConfig.hat === 'tennisCap' && (
+        <group position={[0, 0.28, 0]} rotation={[0.15, 0, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2.5]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          <mesh position={[0, -0.05, 0.18]}>
+            <boxGeometry args={[0.22, 0.02, 0.12]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Tennis Racket */}
+      {skinConfig.accessory === 'tennisRacket' && (
+        <group position={[0.35, 0, 0]} rotation={[0, 0, 0.3]}>
+          <mesh>
+            <torusGeometry args={[0.1, 0.015, 8, 16]} />
+            <meshStandardMaterial color="#8B4513" metalness={0.3} />
+          </mesh>
+          <mesh position={[0, -0.15, 0]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.15, 8]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          {[-0.05, 0, 0.05].map((x, i) => (
+            <mesh key={i} position={[x, 0, 0]}>
+              <boxGeometry args={[0.005, 0.2, 0.005]} />
+              <meshPhongMaterial color="#FFFF00" emissive="#FFFF00" emissiveIntensity={0.3} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Baseball Cap */}
+      {skinConfig.hat === 'baseballCap' && (
+        <group position={[0, 0.28, 0]} rotation={[0.1, 0, 0]}>
+          <mesh>
+            <sphereGeometry args={[0.2, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2.5]} />
+            <meshPhongMaterial color="#1E90FF" emissive="#4169E1" emissiveIntensity={0.4} />
+          </mesh>
+          <mesh position={[0, -0.05, 0.2]}>
+            <boxGeometry args={[0.25, 0.02, 0.15]} />
+            <meshPhongMaterial color="#1E90FF" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Baseball Seams */}
+      {skinConfig.accessory === 'baseballSeams' && (
+        <group>
+          <mesh rotation={[0, 0, 0.3]}>
+            <torusGeometry args={[0.25, 0.01, 4, 32, Math.PI * 1.3]} />
+            <meshPhongMaterial color="#DC143C" emissive="#DC143C" emissiveIntensity={0.5} />
+          </mesh>
+          <mesh rotation={[0, 0, -0.3]}>
+            <torusGeometry args={[0.25, 0.01, 4, 32, Math.PI * 1.3]} />
+            <meshPhongMaterial color="#DC143C" emissive="#DC143C" emissiveIntensity={0.5} />
           </mesh>
         </group>
       )}
