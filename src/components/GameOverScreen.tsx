@@ -110,7 +110,7 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
     if (tempName.trim() && tempName !== playerName) {
       setPlayerName(tempName.trim());
     }
-    onBackToHome();
+    window.location.reload();
   };
 
   const handleBackToHome = () => {
