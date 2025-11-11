@@ -21,6 +21,7 @@ export type Database = {
           player_name: string
           score: number
           skin: string
+          week_year: string | null
         }
         Insert: {
           created_at?: string
@@ -28,6 +29,7 @@ export type Database = {
           player_name: string
           score: number
           skin: string
+          week_year?: string | null
         }
         Update: {
           created_at?: string
@@ -35,6 +37,34 @@ export type Database = {
           player_name?: string
           score?: number
           skin?: string
+          week_year?: string | null
+        }
+        Relationships: []
+      }
+      premium_unlocks: {
+        Row: {
+          created_at: string
+          id: string
+          skin_id: string
+          unlock_code: string
+          unlocked_at: string | null
+          user_identifier: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          skin_id: string
+          unlock_code: string
+          unlocked_at?: string | null
+          user_identifier?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          skin_id?: string
+          unlock_code?: string
+          unlocked_at?: string | null
+          user_identifier?: string | null
         }
         Relationships: []
       }

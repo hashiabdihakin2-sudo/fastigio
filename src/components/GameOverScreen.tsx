@@ -40,12 +40,25 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
     created_at: string;
   }>>([]);
 
-  // Fetch global high scores
+  // Helper function to get ISO week number
+  const getWeekNumber = (date: Date): number => {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  };
+
+  // Fetch global high scores for current week
   useEffect(() => {
     const fetchGlobalHighScores = async () => {
+      const now = new Date();
+      const currentWeek = `${now.getFullYear()}-${String(getWeekNumber(now)).padStart(2, '0')}`;
+      
       const { data, error } = await supabase
         .from('global_highscores')
         .select('*')
+        .eq('week_year', currentWeek)
         .order('score', { ascending: false })
         .limit(10);
 
@@ -62,7 +75,7 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'global_highscores'
         },
@@ -81,12 +94,16 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
   useEffect(() => {
     const saveGlobalScore = async () => {
       if (score > 0 && playerName) {
+        const now = new Date();
+        const currentWeek = `${now.getFullYear()}-${String(getWeekNumber(now)).padStart(2, '0')}`;
+        
         await supabase
           .from('global_highscores')
           .insert({
             player_name: playerName,
             score: score,
-            skin: selectedSkin
+            skin: selectedSkin,
+            week_year: currentWeek
           });
       }
     };

@@ -3,6 +3,8 @@ import { Button } from './ui/button';
 import { useGameStore } from '../store/gameStore';
 import { Sparkles, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const PREMIUM_SKINS = [
   { 
@@ -31,7 +33,7 @@ const PREMIUM_SKINS = [
 const SWISH_NUMBER = '1236739916';
 
 export const PremiumShop = () => {
-  const { unlockedSkins, setSelectedSkin, selectedSkin } = useGameStore();
+  const { unlockedSkins, setSelectedSkin, selectedSkin, playerName } = useGameStore();
   const [copiedSwish, setCopiedSwish] = useState(false);
   const [selectedPremium, setSelectedPremium] = useState<string | null>(null);
 
@@ -49,19 +51,35 @@ export const PremiumShop = () => {
     }
   };
 
-  const handleUnlockCode = () => {
+  const handleUnlockCode = async () => {
     const code = prompt('Ange din upplåsningskod (du får denna efter betalning):');
-    if (code && selectedPremium) {
-      // Simple verification - in production this would be server-side
-      const validCode = `PREMIUM-${selectedPremium.toUpperCase()}`;
-      if (code.toUpperCase() === validCode) {
+    if (!code) return;
+
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-unlock-code', {
+        body: {
+          unlockCode: code,
+          userIdentifier: playerName || 'anonymous',
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        const skinId = data.skinId;
         const currentUnlocked = JSON.parse(localStorage.getItem('unlockedSkins') || '["classic"]');
-        const newUnlocked = [...currentUnlocked, selectedPremium];
+        const newUnlocked = [...currentUnlocked, skinId];
         localStorage.setItem('unlockedSkins', JSON.stringify(newUnlocked));
+        toast.success('Skin upplåst! 🎉', {
+          description: `${skinId} skin är nu tillgänglig!`,
+        });
         window.location.reload();
-      } else {
-        alert('Ogiltig kod. Kontakta support om du betalat.');
       }
+    } catch (error) {
+      console.error('Error validating code:', error);
+      toast.error('Ogiltig kod', {
+        description: 'Kontrollera din kod och försök igen.',
+      });
     }
   };
 
