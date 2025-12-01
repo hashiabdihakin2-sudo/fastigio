@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      game_rooms: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          game_status: string | null
+          id: string
+          player1_id: string
+          player1_position: number | null
+          player1_score: number | null
+          player1_status: string | null
+          player2_id: string | null
+          player2_position: number | null
+          player2_score: number | null
+          player2_status: string | null
+          started_at: string | null
+          winner_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          game_status?: string | null
+          id?: string
+          player1_id: string
+          player1_position?: number | null
+          player1_score?: number | null
+          player1_status?: string | null
+          player2_id?: string | null
+          player2_position?: number | null
+          player2_score?: number | null
+          player2_status?: string | null
+          started_at?: string | null
+          winner_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          game_status?: string | null
+          id?: string
+          player1_id?: string
+          player1_position?: number | null
+          player1_score?: number | null
+          player1_status?: string | null
+          player2_id?: string | null
+          player2_position?: number | null
+          player2_score?: number | null
+          player2_status?: string | null
+          started_at?: string | null
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
       global_highscores: {
         Row: {
           created_at: string
