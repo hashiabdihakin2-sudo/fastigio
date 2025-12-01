@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { MultiplayerGameScene } from './MultiplayerGameScene';
-import { GameUI } from './GameUI';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useGameStore } from '@/store/gameStore';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
 
 interface MultiplayerGameProps {
   roomId: string;
@@ -14,25 +15,48 @@ interface MultiplayerGameProps {
 
 export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: MultiplayerGameProps) => {
   const { room, updatePosition, updateScore, updateStatus } = useMultiplayer(playerId);
-  const { score, ballPosition, gameState } = useGameStore();
+  const { score, ballPosition, restartGame } = useGameStore();
   const lastUpdateRef = useRef({ position: 0, score: 0 });
-  const [isMuted, setIsMuted] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [winner, setWinner] = useState<string | null>(null);
 
+  // Start game when component mounts
   useEffect(() => {
+    restartGame();
     updateStatus('playing');
     
     return () => {
       updateStatus('finished');
     };
-  }, [updateStatus]);
+  }, [updateStatus, restartGame]);
 
+  // Keyboard controls for local player
   useEffect(() => {
-    if (Math.abs(ballPosition.x - lastUpdateRef.current.position) > 0.5) {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        (window as any).handleGlide?.('left');
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        (window as any).handleGlide?.('right');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  // Update position in database
+  useEffect(() => {
+    if (Math.abs(ballPosition.x - lastUpdateRef.current.position) > 0.3) {
       updatePosition(ballPosition.x);
       lastUpdateRef.current.position = ballPosition.x;
     }
   }, [ballPosition.x, updatePosition]);
 
+  // Update score in database
   useEffect(() => {
     if (score !== lastUpdateRef.current.score) {
       updateScore(score);
@@ -40,18 +64,48 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
     }
   }, [score, updateScore]);
 
+  // Check for game end conditions
   useEffect(() => {
-    if (room) {
-      const opponentStatus = isPlayer1 ? room.player2_status : room.player1_status;
-      
-      if (opponentStatus === 'finished' || opponentStatus === 'left') {
-        onGameOver();
+    if (!room || gameEnded) return;
+
+    const myScore = isPlayer1 ? room.player1_score : room.player2_score;
+    const opponentScore = isPlayer1 ? room.player2_score : room.player1_score;
+    const myStatus = isPlayer1 ? room.player1_status : room.player2_status;
+    const opponentStatus = isPlayer1 ? room.player2_status : room.player1_status;
+
+    // Check if either player died (stopped playing)
+    if (opponentStatus === 'finished' && myStatus === 'playing') {
+      // Opponent died, I win
+      setGameEnded(true);
+      setWinner('Du vann!');
+      updateStatus('finished');
+    } else if (myStatus === 'finished' && opponentStatus === 'playing') {
+      // I died, opponent wins
+      setGameEnded(true);
+      setWinner('Motspelaren vann!');
+    } else if (myStatus === 'finished' && opponentStatus === 'finished') {
+      // Both finished, highest score wins
+      if (myScore > opponentScore) {
+        setWinner('Du vann!');
+      } else if (opponentScore > myScore) {
+        setWinner('Motspelaren vann!');
+      } else {
+        setWinner('Oavgjort!');
       }
+      setGameEnded(true);
     }
-  }, [room, isPlayer1, onGameOver]);
+
+    // Check if opponent left
+    if (opponentStatus === 'left') {
+      setGameEnded(true);
+      setWinner('Motspelaren lämnade - Du vann!');
+      updateStatus('finished');
+    }
+  }, [room, isPlayer1, gameEnded, updateStatus]);
 
   const opponentPosition = room ? (isPlayer1 ? room.player2_position : room.player1_position) : 0;
   const opponentScore = room ? (isPlayer1 ? room.player2_score : room.player1_score) : 0;
+  const myScore = room ? (isPlayer1 ? room.player1_score : room.player2_score) : score;
 
   return (
     <div className="relative w-full h-screen flex">
@@ -67,11 +121,11 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
         
         <div className="absolute top-4 left-4 bg-primary/80 backdrop-blur px-4 py-2 rounded-lg">
           <p className="font-bold text-white">Du</p>
-          <p className="text-sm text-white">Poäng: {score}</p>
+          <p className="text-sm text-white">Poäng: {myScore}</p>
         </div>
       </div>
 
-      {/* Right side - Opponent */}
+      {/* Right side - Opponent view */}
       <div className="w-1/2 h-full relative">
         <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
           <MultiplayerGameScene 
@@ -87,19 +141,52 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
         </div>
       </div>
 
-      {/* Game UI overlay */}
-      <div className="absolute inset-0 pointer-events-none">
-        <GameUI 
-          currentSection={0}
-          gameState={gameState}
-          onRestart={() => {}}
-          isMuted={isMuted}
-          onToggleMute={() => setIsMuted(!isMuted)}
-        />
-      </div>
+      {/* Game Over Screen */}
+      {gameEnded && (
+        <div className="absolute inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50">
+          <Card className="p-8 max-w-md w-full text-center space-y-6">
+            <h2 className="text-3xl font-bold text-primary">{winner}</h2>
+            <div className="space-y-2">
+              <p className="text-lg">Ditt poäng: <span className="font-bold text-primary">{myScore}</span></p>
+              <p className="text-lg">Motspelare: <span className="font-bold text-accent">{opponentScore}</span></p>
+            </div>
+            <Button onClick={onGameOver} size="lg" className="w-full">
+              Tillbaka till lobby
+            </Button>
+          </Card>
+        </div>
+      )}
 
       {/* Center divider */}
       <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary-glow to-primary pointer-events-none" />
+      
+      {/* Mobile controls - only for local player */}
+      <div className="absolute bottom-8 left-1/4 -translate-x-1/2 flex gap-4 pointer-events-auto z-10">
+        <Button
+          size="icon"
+          variant="default"
+          className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            (window as any).handleGlide?.('left');
+          }}
+          onClick={() => (window as any).handleGlide?.('left')}
+        >
+          ←
+        </Button>
+        <Button
+          size="icon"
+          variant="default"
+          className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            (window as any).handleGlide?.('right');
+          }}
+          onClick={() => (window as any).handleGlide?.('right')}
+        >
+          →
+        </Button>
+      </div>
     </div>
   );
 };

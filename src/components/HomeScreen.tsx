@@ -9,7 +9,7 @@ interface HomeScreenProps {
 }
 
 const SKINS = [
-  { id: 'classic' as const, name: 'Classic', color: '#00BFFF', emoji: '⚪' },
+  { id: 'classic' as const, name: 'BENO', color: '#00BFFF', emoji: '⚪' },
   { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥' },
   { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️' },
   { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈' },

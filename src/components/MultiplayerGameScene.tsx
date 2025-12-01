@@ -17,19 +17,19 @@ interface MultiplayerGameSceneProps {
 
 export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponentScore }: MultiplayerGameSceneProps) => {
   const ballRef = useRef<any>(null);
-  const cameraRef = useRef<any>(null);
   const velocityRef = useRef(new Vector3(0, 0, 0));
+  const opponentBallPositionRef = useRef(new Vector3(opponentPosition, 1, 0));
+  
   const { 
     ballPosition, 
     setBallPosition, 
     updateScore, 
     endGame, 
     gameState,
-    score,
-    selectedSkin 
+    score
   } = useGameStore();
 
-  // Initialize position
+  // Initialize position for local player
   useEffect(() => {
     if (isLocalPlayer && gameState === 'playing') {
       setBallPosition(new Vector3(0, 1, 0));
@@ -37,15 +37,25 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
     }
   }, [gameState, isLocalPlayer, setBallPosition]);
 
+  // Update opponent position from props
+  useEffect(() => {
+    if (!isLocalPlayer) {
+      opponentBallPositionRef.current.x = opponentPosition;
+      // Move opponent forward based on their score
+      opponentBallPositionRef.current.z = -(opponentScore * 5);
+    }
+  }, [opponentPosition, opponentScore, isLocalPlayer]);
+
   useFrame((state, delta) => {
-    if (!ballRef.current || gameState !== 'playing') return;
+    if (!ballRef.current) return;
 
-    const speed = 8;
-    const glideForce = 12;
-    const maxXSpeed = 15;
-    const gravity = -30;
+    if (isLocalPlayer && gameState === 'playing') {
+      // Local player physics
+      const speed = 8;
+      const glideForce = 12;
+      const maxXSpeed = 15;
+      const gravity = -30;
 
-    if (isLocalPlayer) {
       // Move forward automatically
       velocityRef.current.z = -speed;
 
@@ -102,13 +112,19 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
         state.camera.lookAt(newPosition);
       }
     } else {
-      // Opponent ball - just show position
-      const opponentPos = new Vector3(opponentPosition, 1, ballPosition.z);
-      ballRef.current.position.copy(opponentPos);
+      // Opponent view - show their ball moving
+      ballRef.current.position.copy(opponentBallPositionRef.current);
+      
+      // Camera follows opponent
+      if (state.camera) {
+        state.camera.position.x = opponentBallPositionRef.current.x;
+        state.camera.position.z = opponentBallPositionRef.current.z + 12;
+        state.camera.lookAt(opponentBallPositionRef.current);
+      }
     }
   });
 
-  // Handle glide controls
+  // Handle glide controls for local player
   useEffect(() => {
     if (!isLocalPlayer) return;
 
@@ -123,6 +139,8 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
     };
   }, [gameState, isLocalPlayer]);
 
+  const displayPosition = isLocalPlayer ? ballPosition : opponentBallPositionRef.current;
+
   return (
     <>
       <ambientLight intensity={0.3} />
@@ -135,18 +153,17 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
       />
       <pointLight position={[0, 10, 0]} intensity={0.5} color="#00ffff" />
       
-      <CyberBackground ballPosition={ballPosition} />
+      <CyberBackground ballPosition={displayPosition} />
+      <Ball ref={ballRef} />
+      <Track ballPosition={displayPosition} />
+      <Obstacles ballPosition={displayPosition} />
+      <Coins ballPosition={displayPosition} />
       
-      {isLocalPlayer ? (
-        <>
-          <Ball ref={ballRef} />
-          <Track ballPosition={ballPosition} />
-          <Obstacles ballPosition={ballPosition} />
-          <Coins ballPosition={ballPosition} />
-          {gameState === 'gameOver' && <DeathAnimation position={[ballPosition.x, ballPosition.y, ballPosition.z]} onComplete={() => {}} />}
-        </>
-      ) : (
-        <Ball ref={ballRef} />
+      {isLocalPlayer && gameState === 'gameOver' && (
+        <DeathAnimation 
+          position={[ballPosition.x, ballPosition.y, ballPosition.z]} 
+          onComplete={() => {}} 
+        />
       )}
     </>
   );
