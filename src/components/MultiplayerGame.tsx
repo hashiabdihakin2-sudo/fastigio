@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { GameScene } from './GameScene';
+import { MultiplayerGameScene } from './MultiplayerGameScene';
 import { GameUI } from './GameUI';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useGameStore } from '@/store/gameStore';
@@ -55,28 +54,52 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
   const opponentScore = room ? (isPlayer1 ? room.player2_score : room.player1_score) : 0;
 
   return (
-    <div className="relative w-full h-screen">
-      <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
-        <GameScene controls={{ left: false, right: false }} />
-        <OrbitControls enableZoom={false} enablePan={false} />
-      </Canvas>
-      
-      <GameUI 
-        currentSection={0}
-        gameState={gameState}
-        onRestart={() => {}}
-        isMuted={isMuted}
-        onToggleMute={() => setIsMuted(!isMuted)}
-      />
-      
-      {/* Opponent Info */}
-      <div className="absolute top-20 right-4 bg-background/80 backdrop-blur p-4 rounded-lg space-y-2">
-        <h3 className="font-bold text-sm text-muted-foreground">Motspelare</h3>
-        <div className="space-y-1">
-          <p className="text-sm">Position: {opponentPosition.toFixed(1)}</p>
-          <p className="text-sm">Poäng: {opponentScore}</p>
+    <div className="relative w-full h-screen flex">
+      {/* Left side - Local player */}
+      <div className="w-1/2 h-full relative border-r-2 border-primary/30">
+        <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
+          <MultiplayerGameScene 
+            isLocalPlayer={true} 
+            opponentPosition={opponentPosition}
+            opponentScore={opponentScore}
+          />
+        </Canvas>
+        
+        <div className="absolute top-4 left-4 bg-primary/80 backdrop-blur px-4 py-2 rounded-lg">
+          <p className="font-bold text-white">Du</p>
+          <p className="text-sm text-white">Poäng: {score}</p>
         </div>
       </div>
+
+      {/* Right side - Opponent */}
+      <div className="w-1/2 h-full relative">
+        <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
+          <MultiplayerGameScene 
+            isLocalPlayer={false} 
+            opponentPosition={opponentPosition}
+            opponentScore={opponentScore}
+          />
+        </Canvas>
+        
+        <div className="absolute top-4 right-4 bg-accent/80 backdrop-blur px-4 py-2 rounded-lg">
+          <p className="font-bold text-white">Motspelare</p>
+          <p className="text-sm text-white">Poäng: {opponentScore}</p>
+        </div>
+      </div>
+
+      {/* Game UI overlay */}
+      <div className="absolute inset-0 pointer-events-none">
+        <GameUI 
+          currentSection={0}
+          gameState={gameState}
+          onRestart={() => {}}
+          isMuted={isMuted}
+          onToggleMute={() => setIsMuted(!isMuted)}
+        />
+      </div>
+
+      {/* Center divider */}
+      <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary-glow to-primary pointer-events-none" />
     </div>
   );
 };

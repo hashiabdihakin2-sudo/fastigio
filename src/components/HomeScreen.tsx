@@ -97,19 +97,6 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         </div>
 
-        {/* Player Name Input */}
-        <div className="space-y-2 max-w-md mx-auto">
-          <label className="text-sm font-medium text-foreground">Ditt namn (för topplistan)</label>
-          <Input
-            type="text"
-            placeholder="Ange ditt namn..."
-            value={tempName}
-            onChange={(e) => setTempName(e.target.value)}
-            maxLength={20}
-            className="text-center"
-          />
-        </div>
-
         {/* Mobile Orientation Warning */}
         {isMobile && !isLandscape && (
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex items-center gap-3">
@@ -198,6 +185,19 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
             <p>Använd piltangenterna ← → för att hoppa åt sidan</p>
             <p>Bollen rullar framåt automatiskt!</p>
           </div>
+        </div>
+
+        {/* Player Name Input - Moved to bottom */}
+        <div className="space-y-2 max-w-md mx-auto">
+          <label className="text-sm font-medium text-foreground">Ditt namn (för topplistan)</label>
+          <Input
+            type="text"
+            placeholder="Ange ditt namn..."
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+            maxLength={20}
+            className="text-center"
+          />
         </div>
       </div>
     </div>

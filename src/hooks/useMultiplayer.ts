@@ -84,7 +84,7 @@ export const useMultiplayer = (playerId: string) => {
         .from('game_rooms')
         .update({ 
           player2_id: playerId,
-          game_status: 'ready'
+          game_status: 'playing'
         })
         .eq('id', targetRoomId);
 
@@ -94,7 +94,7 @@ export const useMultiplayer = (playerId: string) => {
       setIsPlayer1(false);
       toast({
         title: "Gick med i rummet!",
-        description: "Spelet börjar snart...",
+        description: "Spelet startar nu...",
       });
 
       return true;
