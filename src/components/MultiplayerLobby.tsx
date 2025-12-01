@@ -55,10 +55,8 @@ export const MultiplayerLobby = ({ playerId, onStartGame, onBack }: MultiplayerL
   }, []);
 
   useEffect(() => {
-    if (room && room.game_status === 'ready' && roomId) {
-      setTimeout(() => {
-        onStartGame(roomId, isPlayer1);
-      }, 2000);
+    if (room && (room.game_status === 'ready' || room.game_status === 'playing') && roomId) {
+      onStartGame(roomId, isPlayer1);
     }
   }, [room, roomId, isPlayer1, onStartGame]);
 
@@ -119,9 +117,9 @@ export const MultiplayerLobby = ({ playerId, onStartGame, onBack }: MultiplayerL
               </div>
             </div>
 
-            {room.game_status === 'ready' && (
+            {(room.game_status === 'ready' || room.game_status === 'playing') && (
               <div className="text-primary font-bold animate-pulse">
-                Spelet startar om 2 sekunder...
+                Startar spel...
               </div>
             )}
           </div>
