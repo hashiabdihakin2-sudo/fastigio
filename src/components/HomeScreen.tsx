@@ -168,16 +168,27 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         </div>
 
-        {/* Start Button */}
+        {/* Start Buttons */}
         <div className="space-y-4">
-          <Button 
-            onClick={handleStartGame}
-            disabled={!tempName.trim()}
-            size="lg"
-            className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Starta Spel
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={handleStartGame}
+              disabled={!tempName.trim()}
+              size="lg"
+              className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 shadow-glow disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Singel spelare
+            </Button>
+            <Button 
+              onClick={() => window.location.href = '/?mode=multiplayer'}
+              disabled={!tempName.trim()}
+              size="lg"
+              variant="outline"
+              className="text-lg px-8 py-6 border-2 border-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              1v1 Multiplayer
+            </Button>
+          </div>
           {!tempName.trim() && (
             <p className="text-sm text-muted-foreground">Ange ditt namn för att börja spela</p>
           )}
