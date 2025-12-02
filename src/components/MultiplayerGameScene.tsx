@@ -128,14 +128,21 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
   useEffect(() => {
     if (!isLocalPlayer) return;
 
-    (window as any).handleGlide = (direction: 'left' | 'right') => {
+    (window as any).handleGlidePlayer1 = (direction: 'left' | 'right') => {
+      if (gameState === 'playing') {
+        (window as any).glideDirection = direction;
+      }
+    };
+
+    (window as any).handleGlidePlayer2 = (direction: 'left' | 'right') => {
       if (gameState === 'playing') {
         (window as any).glideDirection = direction;
       }
     };
 
     return () => {
-      (window as any).handleGlide = undefined;
+      (window as any).handleGlidePlayer1 = undefined;
+      (window as any).handleGlidePlayer2 = undefined;
     };
   }, [gameState, isLocalPlayer]);
 
