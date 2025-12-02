@@ -1,27 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { useGameStore } from '@/store/gameStore';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { MultiplayerGameScene } from './MultiplayerGameScene';
+import { LocalPlayerGameScene } from './LocalPlayerGameScene';
 
 interface LocalMultiplayerGameProps {
   onGameOver: () => void;
 }
 
 export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) => {
-  const { restartGame } = useGameStore();
   const [player1Score, setPlayer1Score] = useState(0);
   const [player2Score, setPlayer2Score] = useState(0);
   const [player1Status, setPlayer1Status] = useState<'playing' | 'finished'>('playing');
   const [player2Status, setPlayer2Status] = useState<'playing' | 'finished'>('playing');
   const [gameEnded, setGameEnded] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
-
-  // Start game when component mounts
-  useEffect(() => {
-    restartGame();
-  }, [restartGame]);
 
   // Keyboard controls - Player 1 uses A/D, Player 2 uses Arrow keys
   useEffect(() => {
@@ -51,33 +44,23 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
     };
   }, [player1Status, player2Status]);
 
-  // Listen for game end events from game scenes
-  useEffect(() => {
-    (window as any).onPlayer1Died = (finalScore: number) => {
-      setPlayer1Score(finalScore);
-      setPlayer1Status('finished');
-    };
+  const handlePlayer1ScoreUpdate = (score: number) => {
+    setPlayer1Score(score);
+  };
 
-    (window as any).onPlayer2Died = (finalScore: number) => {
-      setPlayer2Score(finalScore);
-      setPlayer2Status('finished');
-    };
+  const handlePlayer2ScoreUpdate = (score: number) => {
+    setPlayer2Score(score);
+  };
 
-    (window as any).updatePlayer1Score = (score: number) => {
-      setPlayer1Score(score);
-    };
+  const handlePlayer1Died = (finalScore: number) => {
+    setPlayer1Score(finalScore);
+    setPlayer1Status('finished');
+  };
 
-    (window as any).updatePlayer2Score = (score: number) => {
-      setPlayer2Score(score);
-    };
-
-    return () => {
-      (window as any).onPlayer1Died = undefined;
-      (window as any).onPlayer2Died = undefined;
-      (window as any).updatePlayer1Score = undefined;
-      (window as any).updatePlayer2Score = undefined;
-    };
-  }, []);
+  const handlePlayer2Died = (finalScore: number) => {
+    setPlayer2Score(finalScore);
+    setPlayer2Status('finished');
+  };
 
   // Check for game end conditions
   useEffect(() => {
@@ -108,12 +91,11 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
       {/* Left side - Player 1 */}
       <div className="w-1/2 h-full relative border-r-2 border-primary/30">
         <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
-          <MultiplayerGameScene 
-            isLocalPlayer={true}
+          <LocalPlayerGameScene 
             playerId={1}
             playerStatus={player1Status}
-            opponentPosition={0}
-            opponentScore={0}
+            onScoreUpdate={handlePlayer1ScoreUpdate}
+            onPlayerDied={handlePlayer1Died}
           />
         </Canvas>
         
@@ -126,12 +108,11 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
       {/* Right side - Player 2 */}
       <div className="w-1/2 h-full relative">
         <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
-          <MultiplayerGameScene 
-            isLocalPlayer={true}
+          <LocalPlayerGameScene 
             playerId={2}
             playerStatus={player2Status}
-            opponentPosition={0}
-            opponentScore={0}
+            onScoreUpdate={handlePlayer2ScoreUpdate}
+            onPlayerDied={handlePlayer2Died}
           />
         </Canvas>
         
