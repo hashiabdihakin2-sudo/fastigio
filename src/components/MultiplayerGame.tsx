@@ -30,15 +30,27 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
     };
   }, [updateStatus, restartGame]);
 
-  // Keyboard controls for local player
+  // Keyboard controls - Player 1 uses A/D, Player 2 uses Arrow keys
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        (window as any).handleGlide?.('left');
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        (window as any).handleGlide?.('right');
+      if (isPlayer1) {
+        // Player 1 uses A and D
+        if (e.key === 'a' || e.key === 'A') {
+          e.preventDefault();
+          (window as any).handleGlidePlayer1?.('left');
+        } else if (e.key === 'd' || e.key === 'D') {
+          e.preventDefault();
+          (window as any).handleGlidePlayer1?.('right');
+        }
+      } else {
+        // Player 2 uses Arrow keys
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          (window as any).handleGlidePlayer2?.('left');
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          (window as any).handleGlidePlayer2?.('right');
+        }
       }
     };
 
@@ -46,7 +58,7 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isPlayer1]);
 
   // Update position in database
   useEffect(() => {
@@ -160,33 +172,65 @@ export const MultiplayerGame = ({ roomId, playerId, isPlayer1, onGameOver }: Mul
       {/* Center divider */}
       <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary-glow to-primary pointer-events-none" />
       
-      {/* Mobile controls - only for local player */}
-      <div className="absolute bottom-8 left-1/4 -translate-x-1/2 flex gap-4 pointer-events-auto z-10">
-        <Button
-          size="icon"
-          variant="default"
-          className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
-          onTouchStart={(e) => {
-            e.preventDefault();
-            (window as any).handleGlide?.('left');
-          }}
-          onClick={() => (window as any).handleGlide?.('left')}
-        >
-          ←
-        </Button>
-        <Button
-          size="icon"
-          variant="default"
-          className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
-          onTouchStart={(e) => {
-            e.preventDefault();
-            (window as any).handleGlide?.('right');
-          }}
-          onClick={() => (window as any).handleGlide?.('right')}
-        >
-          →
-        </Button>
-      </div>
+      {/* Mobile controls for Player 1 (A/D) */}
+      {isPlayer1 && (
+        <div className="absolute bottom-8 left-1/4 -translate-x-1/2 flex gap-4 pointer-events-auto z-10">
+          <Button
+            size="icon"
+            variant="default"
+            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              (window as any).handleGlidePlayer1?.('left');
+            }}
+            onClick={() => (window as any).handleGlidePlayer1?.('left')}
+          >
+            A
+          </Button>
+          <Button
+            size="icon"
+            variant="default"
+            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-16 h-16"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              (window as any).handleGlidePlayer1?.('right');
+            }}
+            onClick={() => (window as any).handleGlidePlayer1?.('right')}
+          >
+            D
+          </Button>
+        </div>
+      )}
+
+      {/* Mobile controls for Player 2 (Arrow keys) */}
+      {!isPlayer1 && (
+        <div className="absolute bottom-8 right-1/4 translate-x-1/2 flex gap-4 pointer-events-auto z-10">
+          <Button
+            size="icon"
+            variant="default"
+            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-16 h-16"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              (window as any).handleGlidePlayer2?.('left');
+            }}
+            onClick={() => (window as any).handleGlidePlayer2?.('left')}
+          >
+            ←
+          </Button>
+          <Button
+            size="icon"
+            variant="default"
+            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-16 h-16"
+            onTouchStart={(e) => {
+              e.preventDefault();
+              (window as any).handleGlidePlayer2?.('right');
+            }}
+            onClick={() => (window as any).handleGlidePlayer2?.('right')}
+          >
+            →
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
