@@ -11,11 +11,13 @@ import { useGameStore } from '../store/gameStore';
 
 interface MultiplayerGameSceneProps {
   isLocalPlayer: boolean;
+  playerId: number;
+  playerStatus: 'playing' | 'finished';
   opponentPosition: number;
   opponentScore: number;
 }
 
-export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponentScore }: MultiplayerGameSceneProps) => {
+export const MultiplayerGameScene = ({ isLocalPlayer, playerId, playerStatus, opponentPosition, opponentScore }: MultiplayerGameSceneProps) => {
   const ballRef = useRef<any>(null);
   const velocityRef = useRef(new Vector3(0, 0, 0));
   const opponentBallPositionRef = useRef(new Vector3(opponentPosition, 1, 0));
@@ -31,11 +33,11 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
 
   // Initialize position for local player
   useEffect(() => {
-    if (isLocalPlayer && gameState === 'playing') {
+    if (isLocalPlayer) {
       setBallPosition(new Vector3(0, 1, 0));
       velocityRef.current.set(0, 0, 0);
     }
-  }, [gameState, isLocalPlayer, setBallPosition]);
+  }, [isLocalPlayer, setBallPosition]);
 
   // Update opponent position from props
   useEffect(() => {
@@ -49,7 +51,7 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
   useFrame((state, delta) => {
     if (!ballRef.current) return;
 
-    if (isLocalPlayer && gameState === 'playing') {
+    if (isLocalPlayer && playerStatus === 'playing') {
       // Local player physics
       const speed = 8;
       const glideForce = 12;
@@ -92,7 +94,11 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
 
       // Death if fall off
       if (newPosition.y < -5) {
-        endGame();
+        if (playerId === 1) {
+          (window as any).onPlayer1Died?.(score);
+        } else {
+          (window as any).onPlayer2Died?.(score);
+        }
         return;
       }
 
@@ -103,6 +109,11 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
       const newScore = Math.floor(Math.abs(newPosition.z) / 5);
       if (newScore > score) {
         updateScore(newScore);
+        if (playerId === 1) {
+          (window as any).updatePlayer1Score?.(newScore);
+        } else {
+          (window as any).updatePlayer2Score?.(newScore);
+        }
       }
 
       // Update camera to follow
@@ -128,23 +139,28 @@ export const MultiplayerGameScene = ({ isLocalPlayer, opponentPosition, opponent
   useEffect(() => {
     if (!isLocalPlayer) return;
 
-    (window as any).handleGlidePlayer1 = (direction: 'left' | 'right') => {
-      if (gameState === 'playing') {
-        (window as any).glideDirection = direction;
-      }
-    };
-
-    (window as any).handleGlidePlayer2 = (direction: 'left' | 'right') => {
-      if (gameState === 'playing') {
-        (window as any).glideDirection = direction;
-      }
-    };
+    if (playerId === 1) {
+      (window as any).handleGlidePlayer1 = (direction: 'left' | 'right') => {
+        if (playerStatus === 'playing') {
+          (window as any).glideDirection = direction;
+        }
+      };
+    } else {
+      (window as any).handleGlidePlayer2 = (direction: 'left' | 'right') => {
+        if (playerStatus === 'playing') {
+          (window as any).glideDirection = direction;
+        }
+      };
+    }
 
     return () => {
-      (window as any).handleGlidePlayer1 = undefined;
-      (window as any).handleGlidePlayer2 = undefined;
+      if (playerId === 1) {
+        (window as any).handleGlidePlayer1 = undefined;
+      } else {
+        (window as any).handleGlidePlayer2 = undefined;
+      }
     };
-  }, [gameState, isLocalPlayer]);
+  }, [playerStatus, isLocalPlayer, playerId]);
 
   const displayPosition = isLocalPlayer ? ballPosition : opponentBallPositionRef.current;
 

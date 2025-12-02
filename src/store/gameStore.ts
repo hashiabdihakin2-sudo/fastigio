@@ -41,10 +41,6 @@ const SKIN_PRICES = {
   basketball: 2200,
   tennis: 1800,
   baseball: 2100,
-  // Premium skins (köps med riktiga pengar)
-  diamond: 'premium',
-  cosmic: 'premium',
-  legendary: 'premium',
 } as const;
 
 
@@ -58,8 +54,8 @@ interface GameState {
   highScore: number;
   highScores: HighScore[];
   coins: number;
-  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'diamond' | 'cosmic' | 'legendary')[];
-  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'diamond' | 'cosmic' | 'legendary';
+  unlockedSkins: ('classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball')[];
+  selectedSkin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball';
   playerName: string;
   
   // Actions
@@ -69,9 +65,9 @@ interface GameState {
   endGame: () => void;
   restartGame: () => void;
   updateScore: (score: number) => void;
-  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'diamond' | 'cosmic' | 'legendary') => void;
-  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'diamond' | 'cosmic' | 'legendary') => boolean;
-  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'diamond' | 'cosmic' | 'legendary') => number | 'premium';
+  setSelectedSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball') => void;
+  unlockSkin: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball') => boolean;
+  getSkinPrice: (skin: 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball') => number;
   setPlayerName: (name: string) => void;
 }
 
@@ -117,7 +113,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     const price = SKIN_PRICES[skin];
     
     if (unlockedSkins.includes(skin)) return true;
-    if (price === 'premium') return false; // Premium skins kan inte köpas med coins
     if (coins < price) return false;
     
     const newCoins = coins - price;

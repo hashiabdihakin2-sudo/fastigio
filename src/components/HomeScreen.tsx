@@ -121,7 +121,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
                 <button
                   key={skin.id}
                   onClick={() => handleSkinSelect(skin.id)}
-                  disabled={!isUnlocked && (typeof price === 'number' && coins < price)}
+                  disabled={!isUnlocked && coins < price}
                   className={`
                     relative p-4 rounded-lg border-2 transition-all duration-200
                     ${isSelected 
@@ -130,14 +130,14 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
                       ? 'border-border hover:border-primary/50 hover:scale-105'
                       : 'border-muted opacity-60 hover:opacity-80'
                     }
-                    ${!isUnlocked && (typeof price === 'number' && coins < price) ? 'cursor-not-allowed' : 'cursor-pointer'}
+                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
                   `}
                   style={{ backgroundColor: `${skin.color}20` }}
                 >
                   <div className="text-3xl mb-1">{skin.emoji}</div>
                   <div className="text-xs font-medium text-foreground">{skin.name}</div>
                   
-                  {!isUnlocked && typeof price === 'number' && (
+                  {!isUnlocked && (
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                       <Coins className="w-3 h-3" />
                       {price}
@@ -167,13 +167,13 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
               Singel spelare
             </Button>
             <Button 
-              onClick={() => window.location.href = '/?mode=multiplayer'}
+              onClick={() => window.location.href = '/?mode=local1v1'}
               disabled={!tempName.trim()}
               size="lg"
               variant="outline"
               className="text-lg px-8 py-6 border-2 border-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              1v1 Multiplayer
+              1v1 Lokal (Split-Screen)
             </Button>
           </div>
           {!tempName.trim() && (
@@ -182,7 +182,8 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           
           {/* Controls */}
           <div className="space-y-2 text-sm text-muted-foreground">
-            <p>Använd piltangenterna ← → för att hoppa åt sidan</p>
+            <p>Singel: Använd piltangenterna ← → för att hoppa åt sidan</p>
+            <p>1v1: Spelare 1 använder A och D, Spelare 2 använder ← →</p>
             <p>Bollen rullar framåt automatiskt!</p>
           </div>
         </div>
