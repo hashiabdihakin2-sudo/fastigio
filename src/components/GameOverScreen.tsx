@@ -5,7 +5,6 @@ import { useGameStore } from '../store/gameStore';
 import { Trophy, Coins, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { PremiumShop } from './PremiumShop';
 
 interface GameOverScreenProps {
   onRestart: () => void;
@@ -116,10 +115,6 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
       setSelectedSkin(skinId);
     } else {
       const price = getSkinPrice(skinId);
-      if (price === 'premium') {
-        alert('Denna skin kan endast köpas med riktiga pengar. Se Premium Shop nedan!');
-        return;
-      }
       const success = unlockSkin(skinId);
       if (!success) {
         alert(`Du behöver ${price} coins för att köpa denna skin!`);
@@ -281,9 +276,6 @@ export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps)
             Du har {coins} coins. Spela mer för att tjäna fler!
           </p>
         </Card>
-
-        {/* Premium Shop */}
-        <PremiumShop />
 
         {/* Action Buttons */}
         <div className="space-y-3 max-w-md mx-auto">
