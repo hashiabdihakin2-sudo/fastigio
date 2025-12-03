@@ -11,11 +11,12 @@ import { DeathAnimation } from './DeathAnimation';
 interface LocalPlayerGameSceneProps {
   playerId: number;
   playerStatus: 'playing' | 'finished';
+  playerSkin?: string;
   onScoreUpdate: (score: number) => void;
   onPlayerDied: (score: number) => void;
 }
 
-export const LocalPlayerGameScene = ({ playerId, playerStatus, onScoreUpdate, onPlayerDied }: LocalPlayerGameSceneProps) => {
+export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'classic', onScoreUpdate, onPlayerDied }: LocalPlayerGameSceneProps) => {
   const ballRef = useRef<any>(null);
   const velocityRef = useRef(new Vector3(0, 0, 0));
   const [ballPosition, setBallPosition] = useState(new Vector3(0, 1, 0));
@@ -137,9 +138,9 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, onScoreUpdate, on
       <pointLight position={[0, 10, 0]} intensity={0.5} color="#00ffff" />
       
       <CyberBackground ballPosition={ballPosition} />
-      <Ball ref={ballRef} />
+      <Ball ref={ballRef} skinId={playerSkin as any} />
       <Track ballPosition={ballPosition} />
-      <Obstacles ballPosition={ballPosition} />
+      <Obstacles ballPosition={ballPosition} playerId={playerId} />
       <Coins ballPosition={ballPosition} />
       
       {isDead && (

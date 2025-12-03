@@ -16,9 +16,10 @@ interface Obstacle {
 
 interface ObstaclesProps {
   ballPosition: Vector3;
+  playerId?: number; // For multiplayer - which player this belongs to
 }
 
-export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
+export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
   const { endGame } = useGameStore();
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
@@ -132,7 +133,15 @@ export const Obstacles = ({ ballPosition }: ObstaclesProps) => {
       const collisionRadius = obstacle.type === 'disappearing' ? 1.2 : 0.9;
       
       if (distance < collisionRadius) {
-        endGame();
+        // For multiplayer, call the player-specific death handler
+        if (playerId === 1) {
+          (window as any).handleDeathPlayer1?.();
+        } else if (playerId === 2) {
+          (window as any).handleDeathPlayer2?.();
+        } else {
+          // Single player mode
+          endGame();
+        }
       }
     });
 

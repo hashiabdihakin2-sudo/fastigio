@@ -250,9 +250,13 @@ const SKIN_CONFIGS = {
   }
 };
 
-export const Ball = forwardRef<Group>((props, ref) => {
+interface BallProps {
+  skinId?: keyof typeof SKIN_CONFIGS;
+}
+
+export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
   const { selectedSkin } = useGameStore();
-  const skinConfig = SKIN_CONFIGS[selectedSkin];
+  const skinConfig = SKIN_CONFIGS[skinId || selectedSkin];
 
   return (
     <group ref={ref} position={[0, 1, 0]}>

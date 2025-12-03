@@ -12,9 +12,10 @@ interface Coin {
 
 interface CoinsProps {
   ballPosition: Vector3;
+  playerId?: number; // For multiplayer - which player this belongs to
 }
 
-export const Coins = ({ ballPosition }: CoinsProps) => {
+export const Coins = ({ ballPosition, playerId }: CoinsProps) => {
   const { coins, updateScore, score } = useGameStore();
   const coinsRef = useRef<Coin[]>([]);
   const timeRef = useRef(0);
