@@ -34,6 +34,30 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     gameStarted.current = true;
   }, []);
 
+  // Handle death from obstacles
+  useEffect(() => {
+    const handleDeath = () => {
+      if (!isDead && playerStatus === 'playing') {
+        setIsDead(true);
+        onPlayerDied(score);
+      }
+    };
+
+    if (playerId === 1) {
+      (window as any).handleDeathPlayer1 = handleDeath;
+    } else {
+      (window as any).handleDeathPlayer2 = handleDeath;
+    }
+
+    return () => {
+      if (playerId === 1) {
+        (window as any).handleDeathPlayer1 = undefined;
+      } else {
+        (window as any).handleDeathPlayer2 = undefined;
+      }
+    };
+  }, [playerId, isDead, playerStatus, score, onPlayerDied]);
+
   // Handle glide input
   const handleGlide = useCallback((direction: 'left' | 'right') => {
     if (playerStatus === 'playing' && !isDead) {
@@ -128,11 +152,11 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
       onScoreUpdate(newScore);
     }
 
-    // Update camera to follow ball
+    // Update camera to follow ball - camera behind the ball looking forward
     state.camera.position.x = newPosition.x * 0.5;
     state.camera.position.y = 6;
-    state.camera.position.z = newPosition.z + 12;
-    state.camera.lookAt(newPosition.x * 0.3, 1, newPosition.z);
+    state.camera.position.z = newPosition.z + 15; // Camera behind the ball
+    state.camera.lookAt(newPosition.x * 0.3, 1, newPosition.z - 10); // Look ahead of the ball
   });
 
   return (

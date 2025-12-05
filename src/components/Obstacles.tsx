@@ -16,37 +16,31 @@ interface Obstacle {
 
 interface ObstaclesProps {
   ballPosition: Vector3;
-  playerId?: number; // For multiplayer - which player this belongs to
+  playerId?: number;
 }
 
 export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
   const { endGame } = useGameStore();
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
-  const OBSTACLE_START_THRESHOLD = 10; // Starta hinder vid ~100 poäng (z ≈ 10)
+  const lastGeneratedZ = useRef(0);
+  const OBSTACLE_START_THRESHOLD = 50; // Start obstacles after some distance
 
-  // Generate obstacles procedurally - fler hinder
-  const generateObstacles = (startZ: number = 20) => {
+  // Generate obstacles ahead of the ball (in negative Z direction)
+  const generateObstacles = (startZ: number) => {
     const obstacles: Obstacle[] = [];
     const distance = Math.abs(ballPosition.z);
     
-    // Hinder börjar alltid vid 100 poäng (z ≈ 10)
-    if (distance < OBSTACLE_START_THRESHOLD) {
-      return obstacles; // Inga hinder innan 100 poäng
-    }
-    
-    const difficultyMultiplier = 1 + (distance / 150); // Snabbare svårighetsökning
-    
-    // Mindre avstånd mellan hinder
-    const baseSpacing = 10;
-    const spacing = Math.max(5, baseSpacing - (distance / 200)); // Mindre avstånd
-    const numObstacles = Math.min(60, Math.floor(35 * difficultyMultiplier)); // Fler hinder
+    const difficultyMultiplier = 1 + (distance / 150);
+    const baseSpacing = 12;
+    const spacing = Math.max(6, baseSpacing - (distance / 300));
+    const numObstacles = Math.min(40, Math.floor(20 * difficultyMultiplier));
 
     for (let i = 0; i < numObstacles; i++) {
-      const z = startZ + (i * spacing);
-      const x = (Math.random() - 0.5) * 10;
+      // Generate obstacles ahead (more negative Z)
+      const z = startZ - (i * spacing);
+      const x = (Math.random() - 0.5) * 8;
       
-      // Random obstacle types based on difficulty
       const rand = Math.random();
       const difficultyFactor = Math.min(distance / 300, 1);
       
@@ -55,26 +49,23 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
       let moveSpeed = 0;
       let size = new Vector3(1, 1, 1);
       
-      if (difficultyFactor > 0.3 && rand < 0.4) {
-        // Moving obstacles - långsammare
+      if (difficultyFactor > 0.3 && rand < 0.35) {
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.015 + (difficultyFactor * 0.025); // Långsammare
-      } else if (difficultyFactor > 0.5 && rand < 0.6) {
-        // Disappearing platforms
+        moveSpeed = 0.02 + (difficultyFactor * 0.03);
+      } else if (difficultyFactor > 0.5 && rand < 0.5) {
         type = 'disappearing';
-        size = new Vector3(2, 0.2, 1);
-      } else if (difficultyFactor > 0.7 && rand < 0.25) {
-        // Large moving blocks
+        size = new Vector3(2, 0.3, 1);
+      } else if (difficultyFactor > 0.7 && rand < 0.2) {
         type = 'moving';
         moveDirection = Math.random() > 0.5 ? 1 : -1;
-        moveSpeed = 0.012 + (difficultyFactor * 0.02); // Långsammare
-        size = new Vector3(1.8, 1.8, 1.1);
+        moveSpeed = 0.015 + (difficultyFactor * 0.025);
+        size = new Vector3(1.5, 1.5, 1);
       }
       
       obstacles.push({
-        id: Date.now() + i + Math.random() * 1000,
-        position: new Vector3(x, type === 'disappearing' ? 0.1 : 0.5, z),
+        id: Date.now() + i + Math.random() * 10000,
+        position: new Vector3(x, type === 'disappearing' ? 0.15 : 0.5, z),
         type,
         moveDirection,
         moveSpeed,
@@ -87,86 +78,76 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
     return obstacles;
   };
 
-  // Initialize obstacles - börjar tom tills spelaren når 100 poäng
-  if (obstaclesRef.current.length === 0) {
-    obstaclesRef.current = [];
-  }
-
   useFrame((state, delta) => {
     timeRef.current += delta;
+    const distance = Math.abs(ballPosition.z);
+
+    // Initialize obstacles when reaching threshold
+    if (distance >= OBSTACLE_START_THRESHOLD && obstaclesRef.current.length === 0) {
+      const startZ = ballPosition.z - 20;
+      obstaclesRef.current = generateObstacles(startZ);
+      lastGeneratedZ.current = startZ - (40 * 10);
+    }
+
+    // Generate more obstacles as player progresses
+    if (obstaclesRef.current.length > 0) {
+      const furthestZ = Math.min(...obstaclesRef.current.map(o => o.position.z));
+      
+      // If ball is approaching the furthest obstacle, generate more
+      if (ballPosition.z - 60 < furthestZ) {
+        const newObstacles = generateObstacles(furthestZ - 15);
+        obstaclesRef.current = [...obstaclesRef.current, ...newObstacles];
+      }
+    }
 
     // Update obstacle behaviors
     obstaclesRef.current.forEach(obstacle => {
-      // Moving obstacles
       if (obstacle.type === 'moving' && obstacle.moveDirection && obstacle.moveSpeed) {
         obstacle.position.x += obstacle.moveDirection * obstacle.moveSpeed;
-        
-        // Bounce off track boundaries (wider track now)
-        if (Math.abs(obstacle.position.x) > 5.5) {
+        if (Math.abs(obstacle.position.x) > 4.5) {
           obstacle.moveDirection *= -1;
         }
       }
       
-      // Disappearing platforms
       if (obstacle.type === 'disappearing' && obstacle.disappearTimer !== undefined) {
-        // Check if ball is near to trigger disappearing
         const distanceToBall = Math.abs(obstacle.position.z - ballPosition.z);
-        if (distanceToBall < 8 && obstacle.visible) {
+        if (distanceToBall < 10 && obstacle.visible) {
           obstacle.disappearTimer -= delta;
           if (obstacle.disappearTimer <= 0) {
             obstacle.visible = false;
-            // Reappear after some time
             setTimeout(() => {
               obstacle.visible = true;
               obstacle.disappearTimer = 3 + Math.random() * 2;
-            }, 2000 + Math.random() * 1000);
+            }, 2000);
           }
         }
       }
     });
 
-    // Enhanced collision detection
+    // Collision detection
     obstaclesRef.current.forEach(obstacle => {
       if (!obstacle.visible) return;
       
-      const distance = ballPosition.distanceTo(obstacle.position);
-      const collisionRadius = obstacle.type === 'disappearing' ? 1.2 : 0.9;
+      const dx = ballPosition.x - obstacle.position.x;
+      const dy = ballPosition.y - obstacle.position.y;
+      const dz = ballPosition.z - obstacle.position.z;
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      const collisionRadius = obstacle.type === 'disappearing' ? 1.0 : 0.85;
       
-      if (distance < collisionRadius) {
-        // For multiplayer, call the player-specific death handler
+      if (dist < collisionRadius) {
         if (playerId === 1) {
           (window as any).handleDeathPlayer1?.();
         } else if (playerId === 2) {
           (window as any).handleDeathPlayer2?.();
         } else {
-          // Single player mode
           endGame();
         }
       }
     });
 
-    // Generate new obstacles precisely at threshold and onward
-    const distance = Math.abs(ballPosition.z);
-    const furthestObstacle =
-      obstaclesRef.current.length > 0
-        ? Math.max(...obstaclesRef.current.map((o) => o.position.z))
-        : ballPosition.z;
-
-    if (distance >= OBSTACLE_START_THRESHOLD) {
-      const needInitialBatch = obstaclesRef.current.length === 0;
-      const nearEnd = ballPosition.z > furthestObstacle - 80;
-      if (needInitialBatch || nearEnd) {
-        const startZ = needInitialBatch ? ballPosition.z + 15 : furthestObstacle + 15;
-        const newObstacles = generateObstacles(startZ);
-        if (newObstacles.length > 0) {
-          obstaclesRef.current = [...obstaclesRef.current, ...newObstacles];
-        }
-      }
-    }
-
-    // Clean up distant obstacles
+    // Clean up obstacles that are far behind the ball
     obstaclesRef.current = obstaclesRef.current.filter(
-      obstacle => obstacle.position.z > ballPosition.z - 100
+      obstacle => obstacle.position.z < ballPosition.z + 50
     );
   });
 
@@ -174,7 +155,7 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
     <>
       {obstaclesRef.current
         .filter(obstacle => 
-          Math.abs(obstacle.position.z - ballPosition.z) < 60 && obstacle.visible
+          Math.abs(obstacle.position.z - ballPosition.z) < 80 && obstacle.visible
         )
         .map(obstacle => {
           const pulseIntensity = 0.8 + Math.sin(timeRef.current * 3) * 0.3;
@@ -202,7 +183,6 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
                 />
               </mesh>
               
-              {/* Neon glow effect */}
               <mesh 
                 position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
               >
