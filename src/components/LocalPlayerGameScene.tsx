@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { Ball } from './Ball';
@@ -22,98 +22,37 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
   const [ballPosition, setBallPosition] = useState(new Vector3(0, 1, 0));
   const [score, setScore] = useState(0);
   const [isDead, setIsDead] = useState(false);
-  const glideDirectionRef = useRef<'left' | 'right' | null>(null);
+  const keysPressed = useRef<{ left: boolean; right: boolean }>({ left: false, right: false });
+  const gameStarted = useRef(false);
 
-  // Initialize position
+  // Reset on mount
   useEffect(() => {
     setBallPosition(new Vector3(0, 1, 0));
     velocityRef.current.set(0, 0, 0);
     setScore(0);
     setIsDead(false);
+    gameStarted.current = true;
   }, []);
 
-  useFrame((state, delta) => {
-    if (!ballRef.current || playerStatus !== 'playing' || isDead) return;
-
-    // Local player physics
-    const speed = 8;
-    const glideForce = 12;
-    const maxXSpeed = 15;
-    const gravity = -30;
-
-    // Move forward automatically
-    velocityRef.current.z = -speed;
-
-    // Apply glide momentum
-    if (glideDirectionRef.current) {
-      if (glideDirectionRef.current === 'left') {
-        velocityRef.current.x = Math.max(velocityRef.current.x - glideForce * delta, -maxXSpeed);
-      } else if (glideDirectionRef.current === 'right') {
-        velocityRef.current.x = Math.min(velocityRef.current.x + glideForce * delta, maxXSpeed);
+  // Handle glide input
+  const handleGlide = useCallback((direction: 'left' | 'right') => {
+    if (playerStatus === 'playing' && !isDead) {
+      if (direction === 'left') {
+        keysPressed.current.left = true;
+        setTimeout(() => { keysPressed.current.left = false; }, 100);
+      } else {
+        keysPressed.current.right = true;
+        setTimeout(() => { keysPressed.current.right = false; }, 100);
       }
-      glideDirectionRef.current = null;
     }
+  }, [playerStatus, isDead]);
 
-    // Apply friction
-    velocityRef.current.x *= 0.92;
-
-    // Apply gravity
-    velocityRef.current.y += gravity * delta;
-
-    // Update position
-    const newPosition = ballPosition.clone();
-    newPosition.x += velocityRef.current.x * delta;
-    newPosition.y += velocityRef.current.y * delta;
-    newPosition.z += velocityRef.current.z * delta;
-
-    // Clamp X position
-    newPosition.x = Math.max(-4, Math.min(4, newPosition.x));
-
-    // Ground collision
-    if (newPosition.y <= 1) {
-      newPosition.y = 1;
-      velocityRef.current.y = 0;
-    }
-
-    // Death if fall off
-    if (newPosition.y < -5) {
-      setIsDead(true);
-      onPlayerDied(score);
-      return;
-    }
-
-    setBallPosition(newPosition);
-    ballRef.current.position.copy(newPosition);
-
-    // Update score
-    const newScore = Math.floor(Math.abs(newPosition.z) / 5);
-    if (newScore > score) {
-      setScore(newScore);
-      onScoreUpdate(newScore);
-    }
-
-    // Update camera to follow
-    if (state.camera) {
-      state.camera.position.x = newPosition.x;
-      state.camera.position.z = newPosition.z + 12;
-      state.camera.lookAt(newPosition);
-    }
-  });
-
-  // Handle glide controls for this player
+  // Register glide handlers on window
   useEffect(() => {
     if (playerId === 1) {
-      (window as any).handleGlidePlayer1 = (direction: 'left' | 'right') => {
-        if (playerStatus === 'playing' && !isDead) {
-          glideDirectionRef.current = direction;
-        }
-      };
+      (window as any).handleGlidePlayer1 = handleGlide;
     } else {
-      (window as any).handleGlidePlayer2 = (direction: 'left' | 'right') => {
-        if (playerStatus === 'playing' && !isDead) {
-          glideDirectionRef.current = direction;
-        }
-      };
+      (window as any).handleGlidePlayer2 = handleGlide;
     }
 
     return () => {
@@ -123,17 +62,88 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
         (window as any).handleGlidePlayer2 = undefined;
       }
     };
-  }, [playerStatus, playerId, isDead]);
+  }, [playerId, handleGlide]);
+
+  useFrame((state, delta) => {
+    if (!ballRef.current || playerStatus !== 'playing' || isDead || !gameStarted.current) return;
+
+    const clampedDelta = Math.min(delta, 0.05);
+    
+    // Game physics constants
+    const speed = 12;
+    const glideForce = 25;
+    const maxXSpeed = 18;
+    const gravity = -35;
+    const friction = 0.88;
+
+    // Move forward automatically (negative Z is forward)
+    velocityRef.current.z = -speed;
+
+    // Apply lateral movement based on input
+    if (keysPressed.current.left) {
+      velocityRef.current.x = Math.max(velocityRef.current.x - glideForce * clampedDelta * 10, -maxXSpeed);
+    }
+    if (keysPressed.current.right) {
+      velocityRef.current.x = Math.min(velocityRef.current.x + glideForce * clampedDelta * 10, maxXSpeed);
+    }
+
+    // Apply friction to lateral movement
+    velocityRef.current.x *= friction;
+
+    // Apply gravity
+    velocityRef.current.y += gravity * clampedDelta;
+
+    // Update position
+    const newPosition = ballPosition.clone();
+    newPosition.x += velocityRef.current.x * clampedDelta;
+    newPosition.y += velocityRef.current.y * clampedDelta;
+    newPosition.z += velocityRef.current.z * clampedDelta;
+
+    // Clamp X position to track bounds
+    newPosition.x = Math.max(-4, Math.min(4, newPosition.x));
+
+    // Ground collision
+    if (newPosition.y <= 1) {
+      newPosition.y = 1;
+      velocityRef.current.y = 0;
+    }
+
+    // Death if fall off track
+    if (newPosition.y < -10) {
+      setIsDead(true);
+      onPlayerDied(score);
+      return;
+    }
+
+    setBallPosition(newPosition);
+    
+    if (ballRef.current) {
+      ballRef.current.position.copy(newPosition);
+    }
+
+    // Update score based on distance traveled
+    const newScore = Math.floor(Math.abs(newPosition.z) / 5);
+    if (newScore > score) {
+      setScore(newScore);
+      onScoreUpdate(newScore);
+    }
+
+    // Update camera to follow ball
+    state.camera.position.x = newPosition.x * 0.5;
+    state.camera.position.y = 6;
+    state.camera.position.z = newPosition.z + 12;
+    state.camera.lookAt(newPosition.x * 0.3, 1, newPosition.z);
+  });
 
   return (
     <>
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.4} />
       <directionalLight
         position={[10, 20, 10]}
-        intensity={1}
+        intensity={1.2}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
       <pointLight position={[0, 10, 0]} intensity={0.5} color="#00ffff" />
       
@@ -141,7 +151,7 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
       <Ball ref={ballRef} skinId={playerSkin as any} />
       <Track ballPosition={ballPosition} />
       <Obstacles ballPosition={ballPosition} playerId={playerId} />
-      <Coins ballPosition={ballPosition} />
+      <Coins ballPosition={ballPosition} playerId={playerId} />
       
       {isDead && (
         <DeathAnimation 
