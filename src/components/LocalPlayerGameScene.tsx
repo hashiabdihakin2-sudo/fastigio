@@ -18,19 +18,19 @@ interface LocalPlayerGameSceneProps {
 
 export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'classic', onScoreUpdate, onPlayerDied }: LocalPlayerGameSceneProps) => {
   const ballRef = useRef<any>(null);
-  const velocityRef = useRef(new Vector3(0, 0, 0));
-  const [ballPosition, setBallPosition] = useState(new Vector3(0, 1, 0));
+  const ballPositionRef = useRef(new Vector3(0, 0.5, 0));
   const [score, setScore] = useState(0);
   const [isDead, setIsDead] = useState(false);
+  const [deathPosition, setDeathPosition] = useState<Vector3 | null>(null);
   const keysPressed = useRef<{ left: boolean; right: boolean }>({ left: false, right: false });
   const gameStarted = useRef(false);
 
   // Reset on mount
   useEffect(() => {
-    setBallPosition(new Vector3(0, 1, 0));
-    velocityRef.current.set(0, 0, 0);
+    ballPositionRef.current.set(0, 0.5, 0);
     setScore(0);
     setIsDead(false);
+    setDeathPosition(null);
     gameStarted.current = true;
   }, []);
 
@@ -38,6 +38,7 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
   useEffect(() => {
     const handleDeath = () => {
       if (!isDead && playerStatus === 'playing') {
+        setDeathPosition(ballPositionRef.current.clone());
         setIsDead(true);
         onPlayerDied(score);
       }
@@ -91,59 +92,49 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
   useFrame((state, delta) => {
     if (!ballRef.current || playerStatus !== 'playing' || isDead || !gameStarted.current) return;
 
-    const clampedDelta = Math.min(delta, 0.05);
+    // Clamp delta to prevent huge jumps
+    const clampedDelta = Math.min(delta, 0.033);
     
-    // Calculate speed multiplier based on score (same as singleplayer)
-    const currentScore = Math.floor(ballPosition.z * 10);
-    const speedMultiplier = 1 + (currentScore / 3000);
+    // Calculate speed multiplier based on distance (score)
+    const distance = Math.abs(ballPositionRef.current.z);
+    const speedMultiplier = 1 + (distance / 500);
     
-    // Game physics constants (matching singleplayer)
-    const BASE_FORWARD_SPEED = 0.08;
+    // Game physics - negative Z is forward (into the screen)
+    const BASE_FORWARD_SPEED = 0.3 * clampedDelta * 60;
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
-    const GLIDE_IMPULSE = 0.15;
-    const FRICTION = 0.92;
+    const GLIDE_SPEED = 0.15;
     const LANE_WIDTH = 1.5;
     const MAX_X = 3 * LANE_WIDTH;
     const MIN_X = -3 * LANE_WIDTH;
 
-    // Move forward automatically (positive Z is forward, like singleplayer)
-    const newZ = ballPosition.z + FORWARD_SPEED;
+    // Move forward (negative Z direction)
+    const newZ = ballPositionRef.current.z - FORWARD_SPEED;
     const newY = 0.5;
 
-    // Apply friction to lateral movement
-    velocityRef.current.x *= FRICTION;
-
-    // Apply lateral movement based on input
+    // Handle lateral movement
+    let newX = ballPositionRef.current.x;
     if (keysPressed.current.left) {
-      velocityRef.current.x = -GLIDE_IMPULSE;
+      newX -= GLIDE_SPEED;
     }
     if (keysPressed.current.right) {
-      velocityRef.current.x = GLIDE_IMPULSE;
+      newX += GLIDE_SPEED;
     }
-
-    // Calculate new X position with velocity
-    let newX = ballPosition.x + velocityRef.current.x;
     newX = Math.max(MIN_X, Math.min(MAX_X, newX));
 
-    const newPosition = new Vector3(newX, newY, newZ);
-    setBallPosition(newPosition);
+    // Update position directly on ref to avoid re-renders
+    ballRef.current.position.set(newX, newY, newZ);
+    ballPositionRef.current.set(newX, newY, newZ);
     
-    if (ballRef.current) {
-      ballRef.current.position.copy(newPosition);
-    }
-
-    // Update score based on distance traveled (same as singleplayer: z * 10)
-    const newScore = Math.floor(newPosition.z * 10);
+    // Only update state for score
+    const newScore = Math.floor(Math.abs(newZ) * 10);
     if (newScore > score) {
       setScore(newScore);
       onScoreUpdate(newScore);
     }
 
-    // Update camera to follow ball - camera behind the ball looking forward
-    state.camera.position.x = newPosition.x * 0.5;
-    state.camera.position.y = 6;
-    state.camera.position.z = newPosition.z - 12; // Camera behind the ball (negative because ball goes positive Z)
-    state.camera.lookAt(newPosition.x * 0.3, 0.5, newPosition.z + 10); // Look ahead of the ball
+    // Camera follows ball - behind and above, looking forward
+    state.camera.position.set(newX * 0.3, 5, newZ + 10);
+    state.camera.lookAt(newX * 0.2, 0, newZ - 20);
   });
 
   return (
@@ -153,20 +144,20 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
         position={[10, 20, 10]}
         intensity={1.2}
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize-width={512}
+        shadow-mapSize-height={512}
       />
       <pointLight position={[0, 10, 0]} intensity={0.5} color="#00ffff" />
       
-      <CyberBackground ballPosition={ballPosition} />
+      <CyberBackground ballPosition={ballPositionRef.current} />
       <Ball ref={ballRef} skinId={playerSkin as any} />
-      <Track ballPosition={ballPosition} />
-      <Obstacles ballPosition={ballPosition} playerId={playerId} />
-      <Coins ballPosition={ballPosition} playerId={playerId} />
+      <Track ballPosition={ballPositionRef.current} />
+      <Obstacles ballPosition={ballPositionRef.current} playerId={playerId} />
+      <Coins ballPosition={ballPositionRef.current} playerId={playerId} />
       
-      {isDead && (
+      {isDead && deathPosition && (
         <DeathAnimation 
-          position={[ballPosition.x, ballPosition.y, ballPosition.z]} 
+          position={[deathPosition.x, deathPosition.y, deathPosition.z]} 
           onComplete={() => {}} 
         />
       )}
