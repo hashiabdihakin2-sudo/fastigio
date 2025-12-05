@@ -26,10 +26,10 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
   const lastGeneratedZ = useRef(0);
   const OBSTACLE_START_THRESHOLD = 50; // Start obstacles after some distance
 
-  // Generate obstacles ahead of the ball (in negative Z direction)
+  // Generate obstacles ahead of the ball (in positive Z direction, like singleplayer)
   const generateObstacles = (startZ: number) => {
     const obstacles: Obstacle[] = [];
-    const distance = Math.abs(ballPosition.z);
+    const distance = ballPosition.z;
     
     const difficultyMultiplier = 1 + (distance / 150);
     const baseSpacing = 12;
@@ -37,8 +37,8 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
     const numObstacles = Math.min(40, Math.floor(20 * difficultyMultiplier));
 
     for (let i = 0; i < numObstacles; i++) {
-      // Generate obstacles ahead (more negative Z)
-      const z = startZ - (i * spacing);
+      // Generate obstacles ahead (more positive Z)
+      const z = startZ + (i * spacing);
       const x = (Math.random() - 0.5) * 8;
       
       const rand = Math.random();
@@ -80,22 +80,22 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
 
   useFrame((state, delta) => {
     timeRef.current += delta;
-    const distance = Math.abs(ballPosition.z);
+    const distance = ballPosition.z;
 
     // Initialize obstacles when reaching threshold
     if (distance >= OBSTACLE_START_THRESHOLD && obstaclesRef.current.length === 0) {
-      const startZ = ballPosition.z - 20;
+      const startZ = ballPosition.z + 20;
       obstaclesRef.current = generateObstacles(startZ);
-      lastGeneratedZ.current = startZ - (40 * 10);
+      lastGeneratedZ.current = startZ + (40 * 10);
     }
 
     // Generate more obstacles as player progresses
     if (obstaclesRef.current.length > 0) {
-      const furthestZ = Math.min(...obstaclesRef.current.map(o => o.position.z));
+      const furthestZ = Math.max(...obstaclesRef.current.map(o => o.position.z));
       
       // If ball is approaching the furthest obstacle, generate more
-      if (ballPosition.z - 60 < furthestZ) {
-        const newObstacles = generateObstacles(furthestZ - 15);
+      if (ballPosition.z + 60 > furthestZ) {
+        const newObstacles = generateObstacles(furthestZ + 15);
         obstaclesRef.current = [...obstaclesRef.current, ...newObstacles];
       }
     }
@@ -145,9 +145,9 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
       }
     });
 
-    // Clean up obstacles that are far behind the ball
+    // Clean up obstacles that are far behind the ball (positive Z direction)
     obstaclesRef.current = obstaclesRef.current.filter(
-      obstacle => obstacle.position.z < ballPosition.z + 50
+      obstacle => obstacle.position.z > ballPosition.z - 50
     );
   });
 

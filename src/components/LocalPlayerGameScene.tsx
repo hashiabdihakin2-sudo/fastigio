@@ -93,60 +93,47 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
 
     const clampedDelta = Math.min(delta, 0.05);
     
-    // Game physics constants
-    const speed = 12;
-    const glideForce = 25;
-    const maxXSpeed = 18;
-    const gravity = -35;
-    const friction = 0.88;
+    // Calculate speed multiplier based on score (same as singleplayer)
+    const currentScore = Math.floor(ballPosition.z * 10);
+    const speedMultiplier = 1 + (currentScore / 3000);
+    
+    // Game physics constants (matching singleplayer)
+    const BASE_FORWARD_SPEED = 0.08;
+    const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
+    const GLIDE_IMPULSE = 0.15;
+    const FRICTION = 0.92;
+    const LANE_WIDTH = 1.5;
+    const MAX_X = 3 * LANE_WIDTH;
+    const MIN_X = -3 * LANE_WIDTH;
 
-    // Move forward automatically (negative Z is forward)
-    velocityRef.current.z = -speed;
+    // Move forward automatically (positive Z is forward, like singleplayer)
+    const newZ = ballPosition.z + FORWARD_SPEED;
+    const newY = 0.5;
+
+    // Apply friction to lateral movement
+    velocityRef.current.x *= FRICTION;
 
     // Apply lateral movement based on input
     if (keysPressed.current.left) {
-      velocityRef.current.x = Math.max(velocityRef.current.x - glideForce * clampedDelta * 10, -maxXSpeed);
+      velocityRef.current.x = -GLIDE_IMPULSE;
     }
     if (keysPressed.current.right) {
-      velocityRef.current.x = Math.min(velocityRef.current.x + glideForce * clampedDelta * 10, maxXSpeed);
+      velocityRef.current.x = GLIDE_IMPULSE;
     }
 
-    // Apply friction to lateral movement
-    velocityRef.current.x *= friction;
+    // Calculate new X position with velocity
+    let newX = ballPosition.x + velocityRef.current.x;
+    newX = Math.max(MIN_X, Math.min(MAX_X, newX));
 
-    // Apply gravity
-    velocityRef.current.y += gravity * clampedDelta;
-
-    // Update position
-    const newPosition = ballPosition.clone();
-    newPosition.x += velocityRef.current.x * clampedDelta;
-    newPosition.y += velocityRef.current.y * clampedDelta;
-    newPosition.z += velocityRef.current.z * clampedDelta;
-
-    // Clamp X position to track bounds
-    newPosition.x = Math.max(-4, Math.min(4, newPosition.x));
-
-    // Ground collision
-    if (newPosition.y <= 1) {
-      newPosition.y = 1;
-      velocityRef.current.y = 0;
-    }
-
-    // Death if fall off track
-    if (newPosition.y < -10) {
-      setIsDead(true);
-      onPlayerDied(score);
-      return;
-    }
-
+    const newPosition = new Vector3(newX, newY, newZ);
     setBallPosition(newPosition);
     
     if (ballRef.current) {
       ballRef.current.position.copy(newPosition);
     }
 
-    // Update score based on distance traveled
-    const newScore = Math.floor(Math.abs(newPosition.z) / 5);
+    // Update score based on distance traveled (same as singleplayer: z * 10)
+    const newScore = Math.floor(newPosition.z * 10);
     if (newScore > score) {
       setScore(newScore);
       onScoreUpdate(newScore);
@@ -155,8 +142,8 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     // Update camera to follow ball - camera behind the ball looking forward
     state.camera.position.x = newPosition.x * 0.5;
     state.camera.position.y = 6;
-    state.camera.position.z = newPosition.z + 15; // Camera behind the ball
-    state.camera.lookAt(newPosition.x * 0.3, 1, newPosition.z - 10); // Look ahead of the ball
+    state.camera.position.z = newPosition.z - 12; // Camera behind the ball (negative because ball goes positive Z)
+    state.camera.lookAt(newPosition.x * 0.3, 0.5, newPosition.z + 10); // Look ahead of the ball
   });
 
   return (

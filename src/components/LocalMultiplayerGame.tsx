@@ -96,12 +96,7 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
   }, [player1Status, player2Status, player1Score, player2Score, gamePhase, player1Config, player2Config]);
 
   const handlePlayAgain = () => {
-    setPlayer1Score(0);
-    setPlayer2Score(0);
-    setPlayer1Status('playing');
-    setPlayer2Status('playing');
-    setWinner(null);
-    setGamePhase('playing');
+    window.location.reload();
   };
 
   // Show lobby
