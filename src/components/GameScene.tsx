@@ -77,7 +77,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
     setBallPosition(newPosition);
     ballRef.current.position.copy(newPosition);
 
-    // Camera follows ball from behind
+    // Camera follows ball from behind (positive Z = forward)
     if (groupRef.current) {
       groupRef.current.position.z = -ballPosition.z;
     }
