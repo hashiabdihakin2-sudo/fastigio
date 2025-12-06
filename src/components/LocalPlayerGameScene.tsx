@@ -99,16 +99,16 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     const distance = Math.abs(ballPositionRef.current.z);
     const speedMultiplier = 1 + (distance / 500);
     
-    // Game physics - negative Z is forward (into the screen)
-    const BASE_FORWARD_SPEED = 0.3 * clampedDelta * 60;
+    // Game physics - positive Z is forward (matching single player)
+    const BASE_FORWARD_SPEED = 0.08;
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
     const GLIDE_SPEED = 0.15;
     const LANE_WIDTH = 1.5;
     const MAX_X = 3 * LANE_WIDTH;
     const MIN_X = -3 * LANE_WIDTH;
 
-    // Move forward (negative Z direction)
-    const newZ = ballPositionRef.current.z - FORWARD_SPEED;
+    // Move forward (positive Z direction)
+    const newZ = ballPositionRef.current.z + FORWARD_SPEED;
     const newY = 0.5;
 
     // Handle lateral movement
@@ -132,9 +132,9 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
       onScoreUpdate(newScore);
     }
 
-    // Camera follows ball - behind and above, looking forward
-    state.camera.position.set(newX * 0.3, 5, newZ + 10);
-    state.camera.lookAt(newX * 0.2, 0, newZ - 20);
+    // Camera follows ball - behind and above, looking forward (positive Z)
+    state.camera.position.set(newX * 0.3, 5, newZ - 10);
+    state.camera.lookAt(newX * 0.2, 0, newZ + 20);
   });
 
   return (

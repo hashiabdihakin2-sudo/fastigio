@@ -94,16 +94,16 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
   return (
     <div className="absolute inset-0 pointer-events-none">
       {/* Score display */}
-      <div className="absolute top-8 left-8 pointer-events-auto">
-        <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md">
-          <div className="text-2xl font-bold text-neon-blue">
+      <div className="absolute top-2 left-2 sm:top-8 sm:left-8 pointer-events-auto">
+        <Card className="cyber-border p-2 sm:p-4 bg-card/80 backdrop-blur-md">
+          <div className="text-lg sm:text-2xl font-bold text-neon-blue">
             {score}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-[10px] sm:text-xs text-muted-foreground">
             Rekord: {highScore}
           </div>
-          <div className="text-xs text-accent flex items-center gap-1 mt-1">
-            <Coins className="w-3 h-3" />
+          <div className="text-[10px] sm:text-xs text-accent flex items-center gap-1 mt-0.5 sm:mt-1">
+            <Coins className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
             {coins} coins
           </div>
         </Card>
@@ -111,25 +111,25 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
 
       {/* Controls hint, fullscreen and mute button */}
       {gameState === 'playing' && (
-        <div className="absolute top-8 right-8 pointer-events-auto flex items-start gap-2">
+        <div className="absolute top-2 right-2 sm:top-8 sm:right-8 pointer-events-auto flex items-start gap-1 sm:gap-2">
           <Button
             size="icon"
             variant="outline"
             onClick={toggleFullscreen}
-            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card"
+            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card w-8 h-8 sm:w-10 sm:h-10"
             title={isFullscreen ? "Avsluta fullskärm" : "Fullskärm"}
           >
-            <Maximize className="w-5 h-5" />
+            <Maximize className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
           <Button
             size="icon"
             variant="outline"
             onClick={onToggleMute}
-            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card"
+            className="cyber-border bg-card/80 backdrop-blur-md hover:bg-card w-8 h-8 sm:w-10 sm:h-10"
           >
-            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            {isMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
           </Button>
-          <Card className="cyber-border p-4 bg-card/80 backdrop-blur-md hidden md:block">
+          <Card className="cyber-border p-2 sm:p-4 bg-card/80 backdrop-blur-md hidden md:block">
             <div className="text-sm text-muted-foreground text-right">
               <div>Piltangenter ← →</div>
               <div className="text-neon-purple">för att hoppa åt sidan</div>
@@ -164,30 +164,30 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
 
       {/* Mobile controls */}
       {gameState === 'playing' && (
-        <div className={`absolute bottom-8 left-0 right-0 flex justify-center pointer-events-auto px-4 ${isLandscape ? 'gap-16' : 'gap-8'}`}>
+        <div className={`absolute bottom-4 sm:bottom-8 left-0 right-0 flex justify-center pointer-events-auto px-4 ${isLandscape ? 'gap-16' : 'gap-6 sm:gap-8'}`}>
           <Button
             size="icon"
             variant="default"
-            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow ${isLandscape ? 'w-20 h-20' : 'w-16 h-16'}`}
+            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow active:scale-95 ${isLandscape ? 'w-20 h-20' : 'w-14 h-14 sm:w-16 sm:h-16'}`}
             onTouchStart={(e) => {
               e.preventDefault();
               handleMobileControl('left');
             }}
             onClick={() => handleMobileControl('left')}
           >
-            <ChevronLeft className={isLandscape ? 'w-10 h-10' : 'w-8 h-8'} />
+            <ChevronLeft className={isLandscape ? 'w-10 h-10' : 'w-7 h-7 sm:w-8 sm:h-8'} />
           </Button>
           <Button
             size="icon"
             variant="default"
-            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow ${isLandscape ? 'w-20 h-20' : 'w-16 h-16'}`}
+            className={`rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow active:scale-95 ${isLandscape ? 'w-20 h-20' : 'w-14 h-14 sm:w-16 sm:h-16'}`}
             onTouchStart={(e) => {
               e.preventDefault();
               handleMobileControl('right');
             }}
             onClick={() => handleMobileControl('right')}
           >
-            <ChevronRight className={isLandscape ? 'w-10 h-10' : 'w-8 h-8'} />
+            <ChevronRight className={isLandscape ? 'w-10 h-10' : 'w-7 h-7 sm:w-8 sm:h-8'} />
           </Button>
         </div>
       )}
