@@ -24,12 +24,12 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
   const obstaclesRef = useRef<Obstacle[]>([]);
   const timeRef = useRef(0);
   const lastGeneratedZ = useRef(0);
-  const OBSTACLE_START_THRESHOLD = 50;
+  const OBSTACLE_START_THRESHOLD = 5; // Start obstacles earlier (at 50 score = 5 z)
 
   // Generate obstacles ahead of the ball (positive Z = forward)
   const generateObstacles = (startZ: number) => {
     const obstacles: Obstacle[] = [];
-    const distance = Math.abs(ballPosition.z);
+    const distance = ballPosition.z;
     
     const difficultyMultiplier = 1 + (distance / 200);
     const baseSpacing = 15;
@@ -75,7 +75,7 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
 
   useFrame((state, delta) => {
     timeRef.current += delta;
-    const distance = Math.abs(ballPosition.z);
+    const distance = ballPosition.z;
 
     // Initialize obstacles when ball has traveled enough (positive Z)
     if (distance >= OBSTACLE_START_THRESHOLD && obstaclesRef.current.length === 0) {
@@ -146,55 +146,57 @@ export const Obstacles = ({ ballPosition, playerId }: ObstaclesProps) => {
     );
   });
 
-  return (
-    <>
-      {obstaclesRef.current
-        .filter(obstacle => 
-          Math.abs(obstacle.position.z - ballPosition.z) < 80 && obstacle.visible
-        )
-        .map(obstacle => {
-          const pulseIntensity = 0.8 + Math.sin(timeRef.current * 3) * 0.3;
-          const glowColor = obstacle.type === 'moving' ? '#FF00FF' : 
-                           obstacle.type === 'disappearing' ? '#FF6B00' : '#00FF00';
-          
-          return (
-            <group key={obstacle.id}>
-              <mesh 
-                position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
-                castShadow
-                receiveShadow
-              >
-                <boxGeometry args={[
-                  obstacle.size?.x || 1, 
-                  obstacle.size?.y || 1, 
-                  obstacle.size?.z || 1
-                ]} />
-                <meshPhongMaterial 
-                  color={glowColor}
-                  emissive={glowColor}
-                  emissiveIntensity={pulseIntensity}
-                  transparent={obstacle.type === 'disappearing' && obstacle.disappearTimer && obstacle.disappearTimer < 1}
-                  opacity={obstacle.type === 'disappearing' && obstacle.disappearTimer && obstacle.disappearTimer < 1 ? 0.5 : 1}
-                />
-              </mesh>
-              
-              <mesh 
-                position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
-              >
-                <boxGeometry args={[
-                  (obstacle.size?.x || 1) * 1.1, 
-                  (obstacle.size?.y || 1) * 1.1, 
-                  (obstacle.size?.z || 1) * 1.1
-                ]} />
-                <meshBasicMaterial 
-                  color={glowColor}
-                  transparent
-                  opacity={0.2 + Math.sin(timeRef.current * 4) * 0.1}
-                />
-              </mesh>
-            </group>
-          );
-        })}
-    </>
-  );
+  // Render obstacles relative to camera position for single-player mode
+  // In single-player, the camera group moves so we need to offset obstacle positions
+  const renderObstacles = () => {
+    return obstaclesRef.current
+      .filter(obstacle => 
+        Math.abs(obstacle.position.z - ballPosition.z) < 80 && obstacle.visible
+      )
+      .map(obstacle => {
+        const pulseIntensity = 0.8 + Math.sin(timeRef.current * 3) * 0.3;
+        const glowColor = obstacle.type === 'moving' ? '#FF00FF' : 
+                         obstacle.type === 'disappearing' ? '#FF6B00' : '#00FF00';
+        
+        return (
+          <group key={obstacle.id}>
+            <mesh 
+              position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
+              castShadow
+              receiveShadow
+            >
+              <boxGeometry args={[
+                obstacle.size?.x || 1, 
+                obstacle.size?.y || 1, 
+                obstacle.size?.z || 1
+              ]} />
+              <meshPhongMaterial 
+                color={glowColor}
+                emissive={glowColor}
+                emissiveIntensity={pulseIntensity}
+                transparent={obstacle.type === 'disappearing' && obstacle.disappearTimer && obstacle.disappearTimer < 1}
+                opacity={obstacle.type === 'disappearing' && obstacle.disappearTimer && obstacle.disappearTimer < 1 ? 0.5 : 1}
+              />
+            </mesh>
+            
+            <mesh 
+              position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
+            >
+              <boxGeometry args={[
+                (obstacle.size?.x || 1) * 1.1, 
+                (obstacle.size?.y || 1) * 1.1, 
+                (obstacle.size?.z || 1) * 1.1
+              ]} />
+              <meshBasicMaterial 
+                color={glowColor}
+                transparent
+                opacity={0.2 + Math.sin(timeRef.current * 4) * 0.1}
+              />
+            </mesh>
+          </group>
+        );
+      });
+  };
+
+  return <>{renderObstacles()}</>;
 };

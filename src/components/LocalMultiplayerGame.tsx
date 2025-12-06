@@ -105,9 +105,9 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
   }
 
   return (
-    <div className="relative w-full h-[100dvh] flex flex-col overflow-hidden bg-background">
-      {/* Player 1 Side */}
-      <div className="flex-1 h-1/2 relative border-b-2 border-primary/30">
+    <div className="relative w-full h-[100dvh] flex flex-row overflow-hidden bg-background">
+      {/* Player 1 Side - Left */}
+      <div className="flex-1 w-1/2 h-full relative border-r border-primary/30">
         <Canvas shadows gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}>
           <PerspectiveCamera makeDefault position={[0, 6, -12]} fov={70} />
           <LocalPlayerGameScene 
@@ -120,23 +120,22 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
         </Canvas>
         
         <div className="absolute top-1 left-1 bg-primary/80 backdrop-blur px-2 py-0.5 rounded-lg z-10">
-          <p className="font-bold text-white text-[10px]">{player1Config?.name || 'Spelare 1'}</p>
-          <p className="text-[8px] text-white/80">A/D</p>
-          <p className="text-[10px] text-white">Poäng: {player1Score}</p>
+          <p className="font-bold text-white text-[10px]">{player1Config?.name || 'P1'}</p>
+          <p className="text-[10px] text-white">{player1Score}</p>
         </div>
 
         {/* Mobile control - Player 1 */}
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto z-10">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col gap-2 pointer-events-auto z-10">
           <Button
             size="icon"
-            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-14 h-14 text-xl font-bold active:scale-95"
+            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-10 h-10 text-sm font-bold active:scale-95"
             onTouchStart={(e) => { e.preventDefault(); if (player1Status === 'playing') (window as any).handleGlidePlayer1?.('left'); }}
           >
             ←
           </Button>
           <Button
             size="icon"
-            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-14 h-14 text-xl font-bold active:scale-95"
+            className="rounded-full bg-primary/80 backdrop-blur-md hover:bg-primary shadow-glow w-10 h-10 text-sm font-bold active:scale-95"
             onTouchStart={(e) => { e.preventDefault(); if (player1Status === 'playing') (window as any).handleGlidePlayer1?.('right'); }}
           >
             →
@@ -144,8 +143,8 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
         </div>
       </div>
 
-      {/* Player 2 Side */}
-      <div className="flex-1 h-1/2 relative">
+      {/* Player 2 Side - Right */}
+      <div className="flex-1 w-1/2 h-full relative">
         <Canvas shadows gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}>
           <PerspectiveCamera makeDefault position={[0, 6, -12]} fov={70} />
           <LocalPlayerGameScene 
@@ -158,23 +157,22 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
         </Canvas>
         
         <div className="absolute top-1 right-1 bg-accent/80 backdrop-blur px-2 py-0.5 rounded-lg text-right z-10">
-          <p className="font-bold text-white text-[10px]">{player2Config?.name || 'Spelare 2'}</p>
-          <p className="text-[8px] text-white/80">← →</p>
-          <p className="text-[10px] text-white">Poäng: {player2Score}</p>
+          <p className="font-bold text-white text-[10px]">{player2Config?.name || 'P2'}</p>
+          <p className="text-[10px] text-white">{player2Score}</p>
         </div>
 
         {/* Mobile control - Player 2 */}
-        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto z-10">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col gap-2 pointer-events-auto z-10">
           <Button
             size="icon"
-            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-14 h-14 text-xl font-bold active:scale-95"
+            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-10 h-10 text-sm font-bold active:scale-95"
             onTouchStart={(e) => { e.preventDefault(); if (player2Status === 'playing') (window as any).handleGlidePlayer2?.('left'); }}
           >
             ←
           </Button>
           <Button
             size="icon"
-            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-14 h-14 text-xl font-bold active:scale-95"
+            className="rounded-full bg-accent/80 backdrop-blur-md hover:bg-accent shadow-glow w-10 h-10 text-sm font-bold active:scale-95"
             onTouchStart={(e) => { e.preventDefault(); if (player2Status === 'playing') (window as any).handleGlidePlayer2?.('right'); }}
           >
             →
@@ -183,7 +181,7 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
       </div>
 
       {/* Center divider */}
-      <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gradient-to-r from-primary via-primary-glow to-accent pointer-events-none z-5" />
+      <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary-glow to-accent pointer-events-none z-5" />
 
       {/* Game Over Screen */}
       {gamePhase === 'ended' && (
