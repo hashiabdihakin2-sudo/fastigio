@@ -43,47 +43,57 @@ export const GameUI = ({ currentSection, gameState, onRestart, isMuted, onToggle
     };
   }, []);
 
-  const toggleFullscreen = async () => {
+  const toggleFullscreen = () => {
     const doc = document as any;
     const elem = (fullscreenTarget?.current || document.documentElement) as any;
 
-    const canNativeFS = !!(
-      elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen
+    const isCurrentlyFullscreen = !!(
+      doc.fullscreenElement || 
+      doc.webkitFullscreenElement || 
+      doc.mozFullScreenElement || 
+      doc.msFullscreenElement ||
+      document.body.classList.contains('pseudo-fullscreen')
     );
 
-    try {
-      if (
-        !doc.fullscreenElement &&
-        !doc.webkitFullscreenElement &&
-        !doc.mozFullScreenElement &&
-        !doc.msFullscreenElement
-      ) {
-        if (canNativeFS) {
-          if (elem.requestFullscreen) await elem.requestFullscreen();
-          else if (elem.webkitRequestFullscreen) await elem.webkitRequestFullscreen();
-          else if (elem.mozRequestFullScreen) await elem.mozRequestFullScreen();
-          else if (elem.msRequestFullscreen) await elem.msRequestFullscreen();
-        } else {
-          document.body.classList.add('pseudo-fullscreen');
-          setIsFullscreen(true);
-          window.scrollTo(0, 0);
-        }
+    if (!isCurrentlyFullscreen) {
+      // Try to enter fullscreen
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => usePseudoFullscreen(true));
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
       } else {
-        if (doc.exitFullscreen) await doc.exitFullscreen();
-        else if (doc.webkitExitFullscreen) await doc.webkitExitFullscreen();
-        else if (doc.mozCancelFullScreen) await doc.mozCancelFullScreen();
-        else if (doc.msExitFullscreen) await doc.msExitFullscreen();
-        else {
-          document.body.classList.remove('pseudo-fullscreen');
-          setIsFullscreen(false);
-        }
+        // Fallback for iOS Safari and other browsers without fullscreen API
+        usePseudoFullscreen(true);
       }
-    } catch (err) {
-      // Fallback if native request fails (e.g., iOS Safari inside iframe)
-      document.body.classList.toggle('pseudo-fullscreen');
-      setIsFullscreen(document.body.classList.contains('pseudo-fullscreen'));
-      console.error('Fullscreen error:', err);
+    } else {
+      // Exit fullscreen
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen().catch(() => usePseudoFullscreen(false));
+      } else if (doc.webkitExitFullscreen) {
+        doc.webkitExitFullscreen();
+      } else if (doc.mozCancelFullScreen) {
+        doc.mozCancelFullScreen();
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen();
+      } else {
+        usePseudoFullscreen(false);
+      }
     }
+  };
+
+  const usePseudoFullscreen = (enable: boolean) => {
+    if (enable) {
+      document.body.classList.add('pseudo-fullscreen');
+      // Scroll to top and hide address bar on mobile
+      window.scrollTo(0, 1);
+    } else {
+      document.body.classList.remove('pseudo-fullscreen');
+    }
+    setIsFullscreen(enable);
   };
   
   const handleMobileControl = (direction: 'left' | 'right') => {

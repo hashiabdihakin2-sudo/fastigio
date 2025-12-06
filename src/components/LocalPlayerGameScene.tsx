@@ -95,11 +95,11 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     // Clamp delta to prevent huge jumps
     const clampedDelta = Math.min(delta, 0.033);
     
-    // Calculate speed multiplier based on distance (score)
-    const distance = Math.abs(ballPositionRef.current.z);
-    const speedMultiplier = 1 + (distance / 500);
+    // Calculate speed multiplier based on score (matching single player: 1 + score/3000)
+    const currentScore = Math.floor(Math.abs(ballPositionRef.current.z) * 10);
+    const speedMultiplier = 1 + (currentScore / 3000);
     
-    // Game physics - positive Z is forward (matching single player)
+    // Game physics - matching single player exactly
     const BASE_FORWARD_SPEED = 0.08;
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
     const GLIDE_SPEED = 0.15;
