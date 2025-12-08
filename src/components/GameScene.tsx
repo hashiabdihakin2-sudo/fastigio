@@ -7,6 +7,7 @@ import { Obstacles } from './Obstacles';
 import { Coins } from './Coins';
 import { CyberBackground } from './CyberBackground';
 import { DeathAnimation } from './DeathAnimation';
+import { Snow } from './Snow';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -116,12 +117,12 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   return (
     <group ref={groupRef}>
-      {/* Enhanced futuristic lighting */}
-      <ambientLight intensity={0.2} color="#0066FF" />
+      {/* Christmas themed lighting */}
+      <ambientLight intensity={0.3} color="#e8f4ff" />
       <directionalLight
         position={[15, 25, 10]}
-        intensity={1.2}
-        color="#00CCFF"
+        intensity={1.0}
+        color="#fff5e6"
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
@@ -131,22 +132,24 @@ export const GameScene = ({ controls }: GameSceneProps) => {
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      <pointLight position={[0, 15, 0]} intensity={0.8} color="#FF0080" />
-      <pointLight position={[-10, 8, 0]} intensity={0.6} color="#00FFFF" />
-      <pointLight position={[10, 8, 0]} intensity={0.6} color="#FF6B00" />
+      {/* Christmas colored accent lights */}
+      <pointLight position={[0, 15, 0]} intensity={0.6} color="#FFD700" />
+      <pointLight position={[-10, 8, 0]} intensity={0.5} color="#FF0000" />
+      <pointLight position={[10, 8, 0]} intensity={0.5} color="#00FF00" />
       
-      {/* Dynamic rim lighting */}
+      {/* Moonlight effect */}
       <spotLight
-        position={[0, 20, ballPosition.z + 5]}
+        position={[0, 30, ballPosition.z + 5]}
         target-position={[0, 0, ballPosition.z]}
-        intensity={1}
-        color="#FFFFFF"
-        angle={0.3}
-        penumbra={0.5}
+        intensity={0.8}
+        color="#e0f0ff"
+        angle={0.4}
+        penumbra={0.6}
         castShadow
       />
 
       {/* Game objects */}
+      <Snow ballPosition={ballPosition} />
       <CyberBackground ballPosition={ballPosition} />
       {!showDeathAnimation && <Ball ref={ballRef} />}
       <Track ballPosition={ballPosition} />
