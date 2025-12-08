@@ -25,38 +25,43 @@ export const useGameMusic = (isPlaying: boolean) => {
     masterGain.connect(audioContext.destination);
     masterGainRef.current = masterGain;
 
-    // Cute, playful bassline
-    const bassNotes = [
-      { freq: 130.81, duration: 0.4 },   // C3
-      { freq: 146.83, duration: 0.2 },   // D3
-      { freq: 164.81, duration: 0.4 },   // E3
-      { freq: 146.83, duration: 0.2 },   // D3
-      { freq: 130.81, duration: 0.4 },   // C3
-      { freq: 110, duration: 0.2 },      // A2
-      { freq: 123.47, duration: 0.4 },   // B2
-      { freq: 130.81, duration: 0.4 },   // C3
+    // Christmas "Jingle Bells" inspired melody
+    const melodyNotes = [
+      // "Jingle bells, jingle bells"
+      { freq: 329.63, duration: 0.25 },  // E4
+      { freq: 329.63, duration: 0.25 },  // E4
+      { freq: 329.63, duration: 0.5 },   // E4
+      { freq: 329.63, duration: 0.25 },  // E4
+      { freq: 329.63, duration: 0.25 },  // E4
+      { freq: 329.63, duration: 0.5 },   // E4
+      // "Jingle all the way"
+      { freq: 329.63, duration: 0.25 },  // E4
+      { freq: 392.00, duration: 0.25 },  // G4
+      { freq: 261.63, duration: 0.25 },  // C4
+      { freq: 293.66, duration: 0.25 },  // D4
+      { freq: 329.63, duration: 1.0 },   // E4
     ];
 
-    // Cheerful, bouncy melody
-    const melodyNotes = [
-      { freq: 523.25, duration: 0.2 },   // C5
-      { freq: 587.33, duration: 0.2 },   // D5
-      { freq: 659.25, duration: 0.3 },   // E5
-      { freq: 587.33, duration: 0.1 },   // D5
-      { freq: 523.25, duration: 0.2 },   // C5
-      { freq: 659.25, duration: 0.2 },   // E5
-      { freq: 783.99, duration: 0.4 },   // G5
-      { freq: 659.25, duration: 0.2 },   // E5
-      { freq: 523.25, duration: 0.3 },   // C5
-      { freq: 0, duration: 0.1 },        // Rest
+    // Christmas bass line
+    const bassNotes = [
+      { freq: 130.81, duration: 0.5 },   // C3
+      { freq: 130.81, duration: 0.5 },   // C3
+      { freq: 146.83, duration: 0.5 },   // D3
+      { freq: 146.83, duration: 0.5 },   // D3
+      { freq: 130.81, duration: 0.5 },   // C3
+      { freq: 98.00, duration: 0.5 },    // G2
+      { freq: 130.81, duration: 1.0 },   // C3
     ];
     
-    // Harmony layer
+    // Bell-like harmony for Christmas feel
     const harmonyNotes = [
-      { freq: 329.63, duration: 0.6 },   // E4
-      { freq: 392, duration: 0.4 },      // G4
-      { freq: 329.63, duration: 0.4 },   // E4
-      { freq: 293.66, duration: 0.6 },   // D4
+      { freq: 523.25, duration: 0.5 },   // C5 (bells)
+      { freq: 659.25, duration: 0.5 },   // E5
+      { freq: 783.99, duration: 0.5 },   // G5
+      { freq: 659.25, duration: 0.5 },   // E5
+      { freq: 523.25, duration: 0.5 },   // C5
+      { freq: 392.00, duration: 0.5 },   // G4
+      { freq: 523.25, duration: 1.0 },   // C5
     ];
 
     let bassTime = audioContext.currentTime;
@@ -94,12 +99,13 @@ export const useGameMusic = (isPlaying: boolean) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
           
+          // Triangle wave for warm Christmas bell sound
           osc.type = 'triangle';
           osc.frequency.value = note.freq;
           
-          // Bright, cheerful attack
+          // Bright, bell-like attack
           gain.gain.setValueAtTime(0, melodyTime);
-          gain.gain.linearRampToValueAtTime(0.25, melodyTime + 0.01);
+          gain.gain.linearRampToValueAtTime(0.3, melodyTime + 0.02);
           gain.gain.exponentialRampToValueAtTime(0.01, melodyTime + note.duration);
           
           osc.connect(gain);
@@ -115,29 +121,76 @@ export const useGameMusic = (isPlaying: boolean) => {
     const playHarmony = () => {
       harmonyNotes.forEach((note) => {
         if (note.freq > 0) {
+          // Add a second oscillator for bell shimmer
           const osc = audioContext.createOscillator();
+          const osc2 = audioContext.createOscillator();
           const gain = audioContext.createGain();
           
+          // Sine wave with slight detune for bell effect
           osc.type = 'sine';
           osc.frequency.value = note.freq;
+          osc2.type = 'sine';
+          osc2.frequency.value = note.freq * 2.01; // Slight detune for shimmer
           
-          // Smooth pad-like envelope
+          // Bell-like envelope with longer sustain
           gain.gain.setValueAtTime(0, harmonyTime);
-          gain.gain.linearRampToValueAtTime(0.15, harmonyTime + 0.1);
-          gain.gain.setValueAtTime(0.15, harmonyTime + note.duration - 0.1);
+          gain.gain.linearRampToValueAtTime(0.12, harmonyTime + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.02, harmonyTime + note.duration * 0.8);
           gain.gain.linearRampToValueAtTime(0, harmonyTime + note.duration);
           
           osc.connect(gain);
+          osc2.connect(gain);
           gain.connect(masterGain);
           
           osc.start(harmonyTime);
+          osc2.start(harmonyTime);
           osc.stop(harmonyTime + note.duration);
+          osc2.stop(harmonyTime + note.duration);
         }
         harmonyTime += note.duration;
       });
     };
 
-    // Soft kick drum
+    // Sleigh bell jingle effect (replacing kick)
+    const playSleighBells = () => {
+      const bellInterval = 0.5;
+      let bellTime = audioContext.currentTime;
+      
+      for (let i = 0; i < 32; i++) {
+        // Create jingle bell sound with noise + high frequency
+        const bufferSize = audioContext.sampleRate * 0.15;
+        const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+        const data = buffer.getChannelData(0);
+        
+        for (let j = 0; j < bufferSize; j++) {
+          // Mix of noise and sine for bell-like jingle
+          const t = j / audioContext.sampleRate;
+          const bell = Math.sin(2 * Math.PI * 3000 * t) * Math.exp(-t * 20);
+          const jingle = Math.sin(2 * Math.PI * 5000 * t) * Math.exp(-t * 25);
+          data[j] = (bell + jingle + (Math.random() - 0.5) * 0.3) * Math.exp(-j / (bufferSize * 0.3));
+        }
+        
+        const noise = audioContext.createBufferSource();
+        const filter = audioContext.createBiquadFilter();
+        const gain = audioContext.createGain();
+        
+        noise.buffer = buffer;
+        filter.type = 'bandpass';
+        filter.frequency.value = 4000;
+        filter.Q.value = 2;
+        
+        gain.gain.setValueAtTime(0.2, bellTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, bellTime + 0.15);
+        
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(masterGain);
+        
+        noise.start(bellTime);
+        
+        bellTime += bellInterval;
+      }
+    };
     const playKick = () => {
       const kickInterval = 0.4;
       let kickTime = audioContext.currentTime;
@@ -198,21 +251,21 @@ export const useGameMusic = (isPlaying: boolean) => {
       }
     };
 
-    // Start all patterns
-    playKick();
+    // Start all Christmas patterns
+    playSleighBells();
     playHiHat();
     playBass();
     playMelody();
     playHarmony();
 
-    // Loop the music
-    const totalDuration = 4; // 4 seconds loop
+    // Loop the music (4 seconds)
+    const totalDuration = 4;
     const loopInterval = setInterval(() => {
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         bassTime = audioContext.currentTime;
         melodyTime = audioContext.currentTime;
         harmonyTime = audioContext.currentTime;
-        playKick();
+        playSleighBells();
         playHiHat();
         playBass();
         playMelody();
