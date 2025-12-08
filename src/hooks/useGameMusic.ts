@@ -25,43 +25,62 @@ export const useGameMusic = (isPlaying: boolean) => {
     masterGain.connect(audioContext.destination);
     masterGainRef.current = masterGain;
 
-    // Christmas "Jingle Bells" inspired melody
+    // Upbeat 60s Christmas pop inspired original melody
+    // Energetic, driving feel with bells
     const melodyNotes = [
-      // "Jingle bells, jingle bells"
-      { freq: 329.63, duration: 0.25 },  // E4
-      { freq: 329.63, duration: 0.25 },  // E4
-      { freq: 329.63, duration: 0.5 },   // E4
-      { freq: 329.63, duration: 0.25 },  // E4
-      { freq: 329.63, duration: 0.25 },  // E4
-      { freq: 329.63, duration: 0.5 },   // E4
-      // "Jingle all the way"
-      { freq: 329.63, duration: 0.25 },  // E4
-      { freq: 392.00, duration: 0.25 },  // G4
-      { freq: 261.63, duration: 0.25 },  // C4
-      { freq: 293.66, duration: 0.25 },  // D4
-      { freq: 329.63, duration: 1.0 },   // E4
+      // Upbeat, joyful phrase 1
+      { freq: 392.00, duration: 0.15 },  // G4
+      { freq: 440.00, duration: 0.15 },  // A4
+      { freq: 493.88, duration: 0.3 },   // B4
+      { freq: 523.25, duration: 0.2 },   // C5
+      { freq: 493.88, duration: 0.2 },   // B4
+      { freq: 440.00, duration: 0.4 },   // A4
+      // Phrase 2 - energetic climb
+      { freq: 349.23, duration: 0.15 },  // F4
+      { freq: 392.00, duration: 0.15 },  // G4
+      { freq: 440.00, duration: 0.3 },   // A4
+      { freq: 523.25, duration: 0.4 },   // C5
+      { freq: 493.88, duration: 0.2 },   // B4
+      { freq: 392.00, duration: 0.4 },   // G4
+      // Phrase 3 - resolution
+      { freq: 329.63, duration: 0.2 },   // E4
+      { freq: 392.00, duration: 0.2 },   // G4
+      { freq: 523.25, duration: 0.5 },   // C5
+      { freq: 0, duration: 0.1 },        // Rest
     ];
 
-    // Christmas bass line
+    // Driving bass line - "Wall of Sound" style
     const bassNotes = [
-      { freq: 130.81, duration: 0.5 },   // C3
-      { freq: 130.81, duration: 0.5 },   // C3
-      { freq: 146.83, duration: 0.5 },   // D3
-      { freq: 146.83, duration: 0.5 },   // D3
-      { freq: 130.81, duration: 0.5 },   // C3
-      { freq: 98.00, duration: 0.5 },    // G2
-      { freq: 130.81, duration: 1.0 },   // C3
+      { freq: 130.81, duration: 0.2 },   // C3
+      { freq: 130.81, duration: 0.2 },   // C3
+      { freq: 146.83, duration: 0.2 },   // D3
+      { freq: 130.81, duration: 0.2 },   // C3
+      { freq: 110.00, duration: 0.2 },   // A2
+      { freq: 110.00, duration: 0.2 },   // A2
+      { freq: 123.47, duration: 0.2 },   // B2
+      { freq: 130.81, duration: 0.2 },   // C3
+      { freq: 98.00, duration: 0.2 },    // G2
+      { freq: 98.00, duration: 0.2 },    // G2
+      { freq: 110.00, duration: 0.2 },   // A2
+      { freq: 123.47, duration: 0.2 },   // B2
+      { freq: 130.81, duration: 0.4 },   // C3
+      { freq: 98.00, duration: 0.2 },    // G2
+      { freq: 130.81, duration: 0.2 },   // C3
     ];
     
-    // Bell-like harmony for Christmas feel
+    // Rich, layered harmony - Christmas bells
     const harmonyNotes = [
-      { freq: 523.25, duration: 0.5 },   // C5 (bells)
-      { freq: 659.25, duration: 0.5 },   // E5
-      { freq: 783.99, duration: 0.5 },   // G5
-      { freq: 659.25, duration: 0.5 },   // E5
-      { freq: 523.25, duration: 0.5 },   // C5
-      { freq: 392.00, duration: 0.5 },   // G4
-      { freq: 523.25, duration: 1.0 },   // C5
+      { freq: 659.25, duration: 0.3 },   // E5
+      { freq: 783.99, duration: 0.3 },   // G5
+      { freq: 659.25, duration: 0.3 },   // E5
+      { freq: 587.33, duration: 0.3 },   // D5
+      { freq: 523.25, duration: 0.4 },   // C5
+      { freq: 659.25, duration: 0.3 },   // E5
+      { freq: 783.99, duration: 0.3 },   // G5
+      { freq: 880.00, duration: 0.4 },   // A5
+      { freq: 783.99, duration: 0.3 },   // G5
+      { freq: 659.25, duration: 0.3 },   // E5
+      { freq: 523.25, duration: 0.4 },   // C5
     ];
 
     let bassTime = audioContext.currentTime;
