@@ -99,10 +99,10 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     const currentScore = Math.floor(Math.abs(ballPositionRef.current.z) * 10);
     const speedMultiplier = 1 + (currentScore / 3000);
     
-    // Game physics - matching single player exactly
-    const BASE_FORWARD_SPEED = 0.08;
+    // Game physics - faster for 1v1 mode
+    const BASE_FORWARD_SPEED = 0.12;
     const FORWARD_SPEED = BASE_FORWARD_SPEED * speedMultiplier;
-    const GLIDE_SPEED = 0.15;
+    const GLIDE_SPEED = 0.18;
     const LANE_WIDTH = 1.5;
     const MAX_X = 3 * LANE_WIDTH;
     const MIN_X = -3 * LANE_WIDTH;
