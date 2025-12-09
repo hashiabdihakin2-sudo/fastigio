@@ -105,31 +105,18 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
     }
   };
 
-  // Check for game end conditions
+  // Check for game end conditions - only end when BOTH players are finished
   useEffect(() => {
     if (gamePhase !== 'playing') return;
 
-    const endGame = async (winnerName: string, winnerScore: number, loserName: string, loserScore: number, winnerSkin: string, loserSkin: string, displayWinner: string) => {
-      setGamePhase('ended');
-      setWinner(displayWinner);
-      await saveHighscore(winnerName, winnerScore, loserName, loserScore, winnerSkin, loserSkin);
-    };
+    // Only end the game when both players have finished
+    if (player1Status === 'finished' && player2Status === 'finished') {
+      const endGame = async (winnerName: string, winnerScore: number, loserName: string, loserScore: number, winnerSkin: string, loserSkin: string, displayWinner: string) => {
+        setGamePhase('ended');
+        setWinner(displayWinner);
+        await saveHighscore(winnerName, winnerScore, loserName, loserScore, winnerSkin, loserSkin);
+      };
 
-    if (player1Status === 'finished' && player2Status === 'playing') {
-      endGame(
-        player2Config?.name || 'Spelare 2', player2Score,
-        player1Config?.name || 'Spelare 1', player1Score,
-        player2Config?.skin || 'fire', player1Config?.skin || 'classic',
-        `${player2Config?.name || 'Spelare 2'} vann!`
-      );
-    } else if (player2Status === 'finished' && player1Status === 'playing') {
-      endGame(
-        player1Config?.name || 'Spelare 1', player1Score,
-        player2Config?.name || 'Spelare 2', player2Score,
-        player1Config?.skin || 'classic', player2Config?.skin || 'fire',
-        `${player1Config?.name || 'Spelare 1'} vann!`
-      );
-    } else if (player1Status === 'finished' && player2Status === 'finished') {
       if (player1Score > player2Score) {
         endGame(
           player1Config?.name || 'Spelare 1', player1Score,
