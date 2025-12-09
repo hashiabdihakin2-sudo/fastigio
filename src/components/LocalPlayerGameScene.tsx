@@ -111,13 +111,13 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
     const newZ = ballPositionRef.current.z + FORWARD_SPEED;
     const newY = 0.5;
 
-    // Handle lateral movement
+    // Handle lateral movement (inverted because camera is behind looking forward)
     let newX = ballPositionRef.current.x;
     if (keysPressed.current.left) {
-      newX -= GLIDE_SPEED;
+      newX += GLIDE_SPEED;
     }
     if (keysPressed.current.right) {
-      newX += GLIDE_SPEED;
+      newX -= GLIDE_SPEED;
     }
     newX = Math.max(MIN_X, Math.min(MAX_X, newX));
 
