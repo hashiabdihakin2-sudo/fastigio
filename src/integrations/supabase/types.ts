@@ -92,6 +92,42 @@ export type Database = {
         }
         Relationships: []
       }
+      multiplayer_highscores: {
+        Row: {
+          created_at: string
+          id: string
+          loser_name: string
+          loser_score: number
+          loser_skin: string
+          week_year: string | null
+          winner_name: string
+          winner_score: number
+          winner_skin: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          loser_name: string
+          loser_score: number
+          loser_skin: string
+          week_year?: string | null
+          winner_name: string
+          winner_score: number
+          winner_skin: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          loser_name?: string
+          loser_score?: number
+          loser_skin?: string
+          week_year?: string | null
+          winner_name?: string
+          winner_score?: number
+          winner_skin?: string
+        }
+        Relationships: []
+      }
       premium_unlocks: {
         Row: {
           created_at: string

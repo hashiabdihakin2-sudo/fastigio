@@ -5,6 +5,8 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { LocalPlayerGameScene } from './LocalPlayerGameScene';
 import { LocalMultiplayerLobby, PlayerConfig } from './LocalMultiplayerLobby';
+import { supabase } from '@/integrations/supabase/client';
+import { ScrollArea } from './ui/scroll-area';
 
 interface LocalMultiplayerGameProps {
   onGameOver: () => void;
@@ -20,6 +22,20 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
   const [player1Status, setPlayer1Status] = useState<'playing' | 'finished'>('playing');
   const [player2Status, setPlayer2Status] = useState<'playing' | 'finished'>('playing');
   const [winner, setWinner] = useState<string | null>(null);
+  const [highscores, setHighscores] = useState<any[]>([]);
+
+  // Fetch highscores
+  useEffect(() => {
+    const fetchHighscores = async () => {
+      const { data } = await supabase
+        .from('multiplayer_highscores')
+        .select('*')
+        .order('winner_score', { ascending: false })
+        .limit(10);
+      if (data) setHighscores(data);
+    };
+    fetchHighscores();
+  }, [gamePhase]);
 
   const handleStartGame = (p1: PlayerConfig, p2: PlayerConfig) => {
     setPlayer1Config(p1);
@@ -73,23 +89,63 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
     setPlayer2Status('finished');
   };
 
+  // Save highscore to database
+  const saveHighscore = async (winnerName: string, winnerScore: number, loserName: string, loserScore: number, winnerSkin: string, loserSkin: string) => {
+    try {
+      await supabase.from('multiplayer_highscores').insert({
+        winner_name: winnerName,
+        winner_score: winnerScore,
+        loser_name: loserName,
+        loser_score: loserScore,
+        winner_skin: winnerSkin,
+        loser_skin: loserSkin
+      });
+    } catch (error) {
+      console.error('Failed to save highscore:', error);
+    }
+  };
+
   // Check for game end conditions
   useEffect(() => {
     if (gamePhase !== 'playing') return;
 
+    const endGame = async (winnerName: string, winnerScore: number, loserName: string, loserScore: number, winnerSkin: string, loserSkin: string, displayWinner: string) => {
+      setGamePhase('ended');
+      setWinner(displayWinner);
+      await saveHighscore(winnerName, winnerScore, loserName, loserScore, winnerSkin, loserSkin);
+    };
+
     if (player1Status === 'finished' && player2Status === 'playing') {
-      setGamePhase('ended');
-      setWinner(`${player2Config?.name || 'Spelare 2'} vann!`);
+      endGame(
+        player2Config?.name || 'Spelare 2', player2Score,
+        player1Config?.name || 'Spelare 1', player1Score,
+        player2Config?.skin || 'fire', player1Config?.skin || 'classic',
+        `${player2Config?.name || 'Spelare 2'} vann!`
+      );
     } else if (player2Status === 'finished' && player1Status === 'playing') {
-      setGamePhase('ended');
-      setWinner(`${player1Config?.name || 'Spelare 1'} vann!`);
+      endGame(
+        player1Config?.name || 'Spelare 1', player1Score,
+        player2Config?.name || 'Spelare 2', player2Score,
+        player1Config?.skin || 'classic', player2Config?.skin || 'fire',
+        `${player1Config?.name || 'Spelare 1'} vann!`
+      );
     } else if (player1Status === 'finished' && player2Status === 'finished') {
-      setGamePhase('ended');
       if (player1Score > player2Score) {
-        setWinner(`${player1Config?.name || 'Spelare 1'} vann!`);
+        endGame(
+          player1Config?.name || 'Spelare 1', player1Score,
+          player2Config?.name || 'Spelare 2', player2Score,
+          player1Config?.skin || 'classic', player2Config?.skin || 'fire',
+          `${player1Config?.name || 'Spelare 1'} vann!`
+        );
       } else if (player2Score > player1Score) {
-        setWinner(`${player2Config?.name || 'Spelare 2'} vann!`);
+        endGame(
+          player2Config?.name || 'Spelare 2', player2Score,
+          player1Config?.name || 'Spelare 1', player1Score,
+          player2Config?.skin || 'fire', player1Config?.skin || 'classic',
+          `${player2Config?.name || 'Spelare 2'} vann!`
+        );
       } else {
+        setGamePhase('ended');
         setWinner('Oavgjort!');
       }
     }
@@ -186,7 +242,7 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
       {/* Game Over Screen */}
       {gamePhase === 'ended' && (
         <div className="absolute inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
-          <Card className="p-4 sm:p-8 max-w-md w-full text-center space-y-4 sm:space-y-6">
+          <Card className="p-4 sm:p-8 max-w-2xl w-full text-center space-y-4 sm:space-y-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-primary">{winner}</h2>
             <div className="space-y-2">
               <p className="text-base sm:text-lg">
@@ -196,6 +252,29 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
                 {player2Config?.name || 'Spelare 2'}: <span className="font-bold text-accent">{player2Score}</span>
               </p>
             </div>
+            
+            {/* Highscore leaderboard */}
+            <div className="border border-border rounded-lg p-3">
+              <h3 className="text-lg font-bold mb-2">🏆 1v1 Highscores</h3>
+              <ScrollArea className="h-40">
+                {highscores.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">Inga highscores än!</p>
+                ) : (
+                  <div className="space-y-1">
+                    {highscores.map((hs, index) => (
+                      <div key={hs.id} className="flex justify-between items-center text-sm px-2 py-1 rounded bg-muted/30">
+                        <span className="font-mono text-muted-foreground w-6">{index + 1}.</span>
+                        <span className="flex-1 text-left font-medium">{hs.winner_name}</span>
+                        <span className="text-primary font-bold">{hs.winner_score}</span>
+                        <span className="text-muted-foreground mx-2">vs</span>
+                        <span className="text-muted-foreground">{hs.loser_name} ({hs.loser_score})</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </ScrollArea>
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
               <Button onClick={handlePlayAgain} size="lg" className="flex-1">
                 Spela igen
