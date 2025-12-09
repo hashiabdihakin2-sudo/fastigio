@@ -262,12 +262,15 @@ export const LocalMultiplayerGame = ({ onGameOver }: LocalMultiplayerGameProps) 
                 ) : (
                   <div className="space-y-1">
                     {highscores.map((hs, index) => (
-                      <div key={hs.id} className="flex justify-between items-center text-sm px-2 py-1 rounded bg-muted/30">
-                        <span className="font-mono text-muted-foreground w-6">{index + 1}.</span>
-                        <span className="flex-1 text-left font-medium">{hs.winner_name}</span>
-                        <span className="text-primary font-bold">{hs.winner_score}</span>
-                        <span className="text-muted-foreground mx-2">vs</span>
-                        <span className="text-muted-foreground">{hs.loser_name} ({hs.loser_score})</span>
+                      <div key={hs.id} className="flex flex-col text-sm px-2 py-2 rounded bg-muted/30 gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-muted-foreground w-6">{index + 1}.</span>
+                          <span className="text-primary font-bold">{hs.winner_name}: {hs.winner_score} poäng</span>
+                          <span className="text-xs text-green-500">🏆</span>
+                        </div>
+                        <div className="flex items-center gap-2 pl-8">
+                          <span className="text-muted-foreground">{hs.loser_name}: {hs.loser_score} poäng</span>
+                        </div>
                       </div>
                     ))}
                   </div>
