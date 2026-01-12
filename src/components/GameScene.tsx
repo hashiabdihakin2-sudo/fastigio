@@ -33,8 +33,8 @@ export const GameScene = ({ controls }: GameSceneProps) => {
   } = useGameStore();
 
   const velocityX = useRef(0);
-  const BASE_FORWARD_SPEED = 0.08; // Snabbare
-  const GLIDE_IMPULSE = 0.15; // Snabbare impulse
+  const BASE_FORWARD_SPEED = 0.14; // Mycket snabbare start
+  const GLIDE_IMPULSE = 0.18; // Snabbare impulse
   const FRICTION = 0.92; // Friktion för smooth gliding
   const LANE_WIDTH = 1.5;
   const NUM_LANES = 7;
@@ -117,12 +117,12 @@ export const GameScene = ({ controls }: GameSceneProps) => {
 
   return (
     <group ref={groupRef}>
-      {/* Christmas themed lighting */}
-      <ambientLight intensity={0.3} color="#e8f4ff" />
+      {/* New Year 2026 themed lighting - midnight celebration */}
+      <ambientLight intensity={0.25} color="#1a1a3e" />
       <directionalLight
         position={[15, 25, 10]}
-        intensity={1.0}
-        color="#fff5e6"
+        intensity={0.8}
+        color="#ffeedd"
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
@@ -132,17 +132,17 @@ export const GameScene = ({ controls }: GameSceneProps) => {
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      {/* Christmas colored accent lights */}
-      <pointLight position={[0, 15, 0]} intensity={0.6} color="#FFD700" />
-      <pointLight position={[-10, 8, 0]} intensity={0.5} color="#FF0000" />
-      <pointLight position={[10, 8, 0]} intensity={0.5} color="#00FF00" />
+      {/* New Year celebration lights - gold, pink, purple */}
+      <pointLight position={[0, 15, 0]} intensity={0.7} color="#FFD700" />
+      <pointLight position={[-10, 8, 0]} intensity={0.6} color="#FF1493" />
+      <pointLight position={[10, 8, 0]} intensity={0.6} color="#9400D3" />
       
-      {/* Moonlight effect */}
+      {/* Midnight starlight effect */}
       <spotLight
         position={[0, 30, ballPosition.z + 5]}
         target-position={[0, 0, ballPosition.z]}
-        intensity={0.8}
-        color="#e0f0ff"
+        intensity={0.6}
+        color="#b0c4de"
         angle={0.4}
         penumbra={0.6}
         castShadow

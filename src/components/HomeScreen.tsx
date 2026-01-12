@@ -41,6 +41,12 @@ const SKINS = [
   { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀' },
   { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾' },
   { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾' },
+  // New Year 2026 Premium Skins
+  { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆' },
+  { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇' },
+  { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾' },
+  { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎' },
+  { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
@@ -85,11 +91,11 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
       <div className="text-center space-y-8 p-8 max-w-2xl w-full">
         {/* Logo */}
         <div className="space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
-            Hopp Spel
+          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text">
+            🎆 Nyår 2026 🎆
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground">
-            Undvik hinder och samla poäng!
+            Rulla in i det nya året - undvik hinder och samla poäng!
           </p>
           <div className="flex items-center justify-center gap-2 text-accent">
             <Coins className="w-5 h-5" />

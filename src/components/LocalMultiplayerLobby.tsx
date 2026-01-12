@@ -37,6 +37,12 @@ const SKINS = [
   { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀' },
   { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾' },
   { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾' },
+  // New Year 2026 Premium Skins
+  { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆' },
+  { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇' },
+  { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾' },
+  { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎' },
+  { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌' },
 ];
 
 export type SkinId = typeof SKINS[number]['id'];
@@ -136,8 +142,8 @@ export const LocalMultiplayerLobby = ({ onStartGame, onBack }: LocalMultiplayerL
           <ArrowLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Tillbaka</span>
         </Button>
-        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
-          1v1 Split-Screen
+        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text">
+          🎆 1v1 Nyår 2026 🎆
         </h1>
         <div className="flex items-center gap-1 text-accent">
           <Coins className="w-4 h-4" />
