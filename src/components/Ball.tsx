@@ -247,6 +247,35 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 1.8,
     hat: 'legendaryAura',
     accessory: 'lightningBolts'
+  },
+  // New Year 2026 Premium Skins
+  newyear2026: {
+    color: '#FFD700',
+    emissive: '#FFFF00',
+    emissiveIntensity: 1.5,
+    hat: 'partyHat2026',
+    accessory: 'confetti'
+  },
+  firework: {
+    color: '#FF1493',
+    emissive: '#FF00FF',
+    emissiveIntensity: 1.8,
+    hat: 'fireworkBurst',
+    accessory: 'sparkTrail'
+  },
+  champagne: {
+    color: '#F7E7CE',
+    emissive: '#FFD700',
+    emissiveIntensity: 1.2,
+    hat: 'champagneCork',
+    accessory: 'bubbles'
+  },
+  galaxy: {
+    color: '#9400D3',
+    emissive: '#4B0082',
+    emissiveIntensity: 1.6,
+    hat: 'galaxyHalo',
+    accessory: 'starfield'
   }
 };
 
