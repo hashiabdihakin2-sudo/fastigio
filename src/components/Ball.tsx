@@ -251,30 +251,30 @@ const SKIN_CONFIGS = {
   // New Year 2026 Premium Skins
   newyear2026: {
     color: '#FFD700',
-    emissive: '#FFFF00',
-    emissiveIntensity: 1.5,
+    emissive: '#FF00FF',
+    emissiveIntensity: 1.8,
     hat: 'partyHat2026',
-    accessory: 'confetti'
+    accessory: 'confettiExplosion'
   },
   firework: {
     color: '#FF1493',
-    emissive: '#FF00FF',
-    emissiveIntensity: 1.8,
+    emissive: '#00FFFF',
+    emissiveIntensity: 2.0,
     hat: 'fireworkBurst',
     accessory: 'sparkTrail'
   },
   champagne: {
     color: '#F7E7CE',
     emissive: '#FFD700',
-    emissiveIntensity: 1.2,
+    emissiveIntensity: 1.5,
     hat: 'champagneCork',
-    accessory: 'bubbles'
+    accessory: 'bubblesFloat'
   },
   galaxy: {
-    color: '#9400D3',
-    emissive: '#4B0082',
-    emissiveIntensity: 1.6,
-    hat: 'galaxyHalo',
+    color: '#0a0020',
+    emissive: '#FF00FF',
+    emissiveIntensity: 2.0,
+    hat: 'nebulaHalo',
     accessory: 'starfield'
   }
 };
@@ -1394,6 +1394,271 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
                 <coneGeometry args={[0.025, 0.15, 4]} />
                 <meshStandardMaterial color="#FFA500" emissive="#FFD700" emissiveIntensity={2} />
               </mesh>
+            </group>
+          ))}
+        </group>
+      )}
+
+      {/* Party Hat 2026 - New Year Premium */}
+      {skinConfig.hat === 'partyHat2026' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh>
+            <coneGeometry args={[0.2, 0.45, 32]} />
+            <meshStandardMaterial 
+              color="#FF00FF" 
+              emissive="#FF00FF" 
+              emissiveIntensity={1.2} 
+              metalness={0.8}
+              roughness={0.2}
+            />
+          </mesh>
+          {/* Stripes */}
+          {[0.1, 0.2, 0.3].map((y, i) => (
+            <mesh key={i} position={[0, y - 0.1, 0]}>
+              <torusGeometry args={[0.18 - y * 0.3, 0.02, 8, 32]} />
+              <meshStandardMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={1.5} />
+            </mesh>
+          ))}
+          {/* Pom pom */}
+          <mesh position={[0, 0.3, 0]}>
+            <sphereGeometry args={[0.08, 16, 16]} />
+            <meshStandardMaterial color="#00FFFF" emissive="#00FFFF" emissiveIntensity={2} />
+          </mesh>
+          {/* 2026 Text effect - stars */}
+          {[0, 90, 180, 270].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.15,
+              0.1,
+              Math.sin((angle * Math.PI) / 180) * 0.15
+            ]}>
+              <sphereGeometry args={[0.02, 6, 6]} />
+              <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={3} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Confetti Explosion - New Year Premium */}
+      {skinConfig.accessory === 'confettiExplosion' && (
+        <group>
+          {[...Array(20)].map((_, i) => {
+            const angle = (i / 20) * Math.PI * 2;
+            const radius = 0.35 + Math.sin(i * 2.5) * 0.1;
+            const height = Math.sin(i * 1.3) * 0.2;
+            const colors = ['#FF00FF', '#00FFFF', '#FFD700', '#FF0000', '#00FF00'];
+            return (
+              <mesh key={i} position={[
+                Math.cos(angle) * radius,
+                height,
+                Math.sin(angle) * radius
+              ]} rotation={[i, i * 0.5, i * 0.3]}>
+                <boxGeometry args={[0.04, 0.02, 0.04]} />
+                <meshStandardMaterial 
+                  color={colors[i % colors.length]} 
+                  emissive={colors[i % colors.length]} 
+                  emissiveIntensity={1.5} 
+                />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Firework Burst - New Year Premium */}
+      {skinConfig.hat === 'fireworkBurst' && (
+        <group position={[0, 0.4, 0]}>
+          {/* Central burst */}
+          <mesh>
+            <sphereGeometry args={[0.1, 16, 16]} />
+            <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={3} />
+          </mesh>
+          {/* Burst rays */}
+          {[...Array(16)].map((_, i) => {
+            const angle = (i / 16) * Math.PI * 2;
+            const colors = ['#FF1493', '#00FFFF', '#FFD700', '#FF0000'];
+            return (
+              <mesh key={i} position={[
+                Math.cos(angle) * 0.2,
+                0.05 + Math.sin(i * 0.5) * 0.1,
+                Math.sin(angle) * 0.2
+              ]} rotation={[0, angle, Math.PI / 2]}>
+                <coneGeometry args={[0.02, 0.15, 4]} />
+                <meshStandardMaterial 
+                  color={colors[i % colors.length]} 
+                  emissive={colors[i % colors.length]} 
+                  emissiveIntensity={2} 
+                />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Spark Trail - New Year Premium */}
+      {skinConfig.accessory === 'sparkTrail' && (
+        <group>
+          {[...Array(12)].map((_, i) => {
+            const colors = ['#FF1493', '#00FFFF', '#FFD700'];
+            return (
+              <mesh key={i} position={[
+                Math.sin(i * 0.8) * 0.3,
+                Math.cos(i * 1.2) * 0.2,
+                -0.2 - i * 0.05
+              ]}>
+                <sphereGeometry args={[0.04 - i * 0.002, 8, 8]} />
+                <meshStandardMaterial 
+                  color={colors[i % colors.length]} 
+                  emissive={colors[i % colors.length]} 
+                  emissiveIntensity={2 - i * 0.1} 
+                  transparent
+                  opacity={1 - i * 0.06}
+                />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Champagne Cork - New Year Premium */}
+      {skinConfig.hat === 'champagneCork' && (
+        <group position={[0, 0.35, 0]}>
+          {/* Cork body */}
+          <mesh>
+            <cylinderGeometry args={[0.12, 0.15, 0.25, 16]} />
+            <meshStandardMaterial color="#8B4513" metalness={0.2} roughness={0.8} />
+          </mesh>
+          {/* Cork top */}
+          <mesh position={[0, 0.15, 0]}>
+            <cylinderGeometry args={[0.1, 0.12, 0.08, 16]} />
+            <meshStandardMaterial color="#A0522D" metalness={0.2} roughness={0.8} />
+          </mesh>
+          {/* Golden foil */}
+          <mesh position={[0, -0.15, 0]}>
+            <cylinderGeometry args={[0.16, 0.15, 0.05, 16]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} emissive="#FFD700" emissiveIntensity={0.8} />
+          </mesh>
+          {/* Pop burst effect */}
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[
+              Math.cos((angle * Math.PI) / 180) * 0.15,
+              0.25,
+              Math.sin((angle * Math.PI) / 180) * 0.15
+            ]}>
+              <sphereGeometry args={[0.03, 8, 8]} />
+              <meshStandardMaterial color="#FFFFFF" emissive="#F7E7CE" emissiveIntensity={2} transparent opacity={0.8} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Bubbles Float - New Year Premium */}
+      {skinConfig.accessory === 'bubblesFloat' && (
+        <group>
+          {[...Array(15)].map((_, i) => {
+            const angle = (i / 15) * Math.PI * 2;
+            const radius = 0.3 + Math.sin(i * 1.5) * 0.15;
+            const height = 0.1 + Math.abs(Math.sin(i * 2.1)) * 0.3;
+            return (
+              <mesh key={i} position={[
+                Math.cos(angle) * radius,
+                height,
+                Math.sin(angle) * radius
+              ]}>
+                <sphereGeometry args={[0.03 + Math.sin(i) * 0.01, 12, 12]} />
+                <meshStandardMaterial 
+                  color="#F7E7CE" 
+                  emissive="#FFD700" 
+                  emissiveIntensity={1.2}
+                  transparent
+                  opacity={0.6}
+                  metalness={0.3}
+                  roughness={0.1}
+                />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Nebula Halo - Galaxy Premium */}
+      {skinConfig.hat === 'nebulaHalo' && (
+        <group position={[0, 0.4, 0]}>
+          {/* Outer nebula ring */}
+          <mesh>
+            <torusGeometry args={[0.3, 0.1, 16, 32]} />
+            <meshStandardMaterial 
+              color="#0a0020" 
+              emissive="#FF00FF" 
+              emissiveIntensity={1.5} 
+              transparent 
+              opacity={0.7} 
+            />
+          </mesh>
+          {/* Inner energy ring */}
+          <mesh>
+            <torusGeometry args={[0.25, 0.03, 8, 32]} />
+            <meshStandardMaterial 
+              color="#00FFFF" 
+              emissive="#00FFFF" 
+              emissiveIntensity={2.5} 
+            />
+          </mesh>
+          {/* Stars in nebula */}
+          {[...Array(20)].map((_, i) => {
+            const angle = (i / 20) * Math.PI * 2;
+            return (
+              <mesh key={i} position={[
+                Math.cos(angle) * 0.3,
+                Math.sin(i * 0.5) * 0.05,
+                Math.sin(angle) * 0.3
+              ]}>
+                <sphereGeometry args={[0.015, 6, 6]} />
+                <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={3} />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Starfield - Galaxy Premium */}
+      {skinConfig.accessory === 'starfield' && (
+        <group>
+          {/* Orbiting stars */}
+          {[...Array(24)].map((_, i) => {
+            const angle = (i / 24) * Math.PI * 2;
+            const radius = 0.35 + Math.sin(i * 2) * 0.1;
+            const height = Math.sin(i * 1.5) * 0.15;
+            const colors = ['#FF00FF', '#00FFFF', '#FFFFFF', '#9400D3'];
+            return (
+              <mesh key={i} position={[
+                Math.cos(angle) * radius,
+                height,
+                Math.sin(angle) * radius
+              ]}>
+                <sphereGeometry args={[0.02 + Math.sin(i) * 0.01, 6, 6]} />
+                <meshStandardMaterial 
+                  color={colors[i % colors.length]} 
+                  emissive={colors[i % colors.length]} 
+                  emissiveIntensity={2 + Math.sin(i) * 0.5} 
+                />
+              </mesh>
+            );
+          })}
+          {/* Shooting star trail */}
+          {[0, 120, 240].map((baseAngle, j) => (
+            <group key={j} rotation={[0, (baseAngle * Math.PI) / 180, 0.3]}>
+              {[0, 1, 2, 3].map((i) => (
+                <mesh key={i} position={[0.4 - i * 0.08, 0.1 - i * 0.03, 0]}>
+                  <sphereGeometry args={[0.025 - i * 0.005, 6, 6]} />
+                  <meshStandardMaterial 
+                    color="#FFFFFF" 
+                    emissive="#00FFFF" 
+                    emissiveIntensity={2 - i * 0.4} 
+                    transparent
+                    opacity={1 - i * 0.2}
+                  />
+                </mesh>
+              ))}
             </group>
           ))}
         </group>
