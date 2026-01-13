@@ -9,6 +9,7 @@ import { CyberBackground } from './CyberBackground';
 import { DeathAnimation } from './DeathAnimation';
 import { Snow } from './Snow';
 import { Fireworks } from './Fireworks';
+import { JumpScare } from './JumpScare';
 import { useGameStore } from '../store/gameStore';
 
 interface GameSceneProps {
@@ -152,6 +153,7 @@ export const GameScene = ({ controls }: GameSceneProps) => {
       {/* Game objects */}
       <Snow ballPosition={ballPosition} />
       <Fireworks ballPosition={ballPosition} />
+      <JumpScare score={Math.floor(Math.abs(ballPosition.z) * 10)} />
       <CyberBackground ballPosition={ballPosition} />
       {!showDeathAnimation && <Ball ref={ballRef} />}
       <Track ballPosition={ballPosition} />

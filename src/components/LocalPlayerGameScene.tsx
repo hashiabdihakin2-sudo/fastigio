@@ -8,6 +8,7 @@ import { Coins } from './Coins';
 import { CyberBackground } from './CyberBackground';
 import { DeathAnimation } from './DeathAnimation';
 import { Fireworks } from './Fireworks';
+import { JumpScare } from './JumpScare';
 
 interface LocalPlayerGameSceneProps {
   playerId: number;
@@ -152,6 +153,7 @@ export const LocalPlayerGameScene = ({ playerId, playerStatus, playerSkin = 'cla
       
       <CyberBackground ballPosition={ballPositionRef.current} />
       <Fireworks ballPosition={ballPositionRef.current} />
+      <JumpScare score={score} />
       <Ball ref={ballRef} skinId={playerSkin as any} />
       <Track ballPosition={ballPositionRef.current} />
       <Obstacles ballPosition={ballPositionRef.current} playerId={playerId} />
