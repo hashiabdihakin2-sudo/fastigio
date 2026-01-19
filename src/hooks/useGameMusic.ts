@@ -25,67 +25,34 @@ export const useGameMusic = (isPlaying: boolean) => {
     masterGain.connect(audioContext.destination);
     masterGainRef.current = masterGain;
 
-    // Upbeat 60s Christmas pop inspired original melody
-    // Energetic, driving feel with bells
+    // Original upbeat electronic game melody
     const melodyNotes = [
-      // Upbeat, joyful phrase 1
-      { freq: 392.00, duration: 0.15 },  // G4
-      { freq: 440.00, duration: 0.15 },  // A4
-      { freq: 493.88, duration: 0.3 },   // B4
-      { freq: 523.25, duration: 0.2 },   // C5
-      { freq: 493.88, duration: 0.2 },   // B4
-      { freq: 440.00, duration: 0.4 },   // A4
-      // Phrase 2 - energetic climb
-      { freq: 349.23, duration: 0.15 },  // F4
-      { freq: 392.00, duration: 0.15 },  // G4
-      { freq: 440.00, duration: 0.3 },   // A4
-      { freq: 523.25, duration: 0.4 },   // C5
-      { freq: 493.88, duration: 0.2 },   // B4
-      { freq: 392.00, duration: 0.4 },   // G4
-      // Phrase 3 - resolution
-      { freq: 329.63, duration: 0.2 },   // E4
-      { freq: 392.00, duration: 0.2 },   // G4
-      { freq: 523.25, duration: 0.5 },   // C5
-      { freq: 0, duration: 0.1 },        // Rest
+      { freq: 523.25, duration: 0.2 },  // C5
+      { freq: 587.33, duration: 0.2 },  // D5
+      { freq: 659.25, duration: 0.2 },  // E5
+      { freq: 783.99, duration: 0.4 },  // G5
+      { freq: 659.25, duration: 0.2 },  // E5
+      { freq: 587.33, duration: 0.2 },  // D5
+      { freq: 523.25, duration: 0.4 },  // C5
+      { freq: 392.00, duration: 0.2 },  // G4
+      { freq: 440.00, duration: 0.2 },  // A4
+      { freq: 523.25, duration: 0.4 },  // C5
+      { freq: 0, duration: 0.2 },       // Rest
     ];
 
-    // Driving bass line - "Wall of Sound" style
+    // Driving bass line
     const bassNotes = [
-      { freq: 130.81, duration: 0.2 },   // C3
-      { freq: 130.81, duration: 0.2 },   // C3
-      { freq: 146.83, duration: 0.2 },   // D3
-      { freq: 130.81, duration: 0.2 },   // C3
-      { freq: 110.00, duration: 0.2 },   // A2
-      { freq: 110.00, duration: 0.2 },   // A2
-      { freq: 123.47, duration: 0.2 },   // B2
-      { freq: 130.81, duration: 0.2 },   // C3
-      { freq: 98.00, duration: 0.2 },    // G2
-      { freq: 98.00, duration: 0.2 },    // G2
-      { freq: 110.00, duration: 0.2 },   // A2
-      { freq: 123.47, duration: 0.2 },   // B2
-      { freq: 130.81, duration: 0.4 },   // C3
-      { freq: 98.00, duration: 0.2 },    // G2
-      { freq: 130.81, duration: 0.2 },   // C3
-    ];
-    
-    // Rich, layered harmony - Christmas bells
-    const harmonyNotes = [
-      { freq: 659.25, duration: 0.3 },   // E5
-      { freq: 783.99, duration: 0.3 },   // G5
-      { freq: 659.25, duration: 0.3 },   // E5
-      { freq: 587.33, duration: 0.3 },   // D5
-      { freq: 523.25, duration: 0.4 },   // C5
-      { freq: 659.25, duration: 0.3 },   // E5
-      { freq: 783.99, duration: 0.3 },   // G5
-      { freq: 880.00, duration: 0.4 },   // A5
-      { freq: 783.99, duration: 0.3 },   // G5
-      { freq: 659.25, duration: 0.3 },   // E5
-      { freq: 523.25, duration: 0.4 },   // C5
+      { freq: 130.81, duration: 0.3 },  // C3
+      { freq: 130.81, duration: 0.3 },  // C3
+      { freq: 98.00, duration: 0.3 },   // G2
+      { freq: 98.00, duration: 0.3 },   // G2
+      { freq: 110.00, duration: 0.3 },  // A2
+      { freq: 110.00, duration: 0.3 },  // A2
+      { freq: 130.81, duration: 0.6 },  // C3
     ];
 
     let bassTime = audioContext.currentTime;
     let melodyTime = audioContext.currentTime;
-    let harmonyTime = audioContext.currentTime;
 
     const playBass = () => {
       bassNotes.forEach((note) => {
@@ -96,10 +63,9 @@ export const useGameMusic = (isPlaying: boolean) => {
           osc.type = 'sine';
           osc.frequency.value = note.freq;
           
-          // Soft, bouncy envelope
           gain.gain.setValueAtTime(0, bassTime);
-          gain.gain.linearRampToValueAtTime(0.3, bassTime + 0.02);
-          gain.gain.setValueAtTime(0.3, bassTime + note.duration - 0.1);
+          gain.gain.linearRampToValueAtTime(0.4, bassTime + 0.02);
+          gain.gain.setValueAtTime(0.4, bassTime + note.duration - 0.1);
           gain.gain.linearRampToValueAtTime(0, bassTime + note.duration);
           
           osc.connect(gain);
@@ -118,13 +84,11 @@ export const useGameMusic = (isPlaying: boolean) => {
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
           
-          // Triangle wave for warm Christmas bell sound
-          osc.type = 'triangle';
+          osc.type = 'square';
           osc.frequency.value = note.freq;
           
-          // Bright, bell-like attack
           gain.gain.setValueAtTime(0, melodyTime);
-          gain.gain.linearRampToValueAtTime(0.3, melodyTime + 0.02);
+          gain.gain.linearRampToValueAtTime(0.15, melodyTime + 0.02);
           gain.gain.exponentialRampToValueAtTime(0.01, melodyTime + note.duration);
           
           osc.connect(gain);
@@ -136,80 +100,8 @@ export const useGameMusic = (isPlaying: boolean) => {
         melodyTime += note.duration;
       });
     };
-    
-    const playHarmony = () => {
-      harmonyNotes.forEach((note) => {
-        if (note.freq > 0) {
-          // Add a second oscillator for bell shimmer
-          const osc = audioContext.createOscillator();
-          const osc2 = audioContext.createOscillator();
-          const gain = audioContext.createGain();
-          
-          // Sine wave with slight detune for bell effect
-          osc.type = 'sine';
-          osc.frequency.value = note.freq;
-          osc2.type = 'sine';
-          osc2.frequency.value = note.freq * 2.01; // Slight detune for shimmer
-          
-          // Bell-like envelope with longer sustain
-          gain.gain.setValueAtTime(0, harmonyTime);
-          gain.gain.linearRampToValueAtTime(0.12, harmonyTime + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.02, harmonyTime + note.duration * 0.8);
-          gain.gain.linearRampToValueAtTime(0, harmonyTime + note.duration);
-          
-          osc.connect(gain);
-          osc2.connect(gain);
-          gain.connect(masterGain);
-          
-          osc.start(harmonyTime);
-          osc2.start(harmonyTime);
-          osc.stop(harmonyTime + note.duration);
-          osc2.stop(harmonyTime + note.duration);
-        }
-        harmonyTime += note.duration;
-      });
-    };
 
-    // Sleigh bell jingle effect (replacing kick)
-    const playSleighBells = () => {
-      const bellInterval = 0.5;
-      let bellTime = audioContext.currentTime;
-      
-      for (let i = 0; i < 32; i++) {
-        // Create jingle bell sound with noise + high frequency
-        const bufferSize = audioContext.sampleRate * 0.15;
-        const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-        const data = buffer.getChannelData(0);
-        
-        for (let j = 0; j < bufferSize; j++) {
-          // Mix of noise and sine for bell-like jingle
-          const t = j / audioContext.sampleRate;
-          const bell = Math.sin(2 * Math.PI * 3000 * t) * Math.exp(-t * 20);
-          const jingle = Math.sin(2 * Math.PI * 5000 * t) * Math.exp(-t * 25);
-          data[j] = (bell + jingle + (Math.random() - 0.5) * 0.3) * Math.exp(-j / (bufferSize * 0.3));
-        }
-        
-        const noise = audioContext.createBufferSource();
-        const filter = audioContext.createBiquadFilter();
-        const gain = audioContext.createGain();
-        
-        noise.buffer = buffer;
-        filter.type = 'bandpass';
-        filter.frequency.value = 4000;
-        filter.Q.value = 2;
-        
-        gain.gain.setValueAtTime(0.2, bellTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, bellTime + 0.15);
-        
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(masterGain);
-        
-        noise.start(bellTime);
-        
-        bellTime += bellInterval;
-      }
-    };
+    // Kick drum
     const playKick = () => {
       const kickInterval = 0.4;
       let kickTime = audioContext.currentTime;
@@ -218,23 +110,23 @@ export const useGameMusic = (isPlaying: boolean) => {
         const osc = audioContext.createOscillator();
         const gain = audioContext.createGain();
         
-        osc.frequency.setValueAtTime(120, kickTime);
-        osc.frequency.exponentialRampToValueAtTime(50, kickTime + 0.08);
+        osc.frequency.setValueAtTime(150, kickTime);
+        osc.frequency.exponentialRampToValueAtTime(50, kickTime + 0.1);
         
-        gain.gain.setValueAtTime(0.6, kickTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, kickTime + 0.2);
+        gain.gain.setValueAtTime(0.5, kickTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, kickTime + 0.15);
         
         osc.connect(gain);
         gain.connect(masterGain);
         
         osc.start(kickTime);
-        osc.stop(kickTime + 0.2);
+        osc.stop(kickTime + 0.15);
         
         kickTime += kickInterval;
       }
     };
 
-    // Gentle hi-hat pattern
+    // Hi-hat pattern
     const playHiHat = () => {
       const hiHatInterval = 0.2;
       let hiHatTime = audioContext.currentTime;
@@ -270,25 +162,51 @@ export const useGameMusic = (isPlaying: boolean) => {
       }
     };
 
-    // Start all Christmas patterns
-    playSleighBells();
+    // Arpeggio synth
+    const playArpeggio = () => {
+      const arpNotes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+      const arpInterval = 0.15;
+      let arpTime = audioContext.currentTime;
+      
+      for (let i = 0; i < 60; i++) {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.value = arpNotes[i % arpNotes.length];
+        
+        gain.gain.setValueAtTime(0, arpTime);
+        gain.gain.linearRampToValueAtTime(0.08, arpTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.01, arpTime + 0.12);
+        
+        osc.connect(gain);
+        gain.connect(masterGain);
+        
+        osc.start(arpTime);
+        osc.stop(arpTime + 0.12);
+        
+        arpTime += arpInterval;
+      }
+    };
+
+    // Start all patterns
+    playKick();
     playHiHat();
     playBass();
     playMelody();
-    playHarmony();
+    playArpeggio();
 
-    // Loop the music (4 seconds)
-    const totalDuration = 4;
+    // Loop the music
+    const totalDuration = 3;
     const loopInterval = setInterval(() => {
       if (audioContextRef.current && audioContextRef.current.state === 'running') {
         bassTime = audioContext.currentTime;
         melodyTime = audioContext.currentTime;
-        harmonyTime = audioContext.currentTime;
-        playSleighBells();
+        playKick();
         playHiHat();
         playBass();
         playMelody();
-        playHarmony();
+        playArpeggio();
       }
     }, totalDuration * 1000);
 
