@@ -276,6 +276,49 @@ const SKIN_CONFIGS = {
     emissiveIntensity: 2.0,
     hat: 'nebulaHalo',
     accessory: 'starfield'
+  },
+  // New skins
+  aurora: {
+    color: '#00FF7F',
+    emissive: '#00CED1',
+    emissiveIntensity: 1.8,
+    hat: 'auroraWaves',
+    accessory: 'northernLights'
+  },
+  midnight: {
+    color: '#191970',
+    emissive: '#4169E1',
+    emissiveIntensity: 1.2,
+    hat: 'moonCrescent',
+    accessory: 'starDust'
+  },
+  confetti: {
+    color: '#FF69B4',
+    emissive: '#FFD700',
+    emissiveIntensity: 1.5,
+    hat: 'partyPopper',
+    accessory: 'confettiRain'
+  },
+  golf: {
+    color: '#228B22',
+    emissive: '#32CD32',
+    emissiveIntensity: 0.6,
+    hat: 'golfFlag',
+    accessory: 'golfDimples'
+  },
+  hockey: {
+    color: '#1E90FF',
+    emissive: '#00BFFF',
+    emissiveIntensity: 0.8,
+    hat: 'hockeyHelmet',
+    accessory: 'iceTrail'
+  },
+  pumpkin: {
+    color: '#FF6600',
+    emissive: '#FF8C00',
+    emissiveIntensity: 0.9,
+    hat: 'pumpkinStem',
+    accessory: 'spookyGlow'
   }
 };
 

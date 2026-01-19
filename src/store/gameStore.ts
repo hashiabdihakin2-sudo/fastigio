@@ -9,26 +9,38 @@ interface HighScore {
 }
 
 const SKIN_PRICES = {
+  // Klassiska
   classic: 0,
   fire: 800,
   ice: 800,
   rainbow: 1500,
   golden: 2500,
+  // Karaktärer
   ninja: 3500,
   robot: 4500,
   pirate: 5500,
   wizard: 6500,
+  superhero: 10000,
+  samurai: 7000,
+  knight: 12000,
+  // Monster & Fantasy
   dragon: 8000,
   alien: 9000,
-  superhero: 10000,
   vampire: 11000,
-  knight: 12000,
   zombie: 800,
   ghost: 1000,
-  samurai: 7000,
   mummy: 6000,
-  cyber: 9500,
   phoenix: 15000,
+  cyber: 9500,
+  // Sport
+  football: 2000,
+  soccer: 2500,
+  basketball: 2200,
+  tennis: 1800,
+  baseball: 2100,
+  golf: 2300,
+  hockey: 2400,
+  // Högtider
   christmas: 1200,
   santa: 3500,
   snowman: 2000,
@@ -36,21 +48,20 @@ const SKIN_PRICES = {
   easter: 1200,
   bunny: 2500,
   egg: 1500,
-  football: 2000,
-  soccer: 2500,
-  basketball: 2200,
-  tennis: 1800,
-  baseball: 2100,
-  // New Year 2026 Premium Skins
+  pumpkin: 1800,
+  // Premium Nyår 2026
   newyear2026: 25000,
   firework: 30000,
   champagne: 35000,
   diamond: 50000,
   galaxy: 75000,
+  aurora: 40000,
+  midnight: 45000,
+  confetti: 28000,
 } as const;
 
 
-type SkinType = 'classic' | 'fire' | 'ice' | 'rainbow' | 'golden' | 'ninja' | 'robot' | 'pirate' | 'wizard' | 'dragon' | 'alien' | 'superhero' | 'vampire' | 'knight' | 'zombie' | 'ghost' | 'samurai' | 'mummy' | 'cyber' | 'phoenix' | 'christmas' | 'santa' | 'snowman' | 'gingerbread' | 'easter' | 'bunny' | 'egg' | 'football' | 'soccer' | 'basketball' | 'tennis' | 'baseball' | 'newyear2026' | 'firework' | 'champagne' | 'diamond' | 'galaxy';
+type SkinType = keyof typeof SKIN_PRICES;
 
 interface GameState {
   gameState: 'waiting' | 'playing' | 'gameOver';
@@ -114,11 +125,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     localStorage.setItem('playerName', name);
   },
 
-  getSkinPrice: (skin) => SKIN_PRICES[skin],
+  getSkinPrice: (skin) => SKIN_PRICES[skin] ?? 1000,
 
   unlockSkin: (skin) => {
     const { coins, unlockedSkins } = get();
-    const price = SKIN_PRICES[skin];
+    const price = SKIN_PRICES[skin] ?? 1000;
     
     if (unlockedSkins.includes(skin)) return true;
     if (coins < price) return false;
