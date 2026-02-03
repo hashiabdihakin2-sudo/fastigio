@@ -8,85 +8,62 @@ interface HomeScreenProps {
   onStartGame: () => void;
 }
 
-// Kategoriserade skins
-const SKIN_CATEGORIES = [
-  {
-    name: 'Klassiska',
-    skins: [
-      { id: 'classic' as const, name: 'BENO', color: '#00BFFF', emoji: '⚪' },
-      { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥' },
-      { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️' },
-      { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈' },
-      { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑' },
-    ]
-  },
-  {
-    name: 'Karaktärer',
-    skins: [
-      { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷' },
-      { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
-      { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️' },
-      { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙' },
-      { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸' },
-      { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '🗾' },
-      { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️' },
-    ]
-  },
-  {
-    name: 'Monster & Fantasy',
-    skins: [
-      { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉' },
-      { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽' },
-      { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛' },
-      { id: 'zombie' as const, name: 'Zombie', color: '#556B2F', emoji: '🧟' },
-      { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻' },
-      { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺' },
-      { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥' },
-      { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖' },
-    ]
-  },
-  {
-    name: 'Sport',
-    skins: [
-      { id: 'football' as const, name: 'Fotboll', color: '#8B4513', emoji: '🏈' },
-      { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽' },
-      { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀' },
-      { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾' },
-      { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾' },
-      { id: 'golf' as const, name: 'Golf', color: '#228B22', emoji: '⛳' },
-      { id: 'hockey' as const, name: 'Hockey', color: '#1E90FF', emoji: '🏒' },
-    ]
-  },
-  {
-    name: 'Högtider',
-    skins: [
-      { id: 'christmas' as const, name: 'Jul', color: '#C41E3A', emoji: '🎄' },
-      { id: 'santa' as const, name: 'Tomte', color: '#DC143C', emoji: '🎅' },
-      { id: 'snowman' as const, name: 'Snögubbe', color: '#FFFFFF', emoji: '⛄' },
-      { id: 'gingerbread' as const, name: 'Peppar', color: '#8B4513', emoji: '🍪' },
-      { id: 'easter' as const, name: 'Påsk', color: '#FF69B4', emoji: '🌸' },
-      { id: 'bunny' as const, name: 'Påskhare', color: '#FFB6C1', emoji: '🐰' },
-      { id: 'egg' as const, name: 'Påskägg', color: '#FFEB3B', emoji: '🥚' },
-      { id: 'pumpkin' as const, name: 'Pumpa', color: '#FF6600', emoji: '🎃' },
-    ]
-  },
-  {
-    name: '✨ Premium Nyår 2026 ✨',
-    skins: [
-      { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆' },
-      { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇' },
-      { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾' },
-      { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎' },
-      { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌' },
-      { id: 'aurora' as const, name: 'Aurora', color: '#00FF7F', emoji: '🌈' },
-      { id: 'midnight' as const, name: 'Midnatt', color: '#191970', emoji: '🌙' },
-      { id: 'confetti' as const, name: 'Konfetti', color: '#FF69B4', emoji: '🎊' },
-    ]
-  },
+// Alla skins sorterade efter pris (billigast först)
+const ALL_SKINS = [
+  // Gratis & billiga (0-1500)
+  { id: 'classic' as const, name: 'BENO', color: '#00BFFF', emoji: '⚪', price: 0 },
+  { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥', price: 800 },
+  { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️', price: 800 },
+  { id: 'zombie' as const, name: 'Zombie', color: '#556B2F', emoji: '🧟', price: 800 },
+  { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻', price: 1000 },
+  { id: 'christmas' as const, name: 'Jul', color: '#C41E3A', emoji: '🎄', price: 1200 },
+  { id: 'easter' as const, name: 'Påsk', color: '#FF69B4', emoji: '🌸', price: 1200 },
+  { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈', price: 1500 },
+  { id: 'gingerbread' as const, name: 'Peppar', color: '#8B4513', emoji: '🍪', price: 1500 },
+  { id: 'egg' as const, name: 'Påskägg', color: '#FFEB3B', emoji: '🥚', price: 1500 },
+  
+  // Medium (1800-3500)
+  { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾', price: 1800 },
+  { id: 'pumpkin' as const, name: 'Pumpa', color: '#FF6600', emoji: '🎃', price: 1800 },
+  { id: 'football' as const, name: 'Fotboll', color: '#8B4513', emoji: '🏈', price: 2000 },
+  { id: 'snowman' as const, name: 'Snögubbe', color: '#FFFFFF', emoji: '⛄', price: 2000 },
+  { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾', price: 2100 },
+  { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀', price: 2200 },
+  { id: 'golf' as const, name: 'Golf', color: '#228B22', emoji: '⛳', price: 2300 },
+  { id: 'hockey' as const, name: 'Hockey', color: '#1E90FF', emoji: '🏒', price: 2400 },
+  { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑', price: 2500 },
+  { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽', price: 2500 },
+  { id: 'bunny' as const, name: 'Påskhare', color: '#FFB6C1', emoji: '🐰', price: 2500 },
+  { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 3500 },
+  { id: 'santa' as const, name: 'Tomte', color: '#DC143C', emoji: '🎅', price: 3500 },
+  
+  // Dyra (4500-12000)
+  { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 4500 },
+  { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️', price: 5500 },
+  { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺', price: 6000 },
+  { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙', price: 6500 },
+  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '🗾', price: 7000 },
+  { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉', price: 8000 },
+  { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽', price: 9000 },
+  { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖', price: 9500 },
+  { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸', price: 10000 },
+  { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛', price: 11000 },
+  { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️', price: 12000 },
+  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥', price: 15000 },
+  
+  // Premium Nyår 2026 (25000+)
+  { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆', price: 25000 },
+  { id: 'confetti' as const, name: 'Konfetti', color: '#FF69B4', emoji: '🎊', price: 28000 },
+  { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇', price: 30000 },
+  { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾', price: 35000 },
+  { id: 'aurora' as const, name: 'Aurora', color: '#00FF7F', emoji: '🌈', price: 40000 },
+  { id: 'midnight' as const, name: 'Midnatt', color: '#191970', emoji: '🌙', price: 45000 },
+  { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎', price: 50000 },
+  { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌', price: 75000 },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
-  const { selectedSkin, setSelectedSkin, coins, unlockedSkins, unlockSkin, getSkinPrice, playerName, setPlayerName } = useGameStore();
+  const { selectedSkin, setSelectedSkin, coins, unlockedSkins, unlockSkin, playerName, setPlayerName, getSkinPrice } = useGameStore();
   const [isMobile, setIsMobile] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
   const [tempName, setTempName] = useState(playerName);
@@ -149,60 +126,51 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         )}
 
-        {/* Skin Selection - Kategoriserat */}
+        {/* Skin Selection - Sorterat efter pris */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold text-foreground">Välj ditt utseende</h2>
           
-          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin">
-            {SKIN_CATEGORIES.map((category) => (
-              <div key={category.name} className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground text-left border-b border-border/50 pb-1">
-                  {category.name}
-                </h3>
-                <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-2">
-                  {category.skins.map((skin) => {
-                    const isUnlocked = unlockedSkins.includes(skin.id);
-                    const isSelected = selectedSkin === skin.id;
-                    const price = getSkinPrice(skin.id);
+          <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[350px] overflow-y-auto pr-2 scrollbar-thin">
+            {ALL_SKINS.map((skin) => {
+              const isUnlocked = unlockedSkins.includes(skin.id);
+              const isSelected = selectedSkin === skin.id;
+              const price = skin.price;
 
-                    return (
-                      <button
-                        key={skin.id}
-                        onClick={() => handleSkinSelect(skin.id)}
-                        disabled={!isUnlocked && coins < price}
-                        className={`
-                          relative p-2 sm:p-3 rounded-lg border-2 transition-all duration-200
-                          ${isSelected 
-                            ? 'border-primary shadow-lg scale-105 ring-2 ring-primary/50' 
-                            : isUnlocked
-                            ? 'border-border hover:border-primary/50 hover:scale-102'
-                            : 'border-muted opacity-60 hover:opacity-80'
-                          }
-                          ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
-                        `}
-                        style={{ backgroundColor: `${skin.color}15` }}
-                      >
-                        <div className="text-2xl sm:text-3xl mb-0.5">{skin.emoji}</div>
-                        <div className="text-[10px] sm:text-xs font-medium text-foreground truncate">{skin.name}</div>
-                        
-                        {!isUnlocked && (
-                          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5">
-                            <Coins className="w-2.5 h-2.5" />
-                            {price >= 1000 ? `${(price/1000).toFixed(0)}k` : price}
-                          </div>
-                        )}
-                        
-                        {isSelected && (
-                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                            <span className="text-[10px]">✓</span>
-                          </div>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              return (
+                <button
+                  key={skin.id}
+                  onClick={() => handleSkinSelect(skin.id)}
+                  disabled={!isUnlocked && coins < price}
+                  className={`
+                    relative p-2 sm:p-3 rounded-lg border-2 transition-all duration-200
+                    ${isSelected 
+                      ? 'border-primary shadow-lg scale-105 ring-2 ring-primary/50' 
+                      : isUnlocked
+                      ? 'border-border hover:border-primary/50 hover:scale-102'
+                      : 'border-muted opacity-60 hover:opacity-80'
+                    }
+                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
+                  `}
+                  style={{ backgroundColor: `${skin.color}15` }}
+                >
+                  <div className="text-2xl sm:text-3xl mb-0.5">{skin.emoji}</div>
+                  <div className="text-[10px] sm:text-xs font-medium text-foreground truncate">{skin.name}</div>
+                  
+                  {!isUnlocked && (
+                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5">
+                      <Coins className="w-2.5 h-2.5" />
+                      {price >= 1000 ? `${(price/1000).toFixed(0)}k` : price}
+                    </div>
+                  )}
+                  
+                  {isSelected && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                      <span className="text-[10px]">✓</span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
