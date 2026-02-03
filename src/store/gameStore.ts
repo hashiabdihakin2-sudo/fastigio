@@ -41,23 +41,16 @@ const SKIN_PRICES = {
   golf: 2300,
   hockey: 2400,
   // Högtider
-  christmas: 1200,
-  santa: 3500,
   snowman: 2000,
-  gingerbread: 1500,
-  easter: 1200,
-  bunny: 2500,
-  egg: 1500,
   pumpkin: 1800,
-  // Premium Nyår 2026
-  newyear2026: 25000,
-  firework: 30000,
-  champagne: 35000,
-  diamond: 50000,
-  galaxy: 75000,
-  aurora: 40000,
-  midnight: 45000,
-  confetti: 28000,
+  // Black History Month Premium
+  unity: 20000,
+  crown: 25000,
+  kente: 30000,
+  sankofa: 35000,
+  adinkra: 40000,
+  ankh: 50000,
+  legend: 75000,
 } as const;
 
 
