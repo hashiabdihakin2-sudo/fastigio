@@ -25,24 +25,23 @@ const SKINS = [
   { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺' },
   { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖' },
   { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥' },
-  { id: 'christmas' as const, name: 'Jul', color: '#C41E3A', emoji: '🎄' },
-  { id: 'santa' as const, name: 'Tomte', color: '#DC143C', emoji: '🎅' },
   { id: 'snowman' as const, name: 'Snögubbe', color: '#FFFFFF', emoji: '⛄' },
-  { id: 'gingerbread' as const, name: 'Peppar', color: '#8B4513', emoji: '🍪' },
-  { id: 'easter' as const, name: 'Påsk', color: '#FF69B4', emoji: '🌸' },
-  { id: 'bunny' as const, name: 'Påskhare', color: '#FFB6C1', emoji: '🐰' },
-  { id: 'egg' as const, name: 'Påskägg', color: '#FFEB3B', emoji: '🥚' },
+  { id: 'pumpkin' as const, name: 'Pumpa', color: '#FF6600', emoji: '🎃' },
   { id: 'football' as const, name: 'Fotboll', color: '#8B4513', emoji: '🏈' },
   { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽' },
   { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀' },
   { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾' },
   { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾' },
-  // New Year 2026 Premium Skins
-  { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆' },
-  { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇' },
-  { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾' },
-  { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎' },
-  { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌' },
+  { id: 'golf' as const, name: 'Golf', color: '#228B22', emoji: '⛳' },
+  { id: 'hockey' as const, name: 'Hockey', color: '#1E90FF', emoji: '🏒' },
+  // Black History Month Premium Skins
+  { id: 'unity' as const, name: 'Unity', color: '#DC143C', emoji: '✊' },
+  { id: 'crown' as const, name: 'Crown', color: '#FFD700', emoji: '👑' },
+  { id: 'kente' as const, name: 'Kente', color: '#228B22', emoji: '🟢' },
+  { id: 'sankofa' as const, name: 'Sankofa', color: '#8B4513', emoji: '🔄' },
+  { id: 'adinkra' as const, name: 'Adinkra', color: '#1a1a1a', emoji: '⬛' },
+  { id: 'ankh' as const, name: 'Ankh', color: '#FFD700', emoji: '☥' },
+  { id: 'legend' as const, name: 'Legend', color: '#9400D3', emoji: '🌟' },
 ];
 
 export type SkinId = typeof SKINS[number]['id'];
@@ -142,8 +141,8 @@ export const LocalMultiplayerLobby = ({ onStartGame, onBack }: LocalMultiplayerL
           <ArrowLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Tillbaka</span>
         </Button>
-        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text">
-          🎆 1v1 Nyår 2026 🎆
+        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-red-500 via-green-500 to-yellow-500 bg-clip-text">
+          ✊ 1v1 Black History ✊
         </h1>
         <div className="flex items-center gap-1 text-accent">
           <Coins className="w-4 h-4" />

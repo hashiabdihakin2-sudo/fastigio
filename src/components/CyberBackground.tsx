@@ -8,16 +8,14 @@ interface CyberBackgroundProps {
 
 export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
   const timeRef = useRef(0);
-  const particlesRef = useRef<any[]>([]);
 
   useFrame((state, delta) => {
     timeRef.current += delta;
   });
 
-  // Generate background elements
   const backgroundElements = [];
   
-  // Distant city skyline
+  // Neon city skyline with blue/purple theme
   for (let i = 0; i < 20; i++) {
     const x = (i - 10) * 15;
     const height = 20 + Math.random() * 30;
@@ -27,21 +25,22 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       <mesh key={`building-${i}`} position={[x, height / 2, z]}>
         <boxGeometry args={[8, height, 8]} />
         <meshBasicMaterial 
-          color="#001122"
+          color="#001030"
           transparent
-          opacity={0.3}
+          opacity={0.4}
         />
       </mesh>
     );
     
-    // Building lights
+    // Neon window lights - blue, cyan, magenta
     for (let j = 0; j < 5; j++) {
       const lightY = 5 + j * (height / 6);
+      const colors = ['#00BFFF', '#FF1493', '#00FF80', '#9400D3'];
       backgroundElements.push(
         <mesh key={`light-${i}-${j}`} position={[x, lightY, z + 4]}>
           <boxGeometry args={[1, 1, 0.1]} />
           <meshBasicMaterial 
-            color={Math.random() > 0.7 ? "#00FFFF" : "#FF0080"}
+            color={colors[(i + j) % colors.length]}
             transparent
             opacity={0.8 + Math.sin(timeRef.current * 2 + i + j) * 0.2}
           />
@@ -50,12 +49,13 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     }
   }
   
-  // Floating data streams
+  // Floating neon data streams
   for (let i = 0; i < 30; i++) {
     const x = (Math.random() - 0.5) * 100;
     const y = 10 + Math.random() * 20;
     const z = ballPosition.z + 50 + Math.random() * 150;
     const speed = 0.5 + Math.random() * 1;
+    const colors = ['#00BFFF', '#FF1493', '#00FF80'];
     
     backgroundElements.push(
       <mesh 
@@ -68,7 +68,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       >
         <boxGeometry args={[0.1, 0.1, 2]} />
         <meshBasicMaterial 
-          color="#00FF00"
+          color={colors[i % colors.length]}
           transparent
           opacity={0.6 + Math.sin(timeRef.current * 3 + i) * 0.3}
         />
@@ -76,12 +76,13 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     );
   }
   
-  // Holographic rings
+  // Holographic rings - neon colors
   for (let i = 0; i < 10; i++) {
     const x = (Math.random() - 0.5) * 80;
     const y = 15 + Math.random() * 10;
     const z = ballPosition.z + 100 + i * 30;
     const scale = 1 + Math.sin(timeRef.current * 2 + i) * 0.3;
+    const colors = ['#00BFFF', '#FF1493', '#00FF80', '#9400D3'];
     
     backgroundElements.push(
       <mesh 
@@ -92,16 +93,16 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       >
         <ringGeometry args={[3, 3.2, 32]} />
         <meshBasicMaterial 
-          color="#FF6B00"
+          color={colors[i % colors.length]}
           transparent
-          opacity={0.4}
+          opacity={0.5}
           side={2}
         />
       </mesh>
     );
   }
   
-  // Energy bolts
+  // Energy bolts - cyan
   for (let i = 0; i < 15; i++) {
     const x = (Math.random() - 0.5) * 60;
     const y = 20 + Math.random() * 15;
@@ -113,7 +114,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
         <mesh key={`bolt-${i}`} position={[x, y, z]}>
           <boxGeometry args={[0.2, 10, 0.2]} />
           <meshBasicMaterial 
-            color="#FFFFFF"
+            color="#00BFFF"
             transparent
             opacity={intensity}
           />
@@ -126,13 +127,13 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     <group>
       {backgroundElements}
       
-      {/* Animated fog/atmosphere */}
+      {/* Deep blue atmosphere */}
       <mesh position={[0, 0, ballPosition.z + 200]} scale={[200, 100, 200]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshBasicMaterial 
-          color="#000044"
+          color="#000830"
           transparent
-          opacity={0.1}
+          opacity={0.15}
         />
       </mesh>
     </group>

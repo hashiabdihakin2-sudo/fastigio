@@ -16,11 +16,7 @@ const ALL_SKINS = [
   { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️', price: 800 },
   { id: 'zombie' as const, name: 'Zombie', color: '#556B2F', emoji: '🧟', price: 800 },
   { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻', price: 1000 },
-  { id: 'christmas' as const, name: 'Jul', color: '#C41E3A', emoji: '🎄', price: 1200 },
-  { id: 'easter' as const, name: 'Påsk', color: '#FF69B4', emoji: '🌸', price: 1200 },
   { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈', price: 1500 },
-  { id: 'gingerbread' as const, name: 'Peppar', color: '#8B4513', emoji: '🍪', price: 1500 },
-  { id: 'egg' as const, name: 'Påskägg', color: '#FFEB3B', emoji: '🥚', price: 1500 },
   
   // Medium (1800-3500)
   { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾', price: 1800 },
@@ -33,9 +29,7 @@ const ALL_SKINS = [
   { id: 'hockey' as const, name: 'Hockey', color: '#1E90FF', emoji: '🏒', price: 2400 },
   { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑', price: 2500 },
   { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽', price: 2500 },
-  { id: 'bunny' as const, name: 'Påskhare', color: '#FFB6C1', emoji: '🐰', price: 2500 },
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 3500 },
-  { id: 'santa' as const, name: 'Tomte', color: '#DC143C', emoji: '🎅', price: 3500 },
   
   // Dyra (4500-12000)
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 4500 },
@@ -51,15 +45,14 @@ const ALL_SKINS = [
   { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️', price: 12000 },
   { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥', price: 15000 },
   
-  // Premium Nyår 2026 (25000+)
-  { id: 'newyear2026' as const, name: '2026', color: '#FFD700', emoji: '🎆', price: 25000 },
-  { id: 'confetti' as const, name: 'Konfetti', color: '#FF69B4', emoji: '🎊', price: 28000 },
-  { id: 'firework' as const, name: 'Fyrverkeri', color: '#FF1493', emoji: '🎇', price: 30000 },
-  { id: 'champagne' as const, name: 'Champagne', color: '#F7E7CE', emoji: '🍾', price: 35000 },
-  { id: 'aurora' as const, name: 'Aurora', color: '#00FF7F', emoji: '🌈', price: 40000 },
-  { id: 'midnight' as const, name: 'Midnatt', color: '#191970', emoji: '🌙', price: 45000 },
-  { id: 'diamond' as const, name: 'Diamant', color: '#B9F2FF', emoji: '💎', price: 50000 },
-  { id: 'galaxy' as const, name: 'Galax', color: '#9400D3', emoji: '🌌', price: 75000 },
+  // ✊ Black History Month Premium ✊
+  { id: 'unity' as const, name: 'Unity', color: '#DC143C', emoji: '✊', price: 20000 },
+  { id: 'crown' as const, name: 'Crown', color: '#FFD700', emoji: '👑', price: 25000 },
+  { id: 'kente' as const, name: 'Kente', color: '#228B22', emoji: '🟢', price: 30000 },
+  { id: 'sankofa' as const, name: 'Sankofa', color: '#8B4513', emoji: '🔄', price: 35000 },
+  { id: 'adinkra' as const, name: 'Adinkra', color: '#1a1a1a', emoji: '⬛', price: 40000 },
+  { id: 'ankh' as const, name: 'Ankh', color: '#FFD700', emoji: '☥', price: 50000 },
+  { id: 'legend' as const, name: 'Legend', color: '#9400D3', emoji: '🌟', price: 75000 },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
@@ -104,11 +97,11 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
       <div className="text-center space-y-6 p-6 max-w-4xl w-full my-8">
         {/* Logo */}
         <div className="space-y-3">
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text">
-            🎆 Nyår 2026 🎆
+          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-red-500 via-green-500 to-yellow-500 bg-clip-text">
+            ✊ Black History Month ✊
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground">
-            Rulla in i det nya året - undvik hinder och samla poäng!
+            Celebrating excellence - Undvik hinder och samla poäng!
           </p>
           <div className="flex items-center justify-center gap-2 text-accent">
             <Coins className="w-5 h-5" />
