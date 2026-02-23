@@ -9,48 +9,30 @@ interface HighScore {
 }
 
 const SKIN_PRICES = {
-  // Klassiska
+  // Standard
   classic: 0,
   fire: 800,
   ice: 800,
+  ghost: 1000,
   rainbow: 1500,
   golden: 2500,
-  // Karaktärer
   ninja: 3500,
   robot: 4500,
-  pirate: 5500,
-  wizard: 6500,
-  superhero: 10000,
-  samurai: 7000,
-  knight: 12000,
-  // Monster & Fantasy
-  dragon: 8000,
-  alien: 9000,
-  vampire: 11000,
-  zombie: 800,
-  ghost: 1000,
-  mummy: 6000,
-  phoenix: 15000,
-  cyber: 9500,
-  // Sport
-  football: 2000,
-  soccer: 2500,
-  basketball: 2200,
-  tennis: 1800,
-  baseball: 2100,
-  golf: 2300,
-  hockey: 2400,
-  // Högtider
-  snowman: 2000,
-  pumpkin: 1800,
-  // Black History Month Premium
-  unity: 20000,
-  crown: 25000,
-  kente: 30000,
-  sankofa: 35000,
-  adinkra: 40000,
-  ankh: 50000,
-  legend: 75000,
+  // Historical Figures - Black History Month
+  harriet: 2000,
+  rosa: 3000,
+  mlk: 4000,
+  malcolm: 5000,
+  lincoln: 5500,
+  obama: 6000,
+  mandela: 7000,
+  douglass: 8000,
+  truth: 9000,
+  ali: 10000,
+  jackie: 12000,
+  maya: 15000,
+  jfk: 18000,
+  tubman_legend: 25000,
 } as const;
 
 
@@ -70,7 +52,6 @@ interface GameState {
   selectedSkin: SkinType;
   playerName: string;
   
-  // Actions
   setBallPosition: (position: Vector3) => void;
   nextSection: () => void;
   setIsJumping: (jumping: boolean) => void;
@@ -98,12 +79,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   playerName: localStorage.getItem('playerName') || '',
 
   setBallPosition: (position) => set({ ballPosition: position }),
-
   setIsJumping: (jumping) => set({ isJumping: jumping }),
 
   updateScore: (score) => {
     const { coins } = get();
-    const newCoins = Math.floor(score / 10); // Från poäng
+    const newCoins = Math.floor(score / 10);
     if (newCoins > coins) {
       set({ coins: newCoins });
       localStorage.setItem('coins', newCoins.toString());
@@ -151,7 +131,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { score, highScore, highScores, selectedSkin, playerName } = get();
     const newHighScore = Math.max(score, highScore);
     
-    // Lägg till i högpoänglistan
     const newHighScores = [...highScores, {
       score,
       date: new Date().toLocaleDateString('sv-SE'),

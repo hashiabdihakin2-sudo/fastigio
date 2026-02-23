@@ -8,51 +8,32 @@ interface HomeScreenProps {
   onStartGame: () => void;
 }
 
-// Alla skins sorterade efter pris (billigast först)
 const ALL_SKINS = [
-  // Gratis & billiga (0-1500)
-  { id: 'classic' as const, name: 'BENO', color: '#00BFFF', emoji: '⚪', price: 0 },
+  // Standard skins
+  { id: 'classic' as const, name: 'BENO', color: '#808080', emoji: '⚪', price: 0 },
   { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥', price: 800 },
   { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️', price: 800 },
-  { id: 'zombie' as const, name: 'Zombie', color: '#556B2F', emoji: '🧟', price: 800 },
   { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻', price: 1000 },
   { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈', price: 1500 },
-  
-  // Medium (1800-3500)
-  { id: 'tennis' as const, name: 'Tennis', color: '#FFFF00', emoji: '🎾', price: 1800 },
-  { id: 'pumpkin' as const, name: 'Pumpa', color: '#FF6600', emoji: '🎃', price: 1800 },
-  { id: 'football' as const, name: 'Fotboll', color: '#8B4513', emoji: '🏈', price: 2000 },
-  { id: 'snowman' as const, name: 'Snögubbe', color: '#FFFFFF', emoji: '⛄', price: 2000 },
-  { id: 'baseball' as const, name: 'Baseball', color: '#FFFFFF', emoji: '⚾', price: 2100 },
-  { id: 'basketball' as const, name: 'Basket', color: '#FF8C00', emoji: '🏀', price: 2200 },
-  { id: 'golf' as const, name: 'Golf', color: '#228B22', emoji: '⛳', price: 2300 },
-  { id: 'hockey' as const, name: 'Hockey', color: '#1E90FF', emoji: '🏒', price: 2400 },
   { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑', price: 2500 },
-  { id: 'soccer' as const, name: 'Soccer', color: '#FFFFFF', emoji: '⚽', price: 2500 },
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 3500 },
-  
-  // Dyra (4500-12000)
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 4500 },
-  { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️', price: 5500 },
-  { id: 'mummy' as const, name: 'Mummy', color: '#DEB887', emoji: '🏺', price: 6000 },
-  { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙', price: 6500 },
-  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '🗾', price: 7000 },
-  { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉', price: 8000 },
-  { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽', price: 9000 },
-  { id: 'cyber' as const, name: 'Cyber', color: '#00FFFF', emoji: '🤖', price: 9500 },
-  { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸', price: 10000 },
-  { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛', price: 11000 },
-  { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️', price: 12000 },
-  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF8C00', emoji: '🔥', price: 15000 },
-  
-  // ✊ Black History Month Premium ✊
-  { id: 'unity' as const, name: 'Unity', color: '#DC143C', emoji: '✊', price: 20000 },
-  { id: 'crown' as const, name: 'Crown', color: '#FFD700', emoji: '👑', price: 25000 },
-  { id: 'kente' as const, name: 'Kente', color: '#228B22', emoji: '🟢', price: 30000 },
-  { id: 'sankofa' as const, name: 'Sankofa', color: '#8B4513', emoji: '🔄', price: 35000 },
-  { id: 'adinkra' as const, name: 'Adinkra', color: '#1a1a1a', emoji: '⬛', price: 40000 },
-  { id: 'ankh' as const, name: 'Ankh', color: '#FFD700', emoji: '☥', price: 50000 },
-  { id: 'legend' as const, name: 'Legend', color: '#9400D3', emoji: '🌟', price: 75000 },
+
+  // ✊ Historical Figures - Black History Month ✊
+  { id: 'harriet' as const, name: 'Harriet Tubman', color: '#8B6914', emoji: '🌟', price: 2000, desc: 'Underground Railroad' },
+  { id: 'rosa' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌', price: 3000, desc: 'Civil Rights Icon' },
+  { id: 'mlk' as const, name: 'MLK Jr.', color: '#2C2C2C', emoji: '✊', price: 4000, desc: 'I Have a Dream' },
+  { id: 'malcolm' as const, name: 'Malcolm X', color: '#1a1a1a', emoji: '🕶️', price: 5000, desc: 'By Any Means' },
+  { id: 'lincoln' as const, name: 'Abe Lincoln', color: '#3C3C3C', emoji: '🎩', price: 5500, desc: 'Emancipation' },
+  { id: 'obama' as const, name: 'Obama', color: '#1E3A5F', emoji: '🇺🇸', price: 6000, desc: '44th President' },
+  { id: 'mandela' as const, name: 'Mandela', color: '#228B22', emoji: '✌️', price: 7000, desc: 'Freedom Fighter' },
+  { id: 'douglass' as const, name: 'F. Douglass', color: '#4a3728', emoji: '📜', price: 8000, desc: 'Abolitionist' },
+  { id: 'truth' as const, name: 'S. Truth', color: '#8B7355', emoji: '💪', price: 9000, desc: "Ain't I a Woman" },
+  { id: 'ali' as const, name: 'Muhammad Ali', color: '#CC0000', emoji: '🥊', price: 10000, desc: 'The Greatest' },
+  { id: 'jackie' as const, name: 'J. Robinson', color: '#003DA5', emoji: '⚾', price: 12000, desc: 'Breaking Barriers' },
+  { id: 'maya' as const, name: 'Maya Angelou', color: '#6B3FA0', emoji: '📖', price: 15000, desc: 'Phenomenal Woman' },
+  { id: 'jfk' as const, name: 'JFK', color: '#1C3A5F', emoji: '🏛️', price: 18000, desc: 'New Frontier' },
+  { id: 'tubman_legend' as const, name: 'Tubman ★', color: '#FFD700', emoji: '⭐', price: 25000, desc: 'Legendary Edition' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
@@ -67,12 +48,10 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
       setIsMobile(mobile);
       setIsLandscape(window.innerWidth > window.innerHeight);
     };
-    
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
     return () => window.removeEventListener('resize', checkOrientation);
   }, []);
-
 
   const handleSkinSelect = (skinId: string) => {
     if (unlockedSkins.includes(skinId as any)) {
@@ -92,16 +71,19 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
     onStartGame();
   };
 
+  const standardSkins = ALL_SKINS.filter(s => !('desc' in s));
+  const historicalSkins = ALL_SKINS.filter(s => 'desc' in s);
+
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex items-center justify-center z-10 overflow-y-auto">
+    <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/5 flex items-center justify-center z-10 overflow-y-auto">
       <div className="text-center space-y-6 p-6 max-w-4xl w-full my-8">
         {/* Logo */}
         <div className="space-y-3">
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-red-500 via-green-500 to-yellow-500 bg-clip-text">
+          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text">
             ✊ Black History Month ✊
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground">
-            Celebrating excellence - Undvik hinder och samla poäng!
+          <p className="text-lg md:text-xl text-muted-foreground italic">
+            Honoring those who changed the world
           </p>
           <div className="flex items-center justify-center gap-2 text-accent">
             <Coins className="w-5 h-5" />
@@ -109,7 +91,6 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         </div>
 
-        {/* Mobile Orientation Warning */}
         {isMobile && !isLandscape && (
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex items-center gap-3">
             <Smartphone className="w-6 h-6 text-primary rotate-90" />
@@ -119,16 +100,14 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         )}
 
-        {/* Skin Selection - Sorterat efter pris */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">Välj ditt utseende</h2>
-          
-          <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-2 max-h-[350px] overflow-y-auto pr-2 scrollbar-thin">
-            {ALL_SKINS.map((skin) => {
+        {/* Standard Skins */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">Standard</h2>
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+            {standardSkins.map((skin) => {
               const isUnlocked = unlockedSkins.includes(skin.id);
               const isSelected = selectedSkin === skin.id;
               const price = skin.price;
-
               return (
                 <button
                   key={skin.id}
@@ -148,14 +127,59 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
                 >
                   <div className="text-2xl sm:text-3xl mb-0.5">{skin.emoji}</div>
                   <div className="text-[10px] sm:text-xs font-medium text-foreground truncate">{skin.name}</div>
-                  
                   {!isUnlocked && (
                     <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5">
                       <Coins className="w-2.5 h-2.5" />
                       {price >= 1000 ? `${(price/1000).toFixed(0)}k` : price}
                     </div>
                   )}
-                  
+                  {isSelected && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                      <span className="text-[10px]">✓</span>
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Historical Figures */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold text-foreground">✊ Historical Icons</h2>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2 max-h-[300px] overflow-y-auto pr-2">
+            {historicalSkins.map((skin) => {
+              const isUnlocked = unlockedSkins.includes(skin.id);
+              const isSelected = selectedSkin === skin.id;
+              const price = skin.price;
+              return (
+                <button
+                  key={skin.id}
+                  onClick={() => handleSkinSelect(skin.id)}
+                  disabled={!isUnlocked && coins < price}
+                  className={`
+                    relative p-2 sm:p-3 rounded-lg border-2 transition-all duration-200
+                    ${isSelected 
+                      ? 'border-primary shadow-lg scale-105 ring-2 ring-primary/50' 
+                      : isUnlocked
+                      ? 'border-border hover:border-primary/50 hover:scale-102'
+                      : 'border-muted opacity-60 hover:opacity-80'
+                    }
+                    ${!isUnlocked && coins < price ? 'cursor-not-allowed' : 'cursor-pointer'}
+                  `}
+                  style={{ backgroundColor: `${skin.color}15` }}
+                >
+                  <div className="text-2xl sm:text-3xl mb-0.5">{skin.emoji}</div>
+                  <div className="text-[10px] sm:text-xs font-medium text-foreground truncate">{skin.name}</div>
+                  {'desc' in skin && (
+                    <div className="text-[8px] text-muted-foreground truncate">{(skin as any).desc}</div>
+                  )}
+                  {!isUnlocked && (
+                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full font-bold flex items-center gap-0.5">
+                      <Coins className="w-2.5 h-2.5" />
+                      {price >= 1000 ? `${(price/1000).toFixed(0)}k` : price}
+                    </div>
+                  )}
                   {isSelected && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
                       <span className="text-[10px]">✓</span>
@@ -204,8 +228,6 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           {!tempName.trim() && (
             <p className="text-sm text-muted-foreground">Ange ditt namn för att börja spela</p>
           )}
-          
-          {/* Controls */}
           <div className="space-y-1 text-xs sm:text-sm text-muted-foreground">
             <p>Singel: Piltangenterna ← → | 1v1: Spelare 1: A/D, Spelare 2: ← →</p>
           </div>

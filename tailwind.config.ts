@@ -47,18 +47,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Gaming theme colors
-        neon: {
-          blue: "hsl(var(--neon-blue))",
-          purple: "hsl(var(--neon-purple))",
-          pink: "hsl(var(--neon-pink))",
+        // Theme colors
+        stone: {
+          light: "hsl(var(--stone-light))",
+          mid: "hsl(var(--stone-mid))",
+          dark: "hsl(var(--stone-dark))",
         },
-        cyber: {
-          dark: "hsl(var(--cyber-dark))",
-        },
-        game: {
-          success: "hsl(var(--game-success))",
-          danger: "hsl(var(--game-danger))",
+        warm: {
+          gold: "hsl(var(--warm-gold))",
+          bronze: "hsl(var(--warm-bronze))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
