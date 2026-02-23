@@ -2,90 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Gaming design system - Cyber/Neon theme with dark backgrounds and glowing accents
+/* Black History Month theme - Elegant greyscale with warm accents
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 220 30% 5%;
-    --foreground: 210 100% 95%;
+    --background: 0 0% 7%;
+    --foreground: 0 0% 92%;
 
-    --card: 220 25% 8%;
-    --card-foreground: 210 100% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 92%;
 
-    --popover: 220 25% 8%;
-    --popover-foreground: 210 100% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 92%;
 
-    --primary: 260 100% 70%;
-    --primary-glow: 260 100% 85%;
-    --primary-foreground: 220 30% 5%;
+    --primary: 38 80% 55%;
+    --primary-glow: 38 90% 65%;
+    --primary-foreground: 0 0% 5%;
 
-    --secondary: 200 100% 60%;
-    --secondary-foreground: 220 30% 5%;
+    --secondary: 0 0% 40%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 220 20% 15%;
-    --muted-foreground: 210 30% 70%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 280 100% 75%;
-    --accent-foreground: 220 30% 5%;
+    --accent: 38 70% 50%;
+    --accent-foreground: 0 0% 5%;
 
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 210 100% 95%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 15%;
-    --ring: 260 100% 70%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 38 80% 55%;
 
-    /* Gaming specific colors */
-    --neon-blue: 200 100% 60%;
-    --neon-purple: 280 100% 75%;
-    --neon-pink: 320 100% 70%;
-    --cyber-dark: 220 30% 8%;
-    --game-success: 120 100% 60%;
-    --game-danger: 0 100% 65%;
+    /* Theme specific */
+    --warm-gold: 38 80% 55%;
+    --warm-bronze: 25 50% 40%;
+    --stone-light: 0 0% 75%;
+    --stone-mid: 0 0% 45%;
+    --stone-dark: 0 0% 12%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
-    --gradient-neon: linear-gradient(45deg, hsl(var(--neon-blue)), hsl(var(--neon-purple)));
-    --gradient-cyber: linear-gradient(180deg, hsl(var(--cyber-dark)), hsl(var(--background)));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--warm-bronze)));
+    --gradient-stone: linear-gradient(180deg, hsl(var(--stone-dark)), hsl(var(--background)));
 
     /* Effects */
-    --glow-primary: 0 0 20px hsl(var(--primary) / 0.5);
-    --glow-secondary: 0 0 20px hsl(var(--secondary) / 0.5);
-    --glow-danger: 0 0 20px hsl(var(--game-danger) / 0.5);
-    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.4);
+    --glow-primary: 0 0 20px hsl(var(--primary) / 0.4);
+    --glow-secondary: 0 0 20px hsl(var(--secondary) / 0.3);
+    --glow-danger: 0 0 20px hsl(var(--destructive) / 0.5);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-foreground: 0 0% 26%;
+    --sidebar-primary: 0 0% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 91%;
+    --sidebar-ring: 38 80% 55%;
   }
 
   .dark {
-    /* Dark mode uses same gaming theme - we maintain consistency */
-    --background: 220 35% 3%;
-    --foreground: 210 100% 98%;
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
     
-    --primary: 260 100% 75%;
-    --secondary: 200 100% 65%;
-    --accent: 280 100% 80%;
+    --primary: 38 85% 60%;
+    --secondary: 0 0% 45%;
+    --accent: 38 75% 55%;
     
-    --glow-primary: 0 0 25px hsl(var(--primary) / 0.6);
-    --glow-secondary: 0 0 25px hsl(var(--secondary) / 0.6);
+    --glow-primary: 0 0 25px hsl(var(--primary) / 0.5);
+    --glow-secondary: 0 0 25px hsl(var(--secondary) / 0.4);
   }
 }
 
@@ -96,23 +86,22 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground overflow-hidden;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Georgia', 'Times New Roman', serif;
   }
 
-  /* Gaming UI animations */
   .glow-effect {
     box-shadow: var(--glow-primary);
     transition: all 0.3s ease;
   }
 
   .glow-effect:hover {
-    box-shadow: var(--glow-primary), 0 0 30px hsl(var(--primary) / 0.3);
+    box-shadow: var(--glow-primary), 0 0 30px hsl(var(--primary) / 0.2);
     transform: translateY(-1px);
   }
 
   .cyber-border {
     border: 1px solid hsl(var(--primary) / 0.3);
-    background: linear-gradient(135deg, hsl(var(--background) / 0.8), hsl(var(--cyber-dark) / 0.9));
+    background: linear-gradient(135deg, hsl(var(--background) / 0.8), hsl(var(--stone-dark) / 0.9));
     backdrop-filter: blur(10px);
   }
 }
@@ -139,19 +128,16 @@ body.pseudo-fullscreen .fullscreen-container {
   width: 100vw !important;
 }
 
-/* Ensure container fills viewport in pseudo fullscreen */
 .fullscreen-container {
   height: 100dvh;
   width: 100%;
   touch-action: manipulation;
 }
 
-/* Prevent pull-to-refresh on mobile */
 html, body {
   overscroll-behavior: none;
 }
 
-/* Better touch response for game controls */
 button {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;

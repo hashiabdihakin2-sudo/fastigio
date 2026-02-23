@@ -12,20 +12,28 @@ interface GameOverScreenProps {
 }
 
 const SKINS = [
-  { id: 'classic' as const, name: 'Classic', color: '#00BFFF', emoji: '⚪' },
+  { id: 'classic' as const, name: 'BENO', color: '#808080', emoji: '⚪' },
   { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥' },
   { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️' },
+  { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻' },
   { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈' },
   { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑' },
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷' },
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
-  { id: 'pirate' as const, name: 'Pirate', color: '#8B4513', emoji: '🏴‍☠️' },
-  { id: 'wizard' as const, name: 'Wizard', color: '#4B0082', emoji: '🧙' },
-  { id: 'dragon' as const, name: 'Dragon', color: '#DC143C', emoji: '🐉' },
-  { id: 'alien' as const, name: 'Alien', color: '#7FFF00', emoji: '👽' },
-  { id: 'superhero' as const, name: 'Hero', color: '#1E90FF', emoji: '🦸' },
-  { id: 'vampire' as const, name: 'Vampire', color: '#8B0000', emoji: '🧛' },
-  { id: 'knight' as const, name: 'Knight', color: '#708090', emoji: '⚔️' },
+  { id: 'harriet' as const, name: 'Harriet', color: '#8B6914', emoji: '🌟' },
+  { id: 'rosa' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌' },
+  { id: 'mlk' as const, name: 'MLK Jr.', color: '#2C2C2C', emoji: '✊' },
+  { id: 'malcolm' as const, name: 'Malcolm X', color: '#1a1a1a', emoji: '🕶️' },
+  { id: 'lincoln' as const, name: 'Lincoln', color: '#3C3C3C', emoji: '🎩' },
+  { id: 'obama' as const, name: 'Obama', color: '#1E3A5F', emoji: '🇺🇸' },
+  { id: 'mandela' as const, name: 'Mandela', color: '#228B22', emoji: '✌️' },
+  { id: 'douglass' as const, name: 'Douglass', color: '#4a3728', emoji: '📜' },
+  { id: 'truth' as const, name: 'S. Truth', color: '#8B7355', emoji: '💪' },
+  { id: 'ali' as const, name: 'Ali', color: '#CC0000', emoji: '🥊' },
+  { id: 'jackie' as const, name: 'Robinson', color: '#003DA5', emoji: '⚾' },
+  { id: 'maya' as const, name: 'Angelou', color: '#6B3FA0', emoji: '📖' },
+  { id: 'jfk' as const, name: 'JFK', color: '#1C3A5F', emoji: '🏛️' },
+  { id: 'tubman_legend' as const, name: 'Tubman ★', color: '#FFD700', emoji: '⭐' },
 ];
 
 export const GameOverScreen = ({ onRestart, onBackToHome }: GameOverScreenProps) => {
