@@ -22,6 +22,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          glow: "hsl(var(--primary-glow))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -48,14 +49,17 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         // Theme colors
-        stone: {
-          light: "hsl(var(--stone-light))",
-          mid: "hsl(var(--stone-mid))",
-          dark: "hsl(var(--stone-dark))",
+        violet: {
+          deep: "hsl(var(--violet-deep))",
         },
-        warm: {
-          gold: "hsl(var(--warm-gold))",
-          bronze: "hsl(var(--warm-bronze))",
+        magenta: {
+          bright: "hsl(var(--magenta-bright))",
+        },
+        rose: {
+          soft: "hsl(var(--rose-soft))",
+        },
+        gold: {
+          warm: "hsl(var(--gold-warm))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -75,20 +79,12 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
