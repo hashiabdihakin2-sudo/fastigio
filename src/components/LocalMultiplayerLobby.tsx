@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Coins, ArrowLeft } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 
@@ -13,20 +13,20 @@ const SKINS = [
   { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑' },
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷' },
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
-  { id: 'harriet' as const, name: 'Harriet', color: '#8B6914', emoji: '🌟' },
-  { id: 'rosa' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌' },
-  { id: 'mlk' as const, name: 'MLK Jr.', color: '#2C2C2C', emoji: '✊' },
-  { id: 'malcolm' as const, name: 'Malcolm X', color: '#1a1a1a', emoji: '🕶️' },
-  { id: 'lincoln' as const, name: 'Lincoln', color: '#3C3C3C', emoji: '🎩' },
-  { id: 'obama' as const, name: 'Obama', color: '#1E3A5F', emoji: '🇺🇸' },
-  { id: 'mandela' as const, name: 'Mandela', color: '#228B22', emoji: '✌️' },
-  { id: 'douglass' as const, name: 'Douglass', color: '#4a3728', emoji: '📜' },
-  { id: 'truth' as const, name: 'S. Truth', color: '#8B7355', emoji: '💪' },
-  { id: 'ali' as const, name: 'Ali', color: '#CC0000', emoji: '🥊' },
-  { id: 'jackie' as const, name: 'Robinson', color: '#003DA5', emoji: '⚾' },
-  { id: 'maya' as const, name: 'Angelou', color: '#6B3FA0', emoji: '📖' },
-  { id: 'jfk' as const, name: 'JFK', color: '#1C3A5F', emoji: '🏛️' },
-  { id: 'tubman_legend' as const, name: 'Tubman ★', color: '#FFD700', emoji: '⭐' },
+  { id: 'cleopatra' as const, name: 'Cleopatra', color: '#D4AF37', emoji: '👸' },
+  { id: 'frida' as const, name: 'Frida', color: '#CC3333', emoji: '🎨' },
+  { id: 'amelia' as const, name: 'Earhart', color: '#8B6914', emoji: '✈️' },
+  { id: 'curie' as const, name: 'Curie', color: '#4A90D9', emoji: '⚗️' },
+  { id: 'florence' as const, name: 'Nightingale', color: '#F5F5F5', emoji: '🏥' },
+  { id: 'rosa_w' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌' },
+  { id: 'harriet_w' as const, name: 'Tubman', color: '#8B6914', emoji: '🌟' },
+  { id: 'coco' as const, name: 'Chanel', color: '#1a1a1a', emoji: '💎' },
+  { id: 'malala' as const, name: 'Malala', color: '#E91E63', emoji: '📚' },
+  { id: 'joan' as const, name: 'Joan', color: '#C0C0C0', emoji: '⚔️' },
+  { id: 'queen' as const, name: 'Queen', color: '#4169E1', emoji: '👑' },
+  { id: 'wonder' as const, name: 'Wonder W.', color: '#CC0000', emoji: '⭐' },
+  { id: 'serena' as const, name: 'Serena', color: '#FF69B4', emoji: '🎾' },
+  { id: 'legend_woman' as const, name: 'Legend ★', color: '#FFD700', emoji: '💜' },
 ];
 
 export type SkinId = typeof SKINS[number]['id'];
@@ -120,14 +120,13 @@ export const LocalMultiplayerLobby = ({ onStartGame, onBack }: LocalMultiplayerL
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/10 flex flex-col z-10 overflow-y-auto">
-      {/* Header */}
       <div className="flex items-center justify-between p-2 sm:p-4 border-b border-border/50">
         <Button variant="ghost" size="sm" onClick={onBack} className="gap-1">
           <ArrowLeft className="w-4 h-4" />
           <span className="hidden sm:inline">Tillbaka</span>
         </Button>
-        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-red-500 via-green-500 to-yellow-500 bg-clip-text">
-          ✊ 1v1 Black History ✊
+        <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
+          💜 1v1 Women's Day 💜
         </h1>
         <div className="flex items-center gap-1 text-accent">
           <Coins className="w-4 h-4" />
@@ -135,84 +134,48 @@ export const LocalMultiplayerLobby = ({ onStartGame, onBack }: LocalMultiplayerL
         </div>
       </div>
 
-      {/* Main content - Two columns on larger screens, stacked on mobile */}
       <div className="flex-1 flex flex-col lg:flex-row gap-2 sm:gap-4 p-2 sm:p-4 overflow-y-auto">
-        {/* Player 1 */}
         <div className="flex-1 bg-primary/5 rounded-lg p-2 sm:p-4 border border-primary/20">
           <div className="text-center mb-2 sm:mb-4">
             <h2 className="text-base sm:text-xl font-bold text-primary">Spelare 1</h2>
             <p className="text-xs sm:text-sm text-muted-foreground">Kontroll: A och D</p>
           </div>
-          
           <div className="space-y-2 sm:space-y-4">
             <div>
               <label className="text-xs sm:text-sm font-medium text-foreground">Namn</label>
-              <Input
-                type="text"
-                placeholder="Ange namn..."
-                value={player1Name}
-                onChange={(e) => setPlayer1Name(e.target.value)}
-                maxLength={15}
-                className="text-center text-sm h-8 sm:h-10"
-              />
+              <Input type="text" placeholder="Ange namn..." value={player1Name} onChange={(e) => setPlayer1Name(e.target.value)} maxLength={15} className="text-center text-sm h-8 sm:h-10" />
             </div>
-            
             <div>
               <label className="text-xs sm:text-sm font-medium text-foreground mb-1 block">Välj skin</label>
-              <SkinSelector 
-                player={1} 
-                selectedSkin={player1Skin} 
-                onSelect={(id) => handleSkinSelect(1, id)} 
-              />
+              <SkinSelector player={1} selectedSkin={player1Skin} onSelect={(id) => handleSkinSelect(1, id)} />
             </div>
           </div>
         </div>
 
-        {/* VS Divider */}
         <div className="flex lg:flex-col items-center justify-center py-2 lg:py-0 lg:px-2">
           <div className="text-2xl sm:text-4xl font-bold text-primary/50">VS</div>
         </div>
 
-        {/* Player 2 */}
         <div className="flex-1 bg-accent/5 rounded-lg p-2 sm:p-4 border border-accent/20">
           <div className="text-center mb-2 sm:mb-4">
             <h2 className="text-base sm:text-xl font-bold text-accent">Spelare 2</h2>
             <p className="text-xs sm:text-sm text-muted-foreground">Kontroll: ← och →</p>
           </div>
-          
           <div className="space-y-2 sm:space-y-4">
             <div>
               <label className="text-xs sm:text-sm font-medium text-foreground">Namn</label>
-              <Input
-                type="text"
-                placeholder="Ange namn..."
-                value={player2Name}
-                onChange={(e) => setPlayer2Name(e.target.value)}
-                maxLength={15}
-                className="text-center text-sm h-8 sm:h-10"
-              />
+              <Input type="text" placeholder="Ange namn..." value={player2Name} onChange={(e) => setPlayer2Name(e.target.value)} maxLength={15} className="text-center text-sm h-8 sm:h-10" />
             </div>
-            
             <div>
               <label className="text-xs sm:text-sm font-medium text-foreground mb-1 block">Välj skin</label>
-              <SkinSelector 
-                player={2} 
-                selectedSkin={player2Skin} 
-                onSelect={(id) => handleSkinSelect(2, id)} 
-              />
+              <SkinSelector player={2} selectedSkin={player2Skin} onSelect={(id) => handleSkinSelect(2, id)} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Start Button */}
       <div className="p-2 sm:p-4 border-t border-border/50">
-        <Button
-          onClick={handleStart}
-          disabled={!canStart}
-          size="lg"
-          className="w-full text-base sm:text-lg py-4 sm:py-6 bg-gradient-to-r from-primary to-accent hover:from-primary-glow hover:to-accent transition-all duration-300 shadow-glow disabled:opacity-50"
-        >
+        <Button onClick={handleStart} disabled={!canStart} size="lg" className="w-full text-base sm:text-lg py-4 sm:py-6 bg-gradient-to-r from-primary to-accent hover:from-primary-glow hover:to-accent transition-all duration-300 shadow-glow disabled:opacity-50">
           Starta Spelet!
         </Button>
       </div>

@@ -18,21 +18,21 @@ const SKIN_CONFIGS: Record<string, {
   ninja: { color: '#2C2C2C', emissive: '#FF0000', emissiveIntensity: 0.5, hat: 'ninjaHeadband', accessory: 'shurikens' },
   robot: { color: '#C0C0C0', emissive: '#00FF00', emissiveIntensity: 0.9, hat: 'antenna', accessory: 'circuits' },
   
-  // Historical Figures
-  harriet: { color: '#8B6914', emissive: '#6B4F10', emissiveIntensity: 0.3, hat: 'harrietHeadwrap', accessory: 'harrietShawl' },
-  rosa: { color: '#C4A35A', emissive: '#A08030', emissiveIntensity: 0.3, hat: 'rosaHat', accessory: 'rosaCoat' },
-  mlk: { color: '#3C3C3C', emissive: '#555555', emissiveIntensity: 0.2, hat: null, accessory: 'mlkSuit' },
-  malcolm: { color: '#1a1a1a', emissive: '#333333', emissiveIntensity: 0.2, hat: 'malcolmGlasses', accessory: 'malcolmSuit' },
-  lincoln: { color: '#3C3C3C', emissive: '#555555', emissiveIntensity: 0.2, hat: 'lincolnTopHat', accessory: 'lincolnBeard' },
-  obama: { color: '#1E3A5F', emissive: '#2A4A70', emissiveIntensity: 0.3, hat: null, accessory: 'obamaSuit' },
-  mandela: { color: '#228B22', emissive: '#1A6B1A', emissiveIntensity: 0.3, hat: null, accessory: 'mandelaShirt' },
-  douglass: { color: '#4a3728', emissive: '#3a2718', emissiveIntensity: 0.2, hat: null, accessory: 'douglassHair' },
-  truth: { color: '#8B7355', emissive: '#6B5335', emissiveIntensity: 0.3, hat: 'truthBonnet', accessory: 'truthDress' },
-  ali: { color: '#CC0000', emissive: '#990000', emissiveIntensity: 0.5, hat: null, accessory: 'aliGloves' },
-  jackie: { color: '#003DA5', emissive: '#002D85', emissiveIntensity: 0.4, hat: 'jackieCap', accessory: 'jackieJersey' },
-  maya: { color: '#6B3FA0', emissive: '#4B1F80', emissiveIntensity: 0.4, hat: 'mayaHeadwrap', accessory: 'mayaScarf' },
-  jfk: { color: '#1C3A5F', emissive: '#0C2A4F', emissiveIntensity: 0.2, hat: null, accessory: 'jfkSuit' },
-  tubman_legend: { color: '#FFD700', emissive: '#FFA500', emissiveIntensity: 0.8, hat: 'tubmanLegendCrown', accessory: 'tubmanLegendCape' },
+  // Iconic Women
+  cleopatra: { color: '#D4AF37', emissive: '#B8860B', emissiveIntensity: 0.5, hat: 'cleopatraCrown', accessory: 'cleopatraJewels' },
+  frida: { color: '#CC3333', emissive: '#8B0000', emissiveIntensity: 0.3, hat: 'fridaFlowers', accessory: 'fridaDress' },
+  amelia: { color: '#8B6914', emissive: '#6B4F10', emissiveIntensity: 0.3, hat: 'ameliaGoggles', accessory: 'ameliaJacket' },
+  curie: { color: '#4A90D9', emissive: '#2060A9', emissiveIntensity: 0.5, hat: null, accessory: 'curieLabcoat' },
+  florence: { color: '#F5F5F5', emissive: '#DDDDDD', emissiveIntensity: 0.3, hat: 'florenceCap', accessory: 'florenceApron' },
+  rosa_w: { color: '#C4A35A', emissive: '#A08030', emissiveIntensity: 0.3, hat: 'rosaWHat', accessory: 'rosaWCoat' },
+  harriet_w: { color: '#8B6914', emissive: '#6B4F10', emissiveIntensity: 0.3, hat: 'harrietWHeadwrap', accessory: 'harrietWShawl' },
+  coco: { color: '#1a1a1a', emissive: '#333333', emissiveIntensity: 0.2, hat: 'cocoHat', accessory: 'cocoPearls' },
+  malala: { color: '#E91E63', emissive: '#C2185B', emissiveIntensity: 0.4, hat: 'malalaScarf', accessory: 'malalaBook' },
+  joan: { color: '#C0C0C0', emissive: '#A0A0A0', emissiveIntensity: 0.4, hat: 'joanHelmet', accessory: 'joanArmor' },
+  queen: { color: '#4169E1', emissive: '#2040B0', emissiveIntensity: 0.4, hat: 'queenCrown', accessory: 'queenRobe' },
+  wonder: { color: '#CC0000', emissive: '#990000', emissiveIntensity: 0.5, hat: 'wonderTiara', accessory: 'wonderArmor' },
+  serena: { color: '#FF69B4', emissive: '#FF1493', emissiveIntensity: 0.4, hat: 'serenaHeadband', accessory: 'serenaOutfit' },
+  legend_woman: { color: '#FFD700', emissive: '#FFA500', emissiveIntensity: 0.8, hat: 'legendCrown', accessory: 'legendCape' },
 };
 
 interface BallProps {
@@ -134,211 +134,263 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
-      {/* ========== HISTORICAL FIGURE HATS ========== */}
+      {/* ========== ICONIC WOMEN HATS ========== */}
 
-      {/* Harriet Tubman - Head wrap (bandana style) */}
-      {skinConfig.hat === 'harrietHeadwrap' && (
-        <group position={[0, 0.28, 0]}>
-          {/* Main wrap - fabric around head */}
+      {/* Cleopatra - Egyptian headdress with cobra */}
+      {skinConfig.hat === 'cleopatraCrown' && (
+        <group position={[0, 0.3, 0]}>
+          {/* Nemes headdress */}
           <mesh>
-            <sphereGeometry args={[0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-            <meshPhongMaterial color="#8B6914" emissive="#6B4F10" emissiveIntensity={0.3} />
+            <cylinderGeometry args={[0.22, 0.26, 0.15, 8]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.8} roughness={0.2} />
           </mesh>
-          {/* Knot on top */}
-          <mesh position={[0.05, 0.15, 0.05]}>
-            <sphereGeometry args={[0.08, 8, 8]} />
-            <meshPhongMaterial color="#7B5904" />
+          {/* Cobra uraeus on front */}
+          <mesh position={[0, 0.15, 0.2]}>
+            <coneGeometry args={[0.04, 0.15, 8]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} emissive="#FFD700" emissiveIntensity={0.5} />
           </mesh>
-          <mesh position={[-0.05, 0.12, 0.05]}>
-            <sphereGeometry args={[0.06, 8, 8]} />
-            <meshPhongMaterial color="#7B5904" />
+          {/* Side flaps */}
+          <mesh position={[-0.2, -0.05, 0]} rotation={[0, 0, 0.3]}>
+            <boxGeometry args={[0.08, 0.2, 0.02]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.5} />
           </mesh>
-          {/* Fabric folds */}
-          {[0, 120, 240].map((angle, i) => (
-            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.22, 0.05, Math.sin((angle * Math.PI) / 180) * 0.22]}>
-              <boxGeometry args={[0.08, 0.03, 0.06]} />
-              <meshPhongMaterial color="#9B7924" />
+          <mesh position={[0.2, -0.05, 0]} rotation={[0, 0, -0.3]}>
+            <boxGeometry args={[0.08, 0.2, 0.02]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.5} />
+          </mesh>
+          {/* Blue/gold stripes */}
+          <mesh position={[0, 0.08, 0]}>
+            <torusGeometry args={[0.23, 0.02, 8, 16]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Frida Kahlo - Flower crown */}
+      {skinConfig.hat === 'fridaFlowers' && (
+        <group position={[0, 0.3, 0]}>
+          {/* Flower ring */}
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+            const colors = ['#FF1744', '#E91E63', '#FF9800', '#FFEB3B', '#FF5722', '#F44336', '#E040FB', '#FF6D00'];
+            return (
+              <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.22, 0.05, Math.sin((angle * Math.PI) / 180) * 0.22]}>
+                <sphereGeometry args={[0.06, 8, 8]} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={0.3} />
+              </mesh>
+            );
+          })}
+          {/* Leaves */}
+          {[30, 150, 270].map((angle, i) => (
+            <mesh key={`leaf-${i}`} position={[Math.cos((angle * Math.PI) / 180) * 0.25, 0, Math.sin((angle * Math.PI) / 180) * 0.25]}>
+              <boxGeometry args={[0.04, 0.02, 0.08]} />
+              <meshPhongMaterial color="#2E7D32" />
             </mesh>
           ))}
+          {/* Unibrow detail */}
+          <mesh position={[0, 0.1, 0.28]}>
+            <boxGeometry args={[0.15, 0.015, 0.01]} />
+            <meshBasicMaterial color="#1a1a1a" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Amelia Earhart - Aviator goggles on leather cap */}
+      {skinConfig.hat === 'ameliaGoggles' && (
+        <group position={[0, 0.28, 0]}>
+          {/* Leather flying cap */}
+          <mesh>
+            <sphereGeometry args={[0.24, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          {/* Ear flaps */}
+          <mesh position={[-0.22, -0.05, 0]}>
+            <boxGeometry args={[0.08, 0.15, 0.06]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          <mesh position={[0.22, -0.05, 0]}>
+            <boxGeometry args={[0.08, 0.15, 0.06]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          {/* Goggle strap */}
+          <mesh position={[0, 0.08, 0]}>
+            <torusGeometry args={[0.23, 0.015, 8, 16]} />
+            <meshPhongMaterial color="#333333" />
+          </mesh>
+          {/* Left goggle lens */}
+          <mesh position={[-0.1, 0.08, 0.2]}>
+            <cylinderGeometry args={[0.05, 0.05, 0.02, 16]} />
+            <meshStandardMaterial color="#88CCFF" metalness={0.5} roughness={0.2} />
+          </mesh>
+          {/* Right goggle lens */}
+          <mesh position={[0.1, 0.08, 0.2]}>
+            <cylinderGeometry args={[0.05, 0.05, 0.02, 16]} />
+            <meshStandardMaterial color="#88CCFF" metalness={0.5} roughness={0.2} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Florence Nightingale - Nurse cap */}
+      {skinConfig.hat === 'florenceCap' && (
+        <group position={[0, 0.3, 0]}>
+          {/* White nurse cap */}
+          <mesh>
+            <boxGeometry args={[0.3, 0.12, 0.15]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          {/* Red cross */}
+          <mesh position={[0, 0.02, 0.08]}>
+            <boxGeometry args={[0.04, 0.08, 0.01]} />
+            <meshPhongMaterial color="#CC0000" />
+          </mesh>
+          <mesh position={[0, 0.02, 0.08]}>
+            <boxGeometry args={[0.08, 0.04, 0.01]} />
+            <meshPhongMaterial color="#CC0000" />
+          </mesh>
         </group>
       )}
 
       {/* Rosa Parks - Elegant 1950s hat */}
-      {skinConfig.hat === 'rosaHat' && (
+      {skinConfig.hat === 'rosaWHat' && (
         <group position={[0, 0.3, 0]}>
-          {/* Hat brim */}
-          <mesh>
-            <cylinderGeometry args={[0.3, 0.3, 0.03, 32]} />
-            <meshPhongMaterial color="#4a3828" />
-          </mesh>
-          {/* Hat dome */}
-          <mesh position={[0, 0.08, 0]}>
-            <cylinderGeometry args={[0.15, 0.18, 0.15, 16]} />
-            <meshPhongMaterial color="#4a3828" />
-          </mesh>
-          {/* Hat band - ribbon */}
-          <mesh position={[0, 0.03, 0]}>
-            <torusGeometry args={[0.17, 0.02, 8, 16]} />
-            <meshPhongMaterial color="#C4A35A" emissive="#aa8833" emissiveIntensity={0.4} />
-          </mesh>
-          {/* Small flower decoration */}
-          <mesh position={[0.15, 0.06, 0.08]}>
-            <sphereGeometry args={[0.03, 8, 8]} />
-            <meshPhongMaterial color="#D4AF37" emissive="#D4AF37" emissiveIntensity={0.3} />
-          </mesh>
+          <mesh><cylinderGeometry args={[0.3, 0.3, 0.03, 32]} /><meshPhongMaterial color="#4a3828" /></mesh>
+          <mesh position={[0, 0.08, 0]}><cylinderGeometry args={[0.15, 0.18, 0.15, 16]} /><meshPhongMaterial color="#4a3828" /></mesh>
+          <mesh position={[0, 0.03, 0]}><torusGeometry args={[0.17, 0.02, 8, 16]} /><meshPhongMaterial color="#C4A35A" emissive="#aa8833" emissiveIntensity={0.4} /></mesh>
+          <mesh position={[0.15, 0.06, 0.08]}><sphereGeometry args={[0.03, 8, 8]} /><meshPhongMaterial color="#D4AF37" emissive="#D4AF37" emissiveIntensity={0.3} /></mesh>
         </group>
       )}
 
-      {/* Malcolm X - Glasses */}
-      {skinConfig.hat === 'malcolmGlasses' && (
-        <group position={[0, 0.08, 0.2]}>
-          {/* Left lens frame */}
-          <mesh position={[-0.1, 0, 0.06]}>
-            <torusGeometry args={[0.06, 0.01, 8, 16]} />
-            <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
-          </mesh>
-          {/* Right lens frame */}
-          <mesh position={[0.1, 0, 0.06]}>
-            <torusGeometry args={[0.06, 0.01, 8, 16]} />
-            <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
-          </mesh>
-          {/* Bridge */}
-          <mesh position={[0, 0, 0.06]}>
-            <boxGeometry args={[0.08, 0.01, 0.01]} />
-            <meshStandardMaterial color="#1a1a1a" metalness={0.8} />
-          </mesh>
-          {/* Left temple */}
-          <mesh position={[-0.16, 0, -0.02]} rotation={[0, 0.3, 0]}>
-            <boxGeometry args={[0.01, 0.01, 0.15]} />
-            <meshStandardMaterial color="#1a1a1a" metalness={0.8} />
-          </mesh>
-          {/* Right temple */}
-          <mesh position={[0.16, 0, -0.02]} rotation={[0, -0.3, 0]}>
-            <boxGeometry args={[0.01, 0.01, 0.15]} />
-            <meshStandardMaterial color="#1a1a1a" metalness={0.8} />
-          </mesh>
-        </group>
-      )}
-
-      {/* Lincoln - Iconic tall top hat */}
-      {skinConfig.hat === 'lincolnTopHat' && (
-        <group position={[0, 0.32, 0]}>
-          {/* Hat brim */}
-          <mesh>
-            <cylinderGeometry args={[0.28, 0.28, 0.03, 32]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-          {/* Tall hat body */}
-          <mesh position={[0, 0.22, 0]}>
-            <cylinderGeometry args={[0.17, 0.18, 0.4, 16]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-          {/* Hat band */}
-          <mesh position={[0, 0.05, 0]}>
-            <torusGeometry args={[0.18, 0.015, 8, 16]} />
-            <meshPhongMaterial color="#333333" />
-          </mesh>
-          {/* Flat top */}
-          <mesh position={[0, 0.42, 0]}>
-            <cylinderGeometry args={[0.17, 0.17, 0.02, 16]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-        </group>
-      )}
-
-      {/* Sojourner Truth - Bonnet */}
-      {skinConfig.hat === 'truthBonnet' && (
+      {/* Harriet Tubman - Head wrap */}
+      {skinConfig.hat === 'harrietWHeadwrap' && (
         <group position={[0, 0.28, 0]}>
-          {/* Bonnet dome */}
-          <mesh>
-            <sphereGeometry args={[0.24, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.6]} />
-            <meshPhongMaterial color="#F5F0E8" />
+          <mesh><sphereGeometry args={[0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshPhongMaterial color="#8B6914" /></mesh>
+          <mesh position={[0.05, 0.15, 0.05]}><sphereGeometry args={[0.08, 8, 8]} /><meshPhongMaterial color="#7B5904" /></mesh>
+          <mesh position={[-0.05, 0.12, 0.05]}><sphereGeometry args={[0.06, 8, 8]} /><meshPhongMaterial color="#7B5904" /></mesh>
+        </group>
+      )}
+
+      {/* Coco Chanel - Elegant black hat with pearl */}
+      {skinConfig.hat === 'cocoHat' && (
+        <group position={[0, 0.3, 0]}>
+          {/* Wide brim hat */}
+          <mesh><cylinderGeometry args={[0.32, 0.32, 0.02, 32]} /><meshPhongMaterial color="#1a1a1a" /></mesh>
+          {/* Hat body */}
+          <mesh position={[0, 0.08, 0]}><cylinderGeometry args={[0.14, 0.16, 0.15, 16]} /><meshPhongMaterial color="#1a1a1a" /></mesh>
+          {/* Ribbon */}
+          <mesh position={[0, 0.02, 0]}><torusGeometry args={[0.16, 0.015, 8, 16]} /><meshPhongMaterial color="#FFFFFF" /></mesh>
+          {/* Camellia flower */}
+          <mesh position={[0.14, 0.04, 0.1]}><sphereGeometry args={[0.04, 8, 8]} /><meshPhongMaterial color="#FFFFFF" /></mesh>
+        </group>
+      )}
+
+      {/* Malala - Headscarf */}
+      {skinConfig.hat === 'malalaScarf' && (
+        <group position={[0, 0.25, 0]}>
+          {/* Main scarf draped over head */}
+          <mesh><sphereGeometry args={[0.28, 16, 16, 0, Math.PI * 2, 0, Math.PI * 0.6]} /><meshPhongMaterial color="#E91E63" /></mesh>
+          {/* Scarf drape left */}
+          <mesh position={[-0.15, -0.1, 0.15]} rotation={[0, 0.2, 0.3]}>
+            <boxGeometry args={[0.12, 0.25, 0.02]} />
+            <meshPhongMaterial color="#C2185B" />
           </mesh>
-          {/* Bonnet brim - frames the face */}
-          <mesh position={[0, -0.02, 0.15]} rotation={[0.3, 0, 0]}>
-            <torusGeometry args={[0.18, 0.03, 8, 16, Math.PI]} />
-            <meshPhongMaterial color="#F5F0E8" />
+          {/* Scarf drape right */}
+          <mesh position={[0.15, -0.1, 0.15]} rotation={[0, -0.2, -0.3]}>
+            <boxGeometry args={[0.12, 0.25, 0.02]} />
+            <meshPhongMaterial color="#C2185B" />
           </mesh>
-          {/* Ribbon tie */}
-          <mesh position={[0, -0.08, 0.2]}>
-            <boxGeometry args={[0.06, 0.15, 0.02]} />
-            <meshPhongMaterial color="#C4A35A" />
+          {/* Gold pattern detail */}
+          <mesh position={[0, 0.15, 0]}><torusGeometry args={[0.22, 0.01, 8, 16]} /><meshStandardMaterial color="#FFD700" metalness={0.8} /></mesh>
+        </group>
+      )}
+
+      {/* Joan of Arc - Knight helmet */}
+      {skinConfig.hat === 'joanHelmet' && (
+        <group position={[0, 0.3, 0]}>
+          {/* Helmet dome */}
+          <mesh><sphereGeometry args={[0.25, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.2} /></mesh>
+          {/* Visor */}
+          <mesh position={[0, -0.02, 0.22]} rotation={[0.4, 0, 0]}>
+            <boxGeometry args={[0.2, 0.1, 0.02]} />
+            <meshStandardMaterial color="#A0A0A0" metalness={0.9} roughness={0.3} />
+          </mesh>
+          {/* Plume */}
+          <mesh position={[0, 0.2, -0.05]}>
+            <coneGeometry args={[0.04, 0.3, 8]} />
+            <meshPhongMaterial color="#E91E63" emissive="#C2185B" emissiveIntensity={0.3} />
+          </mesh>
+          {/* Cross on forehead */}
+          <mesh position={[0, 0.1, 0.25]}>
+            <boxGeometry args={[0.02, 0.06, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+          </mesh>
+          <mesh position={[0, 0.1, 0.25]}>
+            <boxGeometry args={[0.04, 0.02, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} />
           </mesh>
         </group>
       )}
 
-      {/* Jackie Robinson - Baseball cap with 42 */}
-      {skinConfig.hat === 'jackieCap' && (
-        <group position={[0, 0.28, 0]}>
-          {/* Cap dome */}
-          <mesh>
-            <sphereGeometry args={[0.22, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          {/* Cap visor */}
-          <mesh position={[0, -0.02, 0.2]} rotation={[-0.3, 0, 0]}>
-            <boxGeometry args={[0.2, 0.02, 0.15]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          {/* "B" letter on front */}
-          <mesh position={[0, 0.08, 0.22]}>
-            <boxGeometry args={[0.06, 0.08, 0.01]} />
-            <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          {/* Cap button on top */}
-          <mesh position={[0, 0.15, 0]}>
-            <sphereGeometry args={[0.025, 8, 8]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-        </group>
-      )}
-
-      {/* Maya Angelou - Colorful headwrap */}
-      {skinConfig.hat === 'mayaHeadwrap' && (
-        <group position={[0, 0.28, 0]}>
-          {/* Main wrap */}
-          <mesh>
-            <sphereGeometry args={[0.26, 16, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-            <meshPhongMaterial color="#6B3FA0" emissive="#4B1F80" emissiveIntensity={0.3} />
-          </mesh>
-          {/* Wrap layers */}
-          <mesh position={[0, 0.12, 0]}>
-            <torusGeometry args={[0.2, 0.04, 8, 16]} />
-            <meshPhongMaterial color="#8B5FC0" />
-          </mesh>
-          {/* Fabric folds on top */}
-          <mesh position={[0.08, 0.2, 0]}>
-            <sphereGeometry args={[0.07, 8, 8]} />
-            <meshPhongMaterial color="#9B6FD0" />
-          </mesh>
-          <mesh position={[-0.06, 0.18, 0.04]}>
-            <sphereGeometry args={[0.06, 8, 8]} />
-            <meshPhongMaterial color="#7B4FB0" />
-          </mesh>
-          {/* Gold accent pin */}
-          <mesh position={[0.12, 0.1, 0.15]}>
-            <sphereGeometry args={[0.025, 8, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
-          </mesh>
-        </group>
-      )}
-
-      {/* Tubman Legend - Golden crown with stars */}
-      {skinConfig.hat === 'tubmanLegendCrown' && (
+      {/* Queen Elizabeth - Royal crown */}
+      {skinConfig.hat === 'queenCrown' && (
         <group position={[0, 0.35, 0]}>
-          {/* Crown base */}
-          <mesh>
-            <cylinderGeometry args={[0.22, 0.24, 0.18, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.6} />
-          </mesh>
+          <mesh><cylinderGeometry args={[0.2, 0.22, 0.15, 8]} /><meshStandardMaterial color="#4169E1" metalness={0.3} roughness={0.5} /></mesh>
+          {/* Gold crown band */}
+          <mesh position={[0, 0.08, 0]}><torusGeometry args={[0.21, 0.025, 8, 16]} /><meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} /></mesh>
           {/* Crown points */}
           {[0, 72, 144, 216, 288].map((angle, i) => (
-            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.2, 0.15, Math.sin((angle * Math.PI) / 180) * 0.2]}>
-              <coneGeometry args={[0.05, 0.2, 4]} />
-              <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFD700" emissiveIntensity={0.8} />
+            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.2, 0.12, Math.sin((angle * Math.PI) / 180) * 0.2]}>
+              <coneGeometry args={[0.03, 0.12, 4]} /><meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
             </mesh>
           ))}
-          {/* Star on front */}
+          {/* Jewels */}
+          <mesh position={[0, 0.08, 0.21]}><sphereGeometry args={[0.025, 8, 8]} /><meshPhongMaterial color="#FF0000" emissive="#FF0000" emissiveIntensity={0.5} /></mesh>
+          <mesh position={[0.2, 0.08, 0]}><sphereGeometry args={[0.02, 8, 8]} /><meshPhongMaterial color="#0000FF" emissive="#0000FF" emissiveIntensity={0.5} /></mesh>
+        </group>
+      )}
+
+      {/* Wonder Woman - Tiara */}
+      {skinConfig.hat === 'wonderTiara' && (
+        <group position={[0, 0.25, 0]}>
+          {/* Gold tiara band */}
+          <mesh><torusGeometry args={[0.28, 0.025, 8, 32, Math.PI]} /><meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.5} /></mesh>
+          {/* Star centerpiece */}
+          <mesh position={[0, 0.08, 0.25]}>
+            <octahedronGeometry args={[0.05]} />
+            <meshStandardMaterial color="#CC0000" metalness={0.8} emissive="#CC0000" emissiveIntensity={0.5} />
+          </mesh>
+          {/* Long flowing hair */}
+          <mesh position={[0, -0.05, -0.2]}>
+            <boxGeometry args={[0.35, 0.4, 0.05]} />
+            <meshPhongMaterial color="#1a1a1a" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Serena Williams - Athletic headband */}
+      {skinConfig.hat === 'serenaHeadband' && (
+        <group position={[0, 0.22, 0]}>
+          {/* Nike-style headband */}
+          <mesh><torusGeometry args={[0.28, 0.03, 8, 32]} /><meshPhongMaterial color="#FF69B4" emissive="#FF1493" emissiveIntensity={0.3} /></mesh>
+          {/* Hair bun */}
+          <mesh position={[0, 0.15, -0.05]}>
+            <sphereGeometry args={[0.12, 12, 12]} />
+            <meshPhongMaterial color="#1a1a1a" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Legend Woman - Golden crown with flowers */}
+      {skinConfig.hat === 'legendCrown' && (
+        <group position={[0, 0.35, 0]}>
+          <mesh><cylinderGeometry args={[0.22, 0.24, 0.18, 8]} /><meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.6} /></mesh>
+          {[0, 72, 144, 216, 288].map((angle, i) => {
+            const colors = ['#E91E63', '#9C27B0', '#FF5722', '#FF1744', '#F50057'];
+            return (
+              <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.2, 0.15, Math.sin((angle * Math.PI) / 180) * 0.2]}>
+                <sphereGeometry args={[0.05, 8, 8]} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={0.6} />
+              </mesh>
+            );
+          })}
           <mesh position={[0, 0.25, 0.2]}>
             <octahedronGeometry args={[0.05]} />
             <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={1.5} />
@@ -347,7 +399,7 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
       )}
 
       {/* ========== STANDARD ACCESSORIES ========== */}
-
+      
       {skinConfig.accessory === 'spark' && (
         <group>
           {[0, 120, 240].map((angle, i) => (
@@ -421,416 +473,334 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
-      {/* ========== HISTORICAL FIGURE ACCESSORIES ========== */}
+      {/* ========== ICONIC WOMEN ACCESSORIES ========== */}
 
-      {/* Harriet Tubman - Shawl draped over shoulders */}
-      {skinConfig.accessory === 'harrietShawl' && (
+      {/* Cleopatra - Gold jewelry and Egyptian collar */}
+      {skinConfig.accessory === 'cleopatraJewels' && (
         <group>
-          {/* Shawl body - draped fabric */}
-          <mesh position={[0, -0.05, -0.15]} rotation={[0.2, 0, 0]}>
-            <boxGeometry args={[0.55, 0.35, 0.02]} />
-            <meshPhongMaterial color="#5a4020" />
+          {/* Egyptian collar necklace */}
+          <mesh position={[0, -0.1, 0]}>
+            <torusGeometry args={[0.32, 0.04, 8, 32]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} emissive="#B8860B" emissiveIntensity={0.3} />
           </mesh>
-          {/* Left drape */}
-          <mesh position={[-0.25, -0.15, 0]} rotation={[0, 0.3, 0.2]}>
-            <boxGeometry args={[0.15, 0.3, 0.02]} />
-            <meshPhongMaterial color="#5a4020" />
+          {/* Jeweled pendants */}
+          {[0, 40, 80, -40, -80].map((angle, i) => {
+            const colors = ['#00BCD4', '#D4AF37', '#4CAF50', '#D4AF37', '#E91E63'];
+            return (
+              <mesh key={i} position={[Math.sin((angle * Math.PI) / 180) * 0.32, -0.15, Math.cos((angle * Math.PI) / 180) * 0.32]}>
+                <sphereGeometry args={[0.02, 8, 8]} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={0.5} />
+              </mesh>
+            );
+          })}
+        </group>
+      )}
+
+      {/* Frida Kahlo - Traditional Mexican dress */}
+      {skinConfig.accessory === 'fridaDress' && (
+        <group>
+          <mesh position={[0, -0.12, 0]}>
+            <cylinderGeometry args={[0.3, 0.38, 0.25, 16]} />
+            <meshPhongMaterial color="#CC3333" />
           </mesh>
-          {/* Right drape */}
-          <mesh position={[0.25, -0.15, 0]} rotation={[0, -0.3, -0.2]}>
-            <boxGeometry args={[0.15, 0.3, 0.02]} />
-            <meshPhongMaterial color="#5a4020" />
+          {/* Embroidered patterns */}
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.31, -0.1, Math.sin((angle * Math.PI) / 180) * 0.31]}>
+              <boxGeometry args={[0.03, 0.04, 0.03]} />
+              <meshPhongMaterial color={i % 2 === 0 ? '#FFEB3B' : '#4CAF50'} emissive={i % 2 === 0 ? '#FFEB3B' : '#4CAF50'} emissiveIntensity={0.3} />
+            </mesh>
+          ))}
+          {/* Necklace */}
+          <mesh position={[0, 0, 0.28]}>
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
           </mesh>
         </group>
       )}
 
-      {/* Rosa Parks - Coat with collar */}
-      {skinConfig.accessory === 'rosaCoat' && (
+      {/* Amelia Earhart - Leather flying jacket */}
+      {skinConfig.accessory === 'ameliaJacket' && (
         <group>
-          {/* Coat body */}
+          <mesh position={[0, -0.12, 0]}>
+            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
+            <meshPhongMaterial color="#8B4513" />
+          </mesh>
+          {/* Jacket collar */}
+          <mesh position={[-0.12, 0.03, 0.2]} rotation={[0.5, 0.3, 0]}>
+            <boxGeometry args={[0.1, 0.08, 0.02]} />
+            <meshPhongMaterial color="#A0522D" />
+          </mesh>
+          <mesh position={[0.12, 0.03, 0.2]} rotation={[0.5, -0.3, 0]}>
+            <boxGeometry args={[0.1, 0.08, 0.02]} />
+            <meshPhongMaterial color="#A0522D" />
+          </mesh>
+          {/* Scarf */}
+          <mesh position={[0.12, -0.05, 0.25]} rotation={[0.2, -0.3, 0.5]}>
+            <boxGeometry args={[0.06, 0.2, 0.01]} />
+            <meshPhongMaterial color="#F5F5DC" />
+          </mesh>
+        </group>
+      )}
+
+      {/* Marie Curie - Lab coat with glowing vial */}
+      {skinConfig.accessory === 'curieLabcoat' && (
+        <group>
+          <mesh position={[0, -0.12, 0]}>
+            <cylinderGeometry args={[0.3, 0.35, 0.25, 16]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          {/* Lab coat lapels */}
+          <mesh position={[-0.08, 0, 0.27]} rotation={[0, 0.2, 0.2]}>
+            <boxGeometry args={[0.06, 0.1, 0.01]} />
+            <meshPhongMaterial color="#F0F0F0" />
+          </mesh>
+          <mesh position={[0.08, 0, 0.27]} rotation={[0, -0.2, -0.2]}>
+            <boxGeometry args={[0.06, 0.1, 0.01]} />
+            <meshPhongMaterial color="#F0F0F0" />
+          </mesh>
+          {/* Glowing radioactive vial */}
+          <mesh position={[0.35, -0.05, 0.1]}>
+            <cylinderGeometry args={[0.03, 0.03, 0.12, 8]} />
+            <meshPhongMaterial color="#00E676" emissive="#00E676" emissiveIntensity={1.5} transparent opacity={0.8} />
+          </mesh>
+          <mesh position={[0.35, 0.03, 0.1]}>
+            <sphereGeometry args={[0.035, 8, 8]} />
+            <meshPhongMaterial color="#00E676" emissive="#00E676" emissiveIntensity={1} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Florence Nightingale - Nurse apron with lamp */}
+      {skinConfig.accessory === 'florenceApron' && (
+        <group>
+          {/* Dress */}
+          <mesh position={[0, -0.12, 0]}>
+            <cylinderGeometry args={[0.3, 0.35, 0.25, 16]} />
+            <meshPhongMaterial color="#4a4a4a" />
+          </mesh>
+          {/* White apron */}
+          <mesh position={[0, -0.1, 0.28]}>
+            <boxGeometry args={[0.2, 0.22, 0.01]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          {/* Oil lamp */}
+          <mesh position={[0.38, -0.05, 0.1]}>
+            <cylinderGeometry args={[0.03, 0.04, 0.08, 8]} />
+            <meshStandardMaterial color="#B8860B" metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0.38, 0.03, 0.1]}>
+            <coneGeometry args={[0.02, 0.06, 8]} />
+            <meshPhongMaterial color="#FFA500" emissive="#FFA500" emissiveIntensity={1.5} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Rosa Parks - Coat */}
+      {skinConfig.accessory === 'rosaWCoat' && (
+        <group>
           <mesh position={[0, -0.15, 0]}>
             <cylinderGeometry args={[0.32, 0.35, 0.25, 16]} />
             <meshPhongMaterial color="#3a2818" />
           </mesh>
-          {/* Collar left */}
-          <mesh position={[-0.15, 0.05, 0.2]} rotation={[0.5, 0.3, 0]}>
-            <boxGeometry args={[0.12, 0.1, 0.02]} />
-            <meshPhongMaterial color="#3a2818" />
-          </mesh>
-          {/* Collar right */}
-          <mesh position={[0.15, 0.05, 0.2]} rotation={[0.5, -0.3, 0]}>
-            <boxGeometry args={[0.12, 0.1, 0.02]} />
-            <meshPhongMaterial color="#3a2818" />
-          </mesh>
-          {/* Buttons */}
+          <mesh position={[-0.15, 0.05, 0.2]} rotation={[0.5, 0.3, 0]}><boxGeometry args={[0.12, 0.1, 0.02]} /><meshPhongMaterial color="#3a2818" /></mesh>
+          <mesh position={[0.15, 0.05, 0.2]} rotation={[0.5, -0.3, 0]}><boxGeometry args={[0.12, 0.1, 0.02]} /><meshPhongMaterial color="#3a2818" /></mesh>
           {[0, -0.06, -0.12].map((y, i) => (
-            <mesh key={i} position={[0, y, 0.33]}>
-              <sphereGeometry args={[0.015, 8, 8]} />
-              <meshStandardMaterial color="#C4A35A" metalness={0.8} roughness={0.2} />
-            </mesh>
+            <mesh key={i} position={[0, y, 0.33]}><sphereGeometry args={[0.015, 8, 8]} /><meshStandardMaterial color="#C4A35A" metalness={0.8} roughness={0.2} /></mesh>
           ))}
         </group>
       )}
 
-      {/* MLK - Suit with tie */}
-      {skinConfig.accessory === 'mlkSuit' && (
+      {/* Harriet Tubman - Shawl */}
+      {skinConfig.accessory === 'harrietWShawl' && (
         <group>
-          {/* Suit jacket */}
-          <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#2C2C2C" />
-          </mesh>
-          {/* White shirt collar */}
-          <mesh position={[0, 0.02, 0.25]}>
-            <boxGeometry args={[0.12, 0.06, 0.01]} />
-            <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          {/* Tie */}
-          <mesh position={[0, -0.08, 0.3]}>
-            <boxGeometry args={[0.04, 0.18, 0.01]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-          {/* Tie knot */}
-          <mesh position={[0, 0.02, 0.3]}>
-            <boxGeometry args={[0.05, 0.03, 0.01]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-          {/* Lapels */}
-          <mesh position={[-0.1, -0.02, 0.26]} rotation={[0, 0.2, 0.3]}>
-            <boxGeometry args={[0.08, 0.12, 0.01]} />
-            <meshPhongMaterial color="#2C2C2C" />
-          </mesh>
-          <mesh position={[0.1, -0.02, 0.26]} rotation={[0, -0.2, -0.3]}>
-            <boxGeometry args={[0.08, 0.12, 0.01]} />
-            <meshPhongMaterial color="#2C2C2C" />
-          </mesh>
+          <mesh position={[0, -0.05, -0.15]} rotation={[0.2, 0, 0]}><boxGeometry args={[0.55, 0.35, 0.02]} /><meshPhongMaterial color="#5a4020" /></mesh>
+          <mesh position={[-0.25, -0.15, 0]} rotation={[0, 0.3, 0.2]}><boxGeometry args={[0.15, 0.3, 0.02]} /><meshPhongMaterial color="#5a4020" /></mesh>
+          <mesh position={[0.25, -0.15, 0]} rotation={[0, -0.3, -0.2]}><boxGeometry args={[0.15, 0.3, 0.02]} /><meshPhongMaterial color="#5a4020" /></mesh>
         </group>
       )}
 
-      {/* Malcolm X - Suit with bow tie */}
-      {skinConfig.accessory === 'malcolmSuit' && (
+      {/* Coco Chanel - Pearls and little black dress */}
+      {skinConfig.accessory === 'cocoPearls' && (
         <group>
-          {/* Suit */}
+          {/* Little black dress */}
           <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
+            <cylinderGeometry args={[0.28, 0.3, 0.22, 16]} />
             <meshPhongMaterial color="#1a1a1a" />
           </mesh>
-          {/* White shirt */}
-          <mesh position={[0, 0, 0.27]}>
-            <boxGeometry args={[0.1, 0.15, 0.01]} />
-            <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          {/* Bow tie */}
-          <mesh position={[-0.04, 0.02, 0.29]} rotation={[0, 0, 0.3]}>
-            <boxGeometry args={[0.06, 0.03, 0.01]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-          <mesh position={[0.04, 0.02, 0.29]} rotation={[0, 0, -0.3]}>
-            <boxGeometry args={[0.06, 0.03, 0.01]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
+          {/* Pearl necklace - double strand */}
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
+            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.3, -0.02, Math.sin((angle * Math.PI) / 180) * 0.3]}>
+              <sphereGeometry args={[0.02, 8, 8]} />
+              <meshStandardMaterial color="#FFF8E7" metalness={0.3} roughness={0.4} />
+            </mesh>
+          ))}
+          {/* CC logo brooch */}
           <mesh position={[0, 0.02, 0.29]}>
-            <sphereGeometry args={[0.015, 8, 8]} />
-            <meshPhongMaterial color="#1a1a1a" />
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
           </mesh>
         </group>
       )}
 
-      {/* Lincoln - Beard */}
-      {skinConfig.accessory === 'lincolnBeard' && (
+      {/* Malala - Book */}
+      {skinConfig.accessory === 'malalaBook' && (
         <group>
-          {/* Chin beard - no mustache (accurate to Lincoln) */}
-          <mesh position={[0, -0.15, 0.2]}>
-            <boxGeometry args={[0.15, 0.12, 0.08]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          {/* Side whiskers */}
-          <mesh position={[-0.18, -0.08, 0.12]}>
-            <boxGeometry args={[0.05, 0.15, 0.05]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          <mesh position={[0.18, -0.08, 0.12]}>
-            <boxGeometry args={[0.05, 0.15, 0.05]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          {/* Suit coat */}
-          <mesh position={[0, -0.15, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#2C2C2C" />
-          </mesh>
-          {/* Bow tie */}
-          <mesh position={[0, 0, 0.28]}>
-            <boxGeometry args={[0.1, 0.04, 0.01]} />
-            <meshPhongMaterial color="#1a1a1a" />
-          </mesh>
-        </group>
-      )}
-
-      {/* Obama - Modern suit with American flag pin */}
-      {skinConfig.accessory === 'obamaSuit' && (
-        <group>
-          {/* Suit jacket */}
+          {/* Simple outfit */}
           <mesh position={[0, -0.12, 0]}>
             <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#1E3A5F" />
+            <meshPhongMaterial color="#E91E63" />
           </mesh>
-          {/* White shirt */}
-          <mesh position={[0, 0, 0.27]}>
-            <boxGeometry args={[0.1, 0.15, 0.01]} />
+          {/* Book held in front */}
+          <mesh position={[0.3, -0.1, 0.15]} rotation={[0, -0.3, 0]}>
+            <boxGeometry args={[0.12, 0.15, 0.03]} />
+            <meshPhongMaterial color="#1565C0" />
+          </mesh>
+          {/* Book pages */}
+          <mesh position={[0.3, -0.1, 0.135]} rotation={[0, -0.3, 0]}>
+            <boxGeometry args={[0.1, 0.13, 0.02]} />
             <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          {/* Blue tie */}
-          <mesh position={[0, -0.06, 0.3]}>
-            <boxGeometry args={[0.04, 0.15, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          {/* American flag pin on lapel */}
-          <mesh position={[-0.12, 0.02, 0.28]}>
-            <boxGeometry args={[0.03, 0.02, 0.01]} />
-            <meshPhongMaterial color="#CC0000" />
-          </mesh>
-          <mesh position={[-0.12, 0.005, 0.28]}>
-            <boxGeometry args={[0.03, 0.01, 0.01]} />
-            <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          <mesh position={[-0.12, -0.005, 0.28]}>
-            <boxGeometry args={[0.03, 0.01, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
           </mesh>
         </group>
       )}
 
-      {/* Mandela - Madiba shirt (patterned) */}
-      {skinConfig.accessory === 'mandelaShirt' && (
+      {/* Joan of Arc - Armor */}
+      {skinConfig.accessory === 'joanArmor' && (
         <group>
-          {/* Shirt body */}
+          {/* Chest plate */}
+          <mesh position={[0, -0.1, 0]}>
+            <cylinderGeometry args={[0.3, 0.33, 0.22, 16]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.2} />
+          </mesh>
+          {/* Cross on chest */}
+          <mesh position={[0, -0.06, 0.31]}>
+            <boxGeometry args={[0.02, 0.1, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+          </mesh>
+          <mesh position={[0, -0.04, 0.31]}>
+            <boxGeometry args={[0.06, 0.02, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+          </mesh>
+          {/* Sword */}
+          <mesh position={[-0.4, 0, -0.05]} rotation={[0, 0, 0.2]}>
+            <boxGeometry args={[0.02, 0.5, 0.01]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
+          </mesh>
+          <mesh position={[-0.4, 0.22, -0.05]}>
+            <boxGeometry args={[0.08, 0.02, 0.02]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Queen Elizabeth - Royal robe */}
+      {skinConfig.accessory === 'queenRobe' && (
+        <group>
+          {/* Royal blue dress */}
           <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#228B22" emissive="#1A6B1A" emissiveIntensity={0.2} />
+            <cylinderGeometry args={[0.3, 0.38, 0.25, 16]} />
+            <meshPhongMaterial color="#4169E1" />
           </mesh>
-          {/* Shirt collar - Mandarin style */}
-          <mesh position={[0, 0.03, 0.25]}>
-            <boxGeometry args={[0.08, 0.06, 0.01]} />
-            <meshPhongMaterial color="#228B22" />
+          {/* Ermine-trimmed robe */}
+          <mesh position={[0, -0.05, -0.2]} rotation={[0.1, 0, 0]}>
+            <boxGeometry args={[0.5, 0.35, 0.02]} />
+            <meshPhongMaterial color="#8B0000" />
           </mesh>
-          {/* Pattern details on shirt */}
-          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.31, -0.1, Math.sin((angle * Math.PI) / 180) * 0.31]}>
-              <boxGeometry args={[0.02, 0.05, 0.02]} />
-              <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={0.3} />
-            </mesh>
-          ))}
-        </group>
-      )}
-
-      {/* Frederick Douglass - Distinguished hair and cravat */}
-      {skinConfig.accessory === 'douglassHair' && (
-        <group>
-          {/* Wild distinguished hair */}
-          <mesh position={[0, 0.2, -0.05]}>
-            <sphereGeometry args={[0.25, 16, 16]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          <mesh position={[-0.15, 0.25, 0]}>
-            <sphereGeometry args={[0.12, 8, 8]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          <mesh position={[0.15, 0.25, 0]}>
-            <sphereGeometry args={[0.12, 8, 8]} />
-            <meshPhongMaterial color="#2a2a2a" />
-          </mesh>
-          {/* Cravat/bow tie */}
-          <mesh position={[0, -0.05, 0.28]}>
-            <boxGeometry args={[0.12, 0.08, 0.02]} />
+          {/* White fur trim */}
+          <mesh position={[0, 0.05, 0.25]}>
+            <torusGeometry args={[0.3, 0.03, 8, 16, Math.PI]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
-          {/* Coat */}
-          <mesh position={[0, -0.15, 0]}>
+          {/* Scepter */}
+          <mesh position={[0.38, 0, 0.05]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.4, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
+          </mesh>
+          <mesh position={[0.38, 0.22, 0.05]}>
+            <sphereGeometry args={[0.035, 8, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.3} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Wonder Woman - Amazonian armor */}
+      {skinConfig.accessory === 'wonderArmor' && (
+        <group>
+          {/* Armored bustier */}
+          <mesh position={[0, -0.1, 0]}>
             <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#3a3a3a" />
+            <meshStandardMaterial color="#CC0000" metalness={0.6} roughness={0.3} />
           </mesh>
-        </group>
-      )}
-
-      {/* Sojourner Truth - Long dress */}
-      {skinConfig.accessory === 'truthDress' && (
-        <group>
-          {/* Dress bodice */}
-          <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.35, 0.25, 16]} />
-            <meshPhongMaterial color="#4a3a2a" />
+          {/* Gold eagle emblem */}
+          <mesh position={[0, -0.02, 0.3]}>
+            <boxGeometry args={[0.1, 0.03, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.5} />
           </mesh>
-          {/* White shawl/collar */}
-          <mesh position={[0, 0.02, 0.2]} rotation={[0.3, 0, 0]}>
-            <boxGeometry args={[0.3, 0.12, 0.02]} />
-            <meshPhongMaterial color="#F5F0E8" />
-          </mesh>
-          {/* Brooch */}
-          <mesh position={[0, 0, 0.3]}>
-            <sphereGeometry args={[0.02, 8, 8]} />
-            <meshStandardMaterial color="#C4A35A" metalness={0.9} roughness={0.1} />
-          </mesh>
-        </group>
-      )}
-
-      {/* Muhammad Ali - Boxing gloves */}
-      {skinConfig.accessory === 'aliGloves' && (
-        <group>
-          {/* Left glove */}
-          <mesh position={[-0.4, -0.05, 0.1]}>
-            <sphereGeometry args={[0.1, 12, 12]} />
-            <meshPhongMaterial color="#CC0000" emissive="#990000" emissiveIntensity={0.3} />
-          </mesh>
+          {/* Bracelets of submission */}
           <mesh position={[-0.35, -0.05, 0.1]}>
-            <cylinderGeometry args={[0.06, 0.08, 0.08, 8]} />
-            <meshPhongMaterial color="#CC0000" />
-          </mesh>
-          {/* Right glove */}
-          <mesh position={[0.4, -0.05, 0.1]}>
-            <sphereGeometry args={[0.1, 12, 12]} />
-            <meshPhongMaterial color="#CC0000" emissive="#990000" emissiveIntensity={0.3} />
+            <torusGeometry args={[0.06, 0.015, 8, 16]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
           </mesh>
           <mesh position={[0.35, -0.05, 0.1]}>
-            <cylinderGeometry args={[0.06, 0.08, 0.08, 8]} />
-            <meshPhongMaterial color="#CC0000" />
+            <torusGeometry args={[0.06, 0.015, 8, 16]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
           </mesh>
-          {/* Boxing shorts */}
-          <mesh position={[0, -0.2, 0]}>
-            <cylinderGeometry args={[0.28, 0.32, 0.15, 16]} />
-            <meshPhongMaterial color="#FFD700" />
+          {/* Lasso of truth */}
+          <mesh position={[0.2, -0.2, -0.15]} rotation={[0.5, 0, 0.3]}>
+            <torusGeometry args={[0.1, 0.01, 8, 16]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={0.8} />
           </mesh>
-          {/* Shorts stripe */}
-          <mesh position={[0, -0.2, 0]}>
-            <torusGeometry args={[0.3, 0.015, 8, 16]} />
+        </group>
+      )}
+
+      {/* Serena Williams - Tennis outfit */}
+      {skinConfig.accessory === 'serenaOutfit' && (
+        <group>
+          {/* Athletic top */}
+          <mesh position={[0, -0.1, 0]}>
+            <cylinderGeometry args={[0.28, 0.3, 0.18, 16]} />
+            <meshPhongMaterial color="#FF69B4" />
+          </mesh>
+          {/* Skirt */}
+          <mesh position={[0, -0.22, 0]}>
+            <cylinderGeometry args={[0.3, 0.38, 0.1, 16]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
-        </group>
-      )}
-
-      {/* Jackie Robinson - Dodgers jersey #42 */}
-      {skinConfig.accessory === 'jackieJersey' && (
-        <group>
-          {/* Jersey body */}
-          <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#FFFFFF" />
+          {/* Tennis racket */}
+          <mesh position={[0.4, 0.05, 0]} rotation={[0, 0, 0.5]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.35, 8]} />
+            <meshStandardMaterial color="#333333" metalness={0.5} />
           </mesh>
-          {/* Number 4 */}
-          <mesh position={[-0.04, -0.08, 0.31]}>
-            <boxGeometry args={[0.03, 0.1, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[-0.04, -0.03, 0.31]}>
-            <boxGeometry args={[0.06, 0.02, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[-0.01, -0.08, 0.31]}>
-            <boxGeometry args={[0.03, 0.02, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          {/* Number 2 */}
-          <mesh position={[0.06, -0.03, 0.31]}>
-            <boxGeometry args={[0.06, 0.02, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[0.085, -0.06, 0.31]}>
-            <boxGeometry args={[0.02, 0.04, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[0.06, -0.08, 0.31]}>
-            <boxGeometry args={[0.06, 0.02, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[0.035, -0.11, 0.31]}>
-            <boxGeometry args={[0.02, 0.04, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
-          </mesh>
-          <mesh position={[0.06, -0.13, 0.31]}>
-            <boxGeometry args={[0.06, 0.02, 0.01]} />
-            <meshPhongMaterial color="#003DA5" />
+          <mesh position={[0.5, 0.2, 0]} rotation={[0, 0, 0.5]}>
+            <torusGeometry args={[0.08, 0.01, 8, 16]} />
+            <meshStandardMaterial color="#333333" metalness={0.5} />
           </mesh>
         </group>
       )}
 
-      {/* Maya Angelou - Elegant scarf */}
-      {skinConfig.accessory === 'mayaScarf' && (
+      {/* Legend Woman - Golden cape with flowers */}
+      {skinConfig.accessory === 'legendCape' && (
         <group>
-          {/* Elegant dress/blouse */}
-          <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#6B3FA0" />
-          </mesh>
-          {/* Flowing scarf */}
-          <mesh position={[0.1, -0.05, 0.25]} rotation={[0.2, -0.3, 0.5]}>
-            <boxGeometry args={[0.08, 0.3, 0.01]} />
-            <meshPhongMaterial color="#D4AF37" />
-          </mesh>
-          <mesh position={[-0.05, -0.1, 0.25]} rotation={[0.1, 0.2, -0.3]}>
-            <boxGeometry args={[0.08, 0.25, 0.01]} />
-            <meshPhongMaterial color="#D4AF37" />
-          </mesh>
-          {/* Earring */}
-          <mesh position={[-0.22, -0.05, 0.1]}>
-            <sphereGeometry args={[0.02, 8, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
-          </mesh>
-          <mesh position={[0.22, -0.05, 0.1]}>
-            <sphereGeometry args={[0.02, 8, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
-          </mesh>
-        </group>
-      )}
-
-      {/* JFK - Presidential suit */}
-      {skinConfig.accessory === 'jfkSuit' && (
-        <group>
-          {/* Navy suit */}
-          <mesh position={[0, -0.12, 0]}>
-            <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#1C3A5F" />
-          </mesh>
-          {/* White shirt */}
-          <mesh position={[0, 0, 0.27]}>
-            <boxGeometry args={[0.1, 0.15, 0.01]} />
-            <meshPhongMaterial color="#FFFFFF" />
-          </mesh>
-          {/* Red tie */}
-          <mesh position={[0, -0.06, 0.3]}>
-            <boxGeometry args={[0.04, 0.15, 0.01]} />
-            <meshPhongMaterial color="#CC0000" />
-          </mesh>
-          {/* PT-109 tie clip */}
-          <mesh position={[0, -0.02, 0.31]}>
-            <boxGeometry args={[0.03, 0.005, 0.005]} />
-            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.1} />
-          </mesh>
-        </group>
-      )}
-
-      {/* Tubman Legend - Golden cape */}
-      {skinConfig.accessory === 'tubmanLegendCape' && (
-        <group>
-          {/* Flowing golden cape */}
           <mesh position={[0, 0, -0.25]} rotation={[0.2, 0, 0]}>
             <boxGeometry args={[0.6, 0.7, 0.02]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.8} roughness={0.2} emissive="#FFA500" emissiveIntensity={0.5} />
+            <meshStandardMaterial color="#9C27B0" metalness={0.5} roughness={0.3} emissive="#7B1FA2" emissiveIntensity={0.4} />
           </mesh>
-          {/* Cape clasp */}
           <mesh position={[0, 0.1, 0.25]}>
             <sphereGeometry args={[0.03, 8, 8]} />
             <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFD700" emissiveIntensity={1} />
           </mesh>
-          {/* Glowing aura particles */}
-          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-            <mesh key={i} position={[
-              Math.cos((angle * Math.PI) / 180) * 0.45,
-              Math.sin(Date.now() * 0.002 + i) * 0.15,
-              Math.sin((angle * Math.PI) / 180) * 0.45
-            ]}>
-              <sphereGeometry args={[0.03, 8, 8]} />
-              <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={2} transparent opacity={0.6} />
-            </mesh>
-          ))}
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+            const colors = ['#E91E63', '#FF5722', '#9C27B0', '#F50057', '#FF4081', '#D500F9'];
+            return (
+              <mesh key={i} position={[
+                Math.cos((angle * Math.PI) / 180) * 0.45,
+                Math.sin(Date.now() * 0.002 + i) * 0.15,
+                Math.sin((angle * Math.PI) / 180) * 0.45
+              ]}>
+                <sphereGeometry args={[0.04, 8, 8]} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={1.5} transparent opacity={0.6} />
+              </mesh>
+            );
+          })}
         </group>
       )}
     </group>

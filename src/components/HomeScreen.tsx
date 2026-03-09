@@ -19,21 +19,21 @@ const ALL_SKINS = [
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 3500 },
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 4500 },
 
-  // ✊ Historical Figures - Black History Month ✊
-  { id: 'harriet' as const, name: 'Harriet Tubman', color: '#8B6914', emoji: '🌟', price: 2000, desc: 'Underground Railroad' },
-  { id: 'rosa' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌', price: 3000, desc: 'Civil Rights Icon' },
-  { id: 'mlk' as const, name: 'MLK Jr.', color: '#2C2C2C', emoji: '✊', price: 4000, desc: 'I Have a Dream' },
-  { id: 'malcolm' as const, name: 'Malcolm X', color: '#1a1a1a', emoji: '🕶️', price: 5000, desc: 'By Any Means' },
-  { id: 'lincoln' as const, name: 'Abe Lincoln', color: '#3C3C3C', emoji: '🎩', price: 5500, desc: 'Emancipation' },
-  { id: 'obama' as const, name: 'Obama', color: '#1E3A5F', emoji: '🇺🇸', price: 6000, desc: '44th President' },
-  { id: 'mandela' as const, name: 'Mandela', color: '#228B22', emoji: '✌️', price: 7000, desc: 'Freedom Fighter' },
-  { id: 'douglass' as const, name: 'F. Douglass', color: '#4a3728', emoji: '📜', price: 8000, desc: 'Abolitionist' },
-  { id: 'truth' as const, name: 'S. Truth', color: '#8B7355', emoji: '💪', price: 9000, desc: "Ain't I a Woman" },
-  { id: 'ali' as const, name: 'Muhammad Ali', color: '#CC0000', emoji: '🥊', price: 10000, desc: 'The Greatest' },
-  { id: 'jackie' as const, name: 'J. Robinson', color: '#003DA5', emoji: '⚾', price: 12000, desc: 'Breaking Barriers' },
-  { id: 'maya' as const, name: 'Maya Angelou', color: '#6B3FA0', emoji: '📖', price: 15000, desc: 'Phenomenal Woman' },
-  { id: 'jfk' as const, name: 'JFK', color: '#1C3A5F', emoji: '🏛️', price: 18000, desc: 'New Frontier' },
-  { id: 'tubman_legend' as const, name: 'Tubman ★', color: '#FFD700', emoji: '⭐', price: 25000, desc: 'Legendary Edition' },
+  // 💜 Iconic Women 💜
+  { id: 'cleopatra' as const, name: 'Cleopatra', color: '#D4AF37', emoji: '👸', price: 2000, desc: 'Queen of Egypt' },
+  { id: 'frida' as const, name: 'Frida Kahlo', color: '#CC3333', emoji: '🎨', price: 3000, desc: 'Viva la Vida' },
+  { id: 'amelia' as const, name: 'A. Earhart', color: '#8B6914', emoji: '✈️', price: 4000, desc: 'Pioneer Aviator' },
+  { id: 'curie' as const, name: 'Marie Curie', color: '#4A90D9', emoji: '⚗️', price: 5000, desc: 'Nobel Laureate' },
+  { id: 'florence' as const, name: 'F. Nightingale', color: '#F5F5F5', emoji: '🏥', price: 5500, desc: 'Lady with the Lamp' },
+  { id: 'rosa_w' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌', price: 6000, desc: 'Civil Rights Icon' },
+  { id: 'harriet_w' as const, name: 'H. Tubman', color: '#8B6914', emoji: '🌟', price: 7000, desc: 'Freedom Fighter' },
+  { id: 'coco' as const, name: 'Coco Chanel', color: '#1a1a1a', emoji: '💎', price: 8000, desc: 'Fashion Pioneer' },
+  { id: 'malala' as const, name: 'Malala', color: '#E91E63', emoji: '📚', price: 9000, desc: 'Education Activist' },
+  { id: 'joan' as const, name: 'Joan of Arc', color: '#C0C0C0', emoji: '⚔️', price: 10000, desc: 'Warrior Saint' },
+  { id: 'queen' as const, name: 'Queen Elizabeth', color: '#4169E1', emoji: '👑', price: 12000, desc: 'The Queen' },
+  { id: 'wonder' as const, name: 'Wonder Woman', color: '#CC0000', emoji: '⭐', price: 15000, desc: 'Amazonian Hero' },
+  { id: 'serena' as const, name: 'Serena Williams', color: '#FF69B4', emoji: '🎾', price: 18000, desc: 'Tennis GOAT' },
+  { id: 'legend_woman' as const, name: 'Legend ★', color: '#FFD700', emoji: '💜', price: 25000, desc: 'Legendary Edition' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
@@ -72,18 +72,18 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
   };
 
   const standardSkins = ALL_SKINS.filter(s => !('desc' in s));
-  const historicalSkins = ALL_SKINS.filter(s => 'desc' in s);
+  const womenSkins = ALL_SKINS.filter(s => 'desc' in s);
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-background via-background/95 to-primary/5 flex items-center justify-center z-10 overflow-y-auto">
       <div className="text-center space-y-6 p-6 max-w-4xl w-full my-8">
         {/* Logo */}
         <div className="space-y-3">
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text">
-            ✊ Black History Month ✊
+          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
+            💜 Women's Day 💜
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground italic">
-            Honoring those who changed the world
+            Celebrating women who changed the world
           </p>
           <div className="flex items-center justify-center gap-2 text-accent">
             <Coins className="w-5 h-5" />
@@ -144,11 +144,11 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
           </div>
         </div>
 
-        {/* Historical Figures */}
+        {/* Iconic Women */}
         <div className="space-y-3">
-          <h2 className="text-lg font-semibold text-foreground">✊ Historical Icons</h2>
+          <h2 className="text-lg font-semibold text-foreground">💜 Iconic Women</h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2 max-h-[300px] overflow-y-auto pr-2">
-            {historicalSkins.map((skin) => {
+            {womenSkins.map((skin) => {
               const isUnlocked = unlockedSkins.includes(skin.id);
               const isSelected = selectedSkin === skin.id;
               const price = skin.price;
