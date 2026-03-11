@@ -365,15 +365,27 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
-      {/* Serena Williams - Athletic headband */}
+      {/* Serena Williams - Beaded braids hairstyle with headband */}
       {skinConfig.hat === 'serenaHeadband' && (
         <group position={[0, 0.22, 0]}>
           {/* Nike-style headband */}
-          <mesh><torusGeometry args={[0.28, 0.03, 8, 32]} /><meshPhongMaterial color="#FF69B4" emissive="#FF1493" emissiveIntensity={0.3} /></mesh>
-          {/* Hair bun */}
-          <mesh position={[0, 0.15, -0.05]}>
-            <sphereGeometry args={[0.12, 12, 12]} />
+          <mesh><torusGeometry args={[0.28, 0.035, 8, 32]} /><meshPhongMaterial color="#FF69B4" emissive="#FF1493" emissiveIntensity={0.3} /></mesh>
+          {/* Hair bun on top */}
+          <mesh position={[0, 0.18, -0.05]}>
+            <sphereGeometry args={[0.14, 12, 12]} />
             <meshPhongMaterial color="#1a1a1a" />
+          </mesh>
+          {/* Beads in hair */}
+          {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+            <mesh key={`bead-${i}`} position={[Math.cos((angle * Math.PI) / 180) * 0.12, 0.22, Math.sin((angle * Math.PI) / 180) * 0.12 - 0.05]}>
+              <sphereGeometry args={[0.02, 8, 8]} />
+              <meshStandardMaterial color={i % 2 === 0 ? '#FFD700' : '#FF69B4'} metalness={0.8} roughness={0.2} />
+            </mesh>
+          ))}
+          {/* Swoosh on headband */}
+          <mesh position={[0, 0, 0.28]} rotation={[0, 0, -0.2]}>
+            <boxGeometry args={[0.06, 0.012, 0.005]} />
+            <meshPhongMaterial color="#FFFFFF" />
           </mesh>
         </group>
       )}
