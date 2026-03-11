@@ -752,27 +752,79 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
-      {/* Serena Williams - Tennis outfit */}
+      {/* Serena Williams - Full tennis outfit with racket, ball, wristbands */}
       {skinConfig.accessory === 'serenaOutfit' && (
         <group>
-          {/* Athletic top */}
+          {/* Nike athletic top with swoosh */}
           <mesh position={[0, -0.1, 0]}>
             <cylinderGeometry args={[0.28, 0.3, 0.18, 16]} />
-            <meshPhongMaterial color="#FF69B4" />
+            <meshPhongMaterial color="#FF69B4" emissive="#FF1493" emissiveIntensity={0.15} />
           </mesh>
-          {/* Skirt */}
-          <mesh position={[0, -0.22, 0]}>
-            <cylinderGeometry args={[0.3, 0.38, 0.1, 16]} />
+          {/* Swoosh logo on chest */}
+          <mesh position={[0.06, -0.04, 0.29]} rotation={[0, 0, -0.3]}>
+            <boxGeometry args={[0.08, 0.015, 0.005]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
-          {/* Tennis racket */}
-          <mesh position={[0.4, 0.05, 0]} rotation={[0, 0, 0.5]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.35, 8]} />
-            <meshStandardMaterial color="#333333" metalness={0.5} />
+          {/* Tennis skirt with pleats */}
+          <mesh position={[0, -0.22, 0]}>
+            <cylinderGeometry args={[0.3, 0.42, 0.12, 16]} />
+            <meshPhongMaterial color="#FFFFFF" />
           </mesh>
-          <mesh position={[0.5, 0.2, 0]} rotation={[0, 0, 0.5]}>
-            <torusGeometry args={[0.08, 0.01, 8, 16]} />
-            <meshStandardMaterial color="#333333" metalness={0.5} />
+          {/* Skirt pleats */}
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+            <mesh key={`pleat-${i}`} position={[Math.cos((angle * Math.PI) / 180) * 0.36, -0.24, Math.sin((angle * Math.PI) / 180) * 0.36]}>
+              <boxGeometry args={[0.01, 0.1, 0.08]} />
+              <meshPhongMaterial color="#F0F0F0" />
+            </mesh>
+          ))}
+          {/* Left wristband */}
+          <mesh position={[-0.35, -0.08, 0.1]}>
+            <torusGeometry args={[0.045, 0.015, 8, 16]} />
+            <meshPhongMaterial color="#FF69B4" />
+          </mesh>
+          {/* Right wristband */}
+          <mesh position={[0.35, -0.08, 0.1]}>
+            <torusGeometry args={[0.045, 0.015, 8, 16]} />
+            <meshPhongMaterial color="#FF69B4" />
+          </mesh>
+          {/* Tennis racket - handle */}
+          <mesh position={[0.4, 0.02, 0]} rotation={[0, 0, 0.4]}>
+            <cylinderGeometry args={[0.018, 0.022, 0.3, 8]} />
+            <meshStandardMaterial color="#222222" metalness={0.3} roughness={0.6} />
+          </mesh>
+          {/* Racket grip tape */}
+          <mesh position={[0.35, -0.08, 0]} rotation={[0, 0, 0.4]}>
+            <cylinderGeometry args={[0.024, 0.024, 0.08, 8]} />
+            <meshPhongMaterial color="#FF69B4" />
+          </mesh>
+          {/* Racket head frame */}
+          <mesh position={[0.52, 0.22, 0]} rotation={[0, 0, 0.4]}>
+            <torusGeometry args={[0.1, 0.012, 8, 20]} />
+            <meshStandardMaterial color="#333333" metalness={0.7} roughness={0.2} />
+          </mesh>
+          {/* Racket strings horizontal */}
+          {[-0.06, -0.03, 0, 0.03, 0.06].map((offset, i) => (
+            <mesh key={`sh-${i}`} position={[0.52 + offset * Math.cos(0.4), 0.22 + offset * Math.sin(0.4), 0]} rotation={[0, 0, 0.4]}>
+              <boxGeometry args={[0.003, 0.18, 0.003]} />
+              <meshPhongMaterial color="#CCCCCC" />
+            </mesh>
+          ))}
+          {/* Racket strings vertical */}
+          {[-0.06, -0.03, 0, 0.03, 0.06].map((offset, i) => (
+            <mesh key={`sv-${i}`} position={[0.52, 0.22, offset]} rotation={[0, 0, 0.4]}>
+              <boxGeometry args={[0.18, 0.003, 0.003]} />
+              <meshPhongMaterial color="#CCCCCC" />
+            </mesh>
+          ))}
+          {/* Tennis ball floating nearby */}
+          <mesh position={[-0.35, 0.25, 0.2]}>
+            <sphereGeometry args={[0.05, 16, 16]} />
+            <meshPhongMaterial color="#CCFF00" emissive="#AADD00" emissiveIntensity={0.3} />
+          </mesh>
+          {/* Ball seam line */}
+          <mesh position={[-0.35, 0.25, 0.2]}>
+            <torusGeometry args={[0.05, 0.005, 8, 16]} />
+            <meshPhongMaterial color="#FFFFFF" />
           </mesh>
         </group>
       )}
