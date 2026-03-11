@@ -772,57 +772,129 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
-      {/* Malala - Book */}
+      {/* Malala - School uniform with book, pen, and Nobel medal */}
       {skinConfig.accessory === 'malalaBook' && (
         <group>
-          {/* Simple outfit */}
+          {/* School uniform - shalwar kameez */}
           <mesh position={[0, -0.12, 0]}>
             <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshPhongMaterial color="#E91E63" />
-          </mesh>
-          {/* Book held in front */}
-          <mesh position={[0.3, -0.1, 0.15]} rotation={[0, -0.3, 0]}>
-            <boxGeometry args={[0.12, 0.15, 0.03]} />
             <meshPhongMaterial color="#1565C0" />
           </mesh>
-          {/* Book pages */}
-          <mesh position={[0.3, -0.1, 0.135]} rotation={[0, -0.3, 0]}>
-            <boxGeometry args={[0.1, 0.13, 0.02]} />
+          {/* White collar */}
+          <mesh position={[0, 0.02, 0.25]}>
+            <boxGeometry args={[0.12, 0.04, 0.01]} />
             <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          {/* Book held in left hand */}
+          <mesh position={[-0.32, -0.08, 0.15]} rotation={[0.1, 0.3, 0]}>
+            <boxGeometry args={[0.14, 0.18, 0.035]} />
+            <meshPhongMaterial color="#8B0000" />
+          </mesh>
+          {/* Book pages */}
+          <mesh position={[-0.32, -0.08, 0.133]} rotation={[0.1, 0.3, 0]}>
+            <boxGeometry args={[0.12, 0.16, 0.025]} />
+            <meshPhongMaterial color="#FFFFF0" />
+          </mesh>
+          {/* Book title line */}
+          <mesh position={[-0.32, -0.04, 0.17]} rotation={[0.1, 0.3, 0]}>
+            <boxGeometry args={[0.08, 0.01, 0.002]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.8} />
+          </mesh>
+          {/* Pen in right hand */}
+          <mesh position={[0.34, -0.02, 0.15]} rotation={[0, 0, 0.6]}>
+            <cylinderGeometry args={[0.008, 0.008, 0.18, 8]} />
+            <meshPhongMaterial color="#333333" />
+          </mesh>
+          {/* Pen tip */}
+          <mesh position={[0.28, -0.08, 0.15]} rotation={[0, 0, 0.6]}>
+            <coneGeometry args={[0.008, 0.03, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+          </mesh>
+          {/* Nobel Peace Prize medal */}
+          <mesh position={[0, -0.05, 0.32]}>
+            <cylinderGeometry args={[0.03, 0.03, 0.005, 16]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFD700" emissiveIntensity={0.5} />
+          </mesh>
+          {/* Medal ribbon */}
+          <mesh position={[0, 0.01, 0.31]}>
+            <boxGeometry args={[0.025, 0.06, 0.003]} />
+            <meshPhongMaterial color="#006400" />
           </mesh>
         </group>
       )}
 
-      {/* Joan of Arc - Armor */}
+      {/* Joan of Arc - Full plate armor with sword and shield */}
       {skinConfig.accessory === 'joanArmor' && (
         <group>
-          {/* Chest plate */}
+          {/* Chest plate with fleur-de-lis */}
           <mesh position={[0, -0.1, 0]}>
             <cylinderGeometry args={[0.3, 0.33, 0.22, 16]} />
-            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.2} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.15} />
           </mesh>
-          {/* Cross on chest */}
+          {/* Armor segments */}
+          <mesh position={[0, -0.03, 0]}>
+            <torusGeometry args={[0.31, 0.01, 8, 16]} />
+            <meshStandardMaterial color="#A0A0A0" metalness={0.9} />
+          </mesh>
+          {/* Gold cross on chest */}
           <mesh position={[0, -0.06, 0.31]}>
             <boxGeometry args={[0.02, 0.1, 0.01]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.3} />
           </mesh>
           <mesh position={[0, -0.04, 0.31]}>
             <boxGeometry args={[0.06, 0.02, 0.01]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.3} />
           </mesh>
-          {/* Sword */}
-          <mesh position={[-0.4, 0, -0.05]} rotation={[0, 0, 0.2]}>
-            <boxGeometry args={[0.02, 0.5, 0.01]} />
-            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
+          {/* Shoulder guards */}
+          <mesh position={[-0.3, 0.05, 0]}>
+            <sphereGeometry args={[0.08, 8, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.15} />
           </mesh>
-          <mesh position={[-0.4, 0.22, -0.05]}>
-            <boxGeometry args={[0.08, 0.02, 0.02]} />
-            <meshStandardMaterial color="#D4AF37" metalness={0.9} />
+          <mesh position={[0.3, 0.05, 0]}>
+            <sphereGeometry args={[0.08, 8, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#C0C0C0" metalness={0.9} roughness={0.15} />
+          </mesh>
+          {/* Sword with detailed hilt */}
+          <mesh position={[-0.42, 0, -0.05]} rotation={[0, 0, 0.15]}>
+            <boxGeometry args={[0.025, 0.55, 0.008]} />
+            <meshStandardMaterial color="#D0D0D0" metalness={0.95} roughness={0.05} />
+          </mesh>
+          {/* Sword guard */}
+          <mesh position={[-0.42, 0.24, -0.05]}>
+            <boxGeometry args={[0.1, 0.02, 0.025]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.95} />
+          </mesh>
+          {/* Sword pommel */}
+          <mesh position={[-0.42, -0.05, -0.05]}>
+            <sphereGeometry args={[0.02, 8, 8]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.95} />
+          </mesh>
+          {/* Shield */}
+          <mesh position={[0.38, -0.05, 0.12]} rotation={[0, -0.3, 0]}>
+            <cylinderGeometry args={[0.12, 0.12, 0.02, 6]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.5} roughness={0.4} />
+          </mesh>
+          <mesh position={[0.38, -0.05, 0.13]} rotation={[0, -0.3, 0]}>
+            <torusGeometry args={[0.12, 0.008, 6, 6]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.95} />
+          </mesh>
+          {/* French banner */}
+          <mesh position={[0, -0.1, -0.3]} rotation={[0.15, 0, 0]}>
+            <boxGeometry args={[0.15, 0.3, 0.005]} />
+            <meshPhongMaterial color="#FFFFFF" />
+          </mesh>
+          <mesh position={[0.05, -0.1, -0.3]} rotation={[0.15, 0, 0]}>
+            <boxGeometry args={[0.05, 0.3, 0.006]} />
+            <meshPhongMaterial color="#CC0000" />
+          </mesh>
+          <mesh position={[-0.05, -0.1, -0.3]} rotation={[0.15, 0, 0]}>
+            <boxGeometry args={[0.05, 0.3, 0.006]} />
+            <meshPhongMaterial color="#1a237e" />
           </mesh>
         </group>
       )}
 
-      {/* Queen Elizabeth - Royal robe */}
+      {/* Queen Elizabeth - Royal robe with handbag, scepter, and orb */}
       {skinConfig.accessory === 'queenRobe' && (
         <group>
           {/* Royal blue dress */}
@@ -831,66 +903,118 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
             <meshPhongMaterial color="#4169E1" />
           </mesh>
           {/* Ermine-trimmed robe */}
-          <mesh position={[0, -0.05, -0.2]} rotation={[0.1, 0, 0]}>
-            <boxGeometry args={[0.5, 0.35, 0.02]} />
+          <mesh position={[0, -0.08, -0.22]} rotation={[0.15, 0, 0]}>
+            <boxGeometry args={[0.55, 0.4, 0.02]} />
             <meshPhongMaterial color="#8B0000" />
           </mesh>
-          {/* White fur trim */}
+          {/* Ermine spots */}
+          {[[-0.15, -0.15], [0.1, -0.1], [-0.08, -0.25], [0.15, -0.2], [0, -0.05]].map(([x, y], i) => (
+            <mesh key={`ermine-${i}`} position={[x, y, -0.23]} rotation={[0.15, 0, 0]}>
+              <sphereGeometry args={[0.012, 6, 6]} />
+              <meshPhongMaterial color="#1a1a1a" />
+            </mesh>
+          ))}
+          {/* White fur collar */}
           <mesh position={[0, 0.05, 0.25]}>
-            <torusGeometry args={[0.3, 0.03, 8, 16, Math.PI]} />
+            <torusGeometry args={[0.3, 0.04, 8, 16, Math.PI]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
           {/* Scepter */}
           <mesh position={[0.38, 0, 0.05]}>
-            <cylinderGeometry args={[0.015, 0.015, 0.4, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.9} roughness={0.1} />
+            <cylinderGeometry args={[0.012, 0.015, 0.45, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
           </mesh>
-          <mesh position={[0.38, 0.22, 0.05]}>
+          <mesh position={[0.38, 0.25, 0.05]}>
             <sphereGeometry args={[0.035, 8, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.3} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.4} />
+          </mesh>
+          {/* Cross on scepter */}
+          <mesh position={[0.38, 0.3, 0.05]}>
+            <boxGeometry args={[0.01, 0.04, 0.01]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} />
+          </mesh>
+          {/* Iconic Launer handbag */}
+          <mesh position={[-0.36, -0.12, 0.1]}>
+            <boxGeometry args={[0.1, 0.08, 0.05]} />
+            <meshPhongMaterial color="#1a1a1a" />
+          </mesh>
+          <mesh position={[-0.36, -0.06, 0.1]}>
+            <torusGeometry args={[0.04, 0.006, 8, 12, Math.PI]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} />
+          </mesh>
+          {/* Royal Order brooch */}
+          <mesh position={[0.08, 0.02, 0.3]}>
+            <octahedronGeometry args={[0.025]} />
+            <meshStandardMaterial color="#0000FF" metalness={0.7} emissive="#0000FF" emissiveIntensity={0.3} />
           </mesh>
         </group>
       )}
 
-      {/* Wonder Woman - Amazonian armor */}
+      {/* Wonder Woman - Full Amazonian armor with shield and lasso */}
       {skinConfig.accessory === 'wonderArmor' && (
         <group>
           {/* Armored bustier */}
           <mesh position={[0, -0.1, 0]}>
             <cylinderGeometry args={[0.3, 0.33, 0.2, 16]} />
-            <meshStandardMaterial color="#CC0000" metalness={0.6} roughness={0.3} />
+            <meshStandardMaterial color="#CC0000" metalness={0.7} roughness={0.2} />
           </mesh>
-          {/* Gold eagle emblem */}
-          <mesh position={[0, -0.02, 0.3]}>
-            <boxGeometry args={[0.1, 0.03, 0.01]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFA500" emissiveIntensity={0.5} />
+          {/* Gold W eagle emblem */}
+          <mesh position={[0, -0.02, 0.31]}>
+            <boxGeometry args={[0.12, 0.02, 0.005]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.5} />
           </mesh>
-          {/* Bracelets of submission */}
-          <mesh position={[-0.35, -0.05, 0.1]}>
-            <torusGeometry args={[0.06, 0.015, 8, 16]} />
-            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
+          <mesh position={[-0.04, 0, 0.31]} rotation={[0, 0, 0.4]}>
+            <boxGeometry args={[0.06, 0.015, 0.005]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.5} />
           </mesh>
-          <mesh position={[0.35, -0.05, 0.1]}>
-            <torusGeometry args={[0.06, 0.015, 8, 16]} />
-            <meshStandardMaterial color="#C0C0C0" metalness={0.95} roughness={0.1} />
+          <mesh position={[0.04, 0, 0.31]} rotation={[0, 0, -0.4]}>
+            <boxGeometry args={[0.06, 0.015, 0.005]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.5} />
           </mesh>
-          {/* Lasso of truth */}
-          <mesh position={[0.2, -0.2, -0.15]} rotation={[0.5, 0, 0.3]}>
-            <torusGeometry args={[0.1, 0.01, 8, 16]} />
+          {/* Blue armored skirt with stars */}
+          <mesh position={[0, -0.22, 0]}>
+            <cylinderGeometry args={[0.3, 0.38, 0.1, 16]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.4} roughness={0.4} />
+          </mesh>
+          {[0, 72, 144, 216, 288].map((angle, i) => (
+            <mesh key={`star-${i}`} position={[Math.cos((angle * Math.PI) / 180) * 0.34, -0.22, Math.sin((angle * Math.PI) / 180) * 0.34]}>
+              <octahedronGeometry args={[0.015]} />
+              <meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={0.5} />
+            </mesh>
+          ))}
+          {/* Double silver bracelets */}
+          <mesh position={[-0.35, -0.05, 0.1]}><torusGeometry args={[0.06, 0.02, 8, 16]} /><meshStandardMaterial color="#C0C0C0" metalness={0.98} roughness={0.05} /></mesh>
+          <mesh position={[-0.35, -0.02, 0.1]}><torusGeometry args={[0.06, 0.02, 8, 16]} /><meshStandardMaterial color="#C0C0C0" metalness={0.98} roughness={0.05} /></mesh>
+          <mesh position={[0.35, -0.05, 0.1]}><torusGeometry args={[0.06, 0.02, 8, 16]} /><meshStandardMaterial color="#C0C0C0" metalness={0.98} roughness={0.05} /></mesh>
+          <mesh position={[0.35, -0.02, 0.1]}><torusGeometry args={[0.06, 0.02, 8, 16]} /><meshStandardMaterial color="#C0C0C0" metalness={0.98} roughness={0.05} /></mesh>
+          {/* Shield on back */}
+          <mesh position={[0, 0, -0.3]}><cylinderGeometry args={[0.15, 0.15, 0.02, 16]} /><meshStandardMaterial color="#CC0000" metalness={0.7} roughness={0.2} /></mesh>
+          <mesh position={[0, 0, -0.31]}><torusGeometry args={[0.15, 0.01, 8, 16]} /><meshStandardMaterial color="#FFD700" metalness={0.95} /></mesh>
+          <mesh position={[0, 0, -0.32]}><octahedronGeometry args={[0.04]} /><meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFD700" emissiveIntensity={0.5} /></mesh>
+          {/* Glowing lasso of truth */}
+          <mesh position={[0.2, -0.2, -0.1]} rotation={[0.5, 0, 0.3]}>
+            <torusGeometry args={[0.1, 0.012, 8, 16]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={1.2} />
+          </mesh>
+          <mesh position={[0.15, -0.3, -0.05]} rotation={[0.8, 0.2, 0.5]}>
+            <torusGeometry args={[0.06, 0.008, 8, 12, Math.PI]} />
             <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={0.8} />
           </mesh>
+          {/* Red boots */}
+          <mesh position={[-0.1, -0.3, 0.05]}><cylinderGeometry args={[0.04, 0.05, 0.08, 8]} /><meshStandardMaterial color="#CC0000" metalness={0.5} /></mesh>
+          <mesh position={[0.1, -0.3, 0.05]}><cylinderGeometry args={[0.04, 0.05, 0.08, 8]} /><meshStandardMaterial color="#CC0000" metalness={0.5} /></mesh>
         </group>
       )}
 
-      {/* Serena Williams - Full tennis outfit with racket, ball, wristbands */}
+      {/* Serena Williams - Full tennis outfit with racket, ball, wristbands, trophy */}
       {skinConfig.accessory === 'serenaOutfit' && (
         <group>
-          {/* Nike athletic top with swoosh */}
+          {/* Nike athletic top */}
           <mesh position={[0, -0.1, 0]}>
             <cylinderGeometry args={[0.28, 0.3, 0.18, 16]} />
             <meshPhongMaterial color="#FF69B4" emissive="#FF1493" emissiveIntensity={0.15} />
           </mesh>
-          {/* Swoosh logo on chest */}
+          {/* Swoosh */}
           <mesh position={[0.06, -0.04, 0.29]} rotation={[0, 0, -0.3]}>
             <boxGeometry args={[0.08, 0.015, 0.005]} />
             <meshPhongMaterial color="#FFFFFF" />
@@ -900,89 +1024,125 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
             <cylinderGeometry args={[0.3, 0.42, 0.12, 16]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
-          {/* Skirt pleats */}
           {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
             <mesh key={`pleat-${i}`} position={[Math.cos((angle * Math.PI) / 180) * 0.36, -0.24, Math.sin((angle * Math.PI) / 180) * 0.36]}>
               <boxGeometry args={[0.01, 0.1, 0.08]} />
               <meshPhongMaterial color="#F0F0F0" />
             </mesh>
           ))}
-          {/* Left wristband */}
-          <mesh position={[-0.35, -0.08, 0.1]}>
-            <torusGeometry args={[0.045, 0.015, 8, 16]} />
-            <meshPhongMaterial color="#FF69B4" />
-          </mesh>
-          {/* Right wristband */}
-          <mesh position={[0.35, -0.08, 0.1]}>
-            <torusGeometry args={[0.045, 0.015, 8, 16]} />
-            <meshPhongMaterial color="#FF69B4" />
-          </mesh>
+          {/* Wristbands */}
+          <mesh position={[-0.35, -0.08, 0.1]}><torusGeometry args={[0.045, 0.015, 8, 16]} /><meshPhongMaterial color="#FF69B4" /></mesh>
+          <mesh position={[0.35, -0.08, 0.1]}><torusGeometry args={[0.045, 0.015, 8, 16]} /><meshPhongMaterial color="#FF69B4" /></mesh>
           {/* Tennis racket - handle */}
           <mesh position={[0.4, 0.02, 0]} rotation={[0, 0, 0.4]}>
             <cylinderGeometry args={[0.018, 0.022, 0.3, 8]} />
             <meshStandardMaterial color="#222222" metalness={0.3} roughness={0.6} />
           </mesh>
-          {/* Racket grip tape */}
+          {/* Grip tape */}
           <mesh position={[0.35, -0.08, 0]} rotation={[0, 0, 0.4]}>
             <cylinderGeometry args={[0.024, 0.024, 0.08, 8]} />
             <meshPhongMaterial color="#FF69B4" />
           </mesh>
-          {/* Racket head frame */}
+          {/* Racket head */}
           <mesh position={[0.52, 0.22, 0]} rotation={[0, 0, 0.4]}>
             <torusGeometry args={[0.1, 0.012, 8, 20]} />
             <meshStandardMaterial color="#333333" metalness={0.7} roughness={0.2} />
           </mesh>
-          {/* Racket strings horizontal */}
+          {/* Strings */}
           {[-0.06, -0.03, 0, 0.03, 0.06].map((offset, i) => (
             <mesh key={`sh-${i}`} position={[0.52 + offset * Math.cos(0.4), 0.22 + offset * Math.sin(0.4), 0]} rotation={[0, 0, 0.4]}>
-              <boxGeometry args={[0.003, 0.18, 0.003]} />
-              <meshPhongMaterial color="#CCCCCC" />
+              <boxGeometry args={[0.003, 0.18, 0.003]} /><meshPhongMaterial color="#CCCCCC" />
             </mesh>
           ))}
-          {/* Racket strings vertical */}
           {[-0.06, -0.03, 0, 0.03, 0.06].map((offset, i) => (
             <mesh key={`sv-${i}`} position={[0.52, 0.22, offset]} rotation={[0, 0, 0.4]}>
-              <boxGeometry args={[0.18, 0.003, 0.003]} />
-              <meshPhongMaterial color="#CCCCCC" />
+              <boxGeometry args={[0.18, 0.003, 0.003]} /><meshPhongMaterial color="#CCCCCC" />
             </mesh>
           ))}
-          {/* Tennis ball floating nearby */}
+          {/* Tennis ball */}
           <mesh position={[-0.35, 0.25, 0.2]}>
             <sphereGeometry args={[0.05, 16, 16]} />
             <meshPhongMaterial color="#CCFF00" emissive="#AADD00" emissiveIntensity={0.3} />
           </mesh>
-          {/* Ball seam line */}
           <mesh position={[-0.35, 0.25, 0.2]}>
             <torusGeometry args={[0.05, 0.005, 8, 16]} />
             <meshPhongMaterial color="#FFFFFF" />
           </mesh>
+          {/* Grand Slam trophy */}
+          <mesh position={[-0.4, -0.2, -0.15]}>
+            <cylinderGeometry args={[0.015, 0.03, 0.06, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
+          </mesh>
+          <mesh position={[-0.4, -0.15, -0.15]}>
+            <sphereGeometry args={[0.025, 8, 8]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.3} />
+          </mesh>
         </group>
       )}
 
-      {/* Legend Woman - Golden cape with flowers */}
+      {/* Legend Woman - Spectacular golden cape with orbiting flowers, Venus symbol, aura */}
       {skinConfig.accessory === 'legendCape' && (
         <group>
-          <mesh position={[0, 0, -0.25]} rotation={[0.2, 0, 0]}>
-            <boxGeometry args={[0.6, 0.7, 0.02]} />
-            <meshStandardMaterial color="#9C27B0" metalness={0.5} roughness={0.3} emissive="#7B1FA2" emissiveIntensity={0.4} />
+          {/* Grand flowing cape */}
+          <mesh position={[0, -0.05, -0.25]} rotation={[0.2, 0, 0]}>
+            <boxGeometry args={[0.65, 0.75, 0.02]} />
+            <meshStandardMaterial color="#9C27B0" metalness={0.6} roughness={0.2} emissive="#7B1FA2" emissiveIntensity={0.5} />
           </mesh>
-          <mesh position={[0, 0.1, 0.25]}>
-            <sphereGeometry args={[0.03, 8, 8]} />
-            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} emissive="#FFD700" emissiveIntensity={1} />
+          {/* Cape gold trim */}
+          <mesh position={[0, 0.1, -0.24]}>
+            <boxGeometry args={[0.65, 0.03, 0.025]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFA500" emissiveIntensity={0.5} />
           </mesh>
-          {[0, 60, 120, 180, 240, 300].map((angle, i) => {
-            const colors = ['#E91E63', '#FF5722', '#9C27B0', '#F50057', '#FF4081', '#D500F9'];
+          {/* Elegant gown */}
+          <mesh position={[0, -0.15, 0]}>
+            <cylinderGeometry args={[0.3, 0.4, 0.25, 16]} />
+            <meshStandardMaterial color="#9C27B0" metalness={0.4} roughness={0.4} emissive="#7B1FA2" emissiveIntensity={0.2} />
+          </mesh>
+          {/* Diamond brooch */}
+          <mesh position={[0, 0.1, 0.28]}>
+            <octahedronGeometry args={[0.04]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFD700" emissiveIntensity={1.5} />
+          </mesh>
+          <mesh position={[0, 0.1, 0.3]}>
+            <octahedronGeometry args={[0.02]} />
+            <meshStandardMaterial color="#FFFFFF" metalness={0.3} emissive="#FFFFFF" emissiveIntensity={2} />
+          </mesh>
+          {/* Orbiting flower petals */}
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+            const colors = ['#E91E63', '#FF5722', '#9C27B0', '#F50057', '#FF4081', '#D500F9', '#E91E63', '#FF1744'];
             return (
               <mesh key={i} position={[
-                Math.cos((angle * Math.PI) / 180) * 0.45,
-                Math.sin(Date.now() * 0.002 + i) * 0.15,
-                Math.sin((angle * Math.PI) / 180) * 0.45
+                Math.cos((angle * Math.PI) / 180) * 0.48,
+                Math.sin(Date.now() * 0.002 + i) * 0.18,
+                Math.sin((angle * Math.PI) / 180) * 0.48
               ]}>
                 <sphereGeometry args={[0.04, 8, 8]} />
-                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={1.5} transparent opacity={0.6} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={1.8} transparent opacity={0.7} />
               </mesh>
             );
           })}
+          {/* Golden aura rings */}
+          <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[0.5, 0.008, 8, 32]} />
+            <meshPhongMaterial color="#FFD700" emissive="#FFD700" emissiveIntensity={1} transparent opacity={0.4} />
+          </mesh>
+          <mesh position={[0, 0, 0]} rotation={[Math.PI / 3, 0, Math.PI / 4]}>
+            <torusGeometry args={[0.55, 0.006, 8, 32]} />
+            <meshPhongMaterial color="#E91E63" emissive="#E91E63" emissiveIntensity={0.8} transparent opacity={0.3} />
+          </mesh>
+          {/* Venus/♀ symbol floating above */}
+          <mesh position={[0, 0.55, 0]}>
+            <torusGeometry args={[0.05, 0.008, 8, 16]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFD700" emissiveIntensity={1.5} />
+          </mesh>
+          <mesh position={[0, 0.47, 0]}>
+            <boxGeometry args={[0.015, 0.08, 0.008]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFD700" emissiveIntensity={1.5} />
+          </mesh>
+          <mesh position={[0, 0.44, 0]}>
+            <boxGeometry args={[0.04, 0.015, 0.008]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} emissive="#FFD700" emissiveIntensity={1.5} />
+          </mesh>
         </group>
       )}
     </group>
