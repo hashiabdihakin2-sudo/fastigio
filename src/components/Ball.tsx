@@ -487,24 +487,59 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
 
       {/* ========== ICONIC WOMEN ACCESSORIES ========== */}
 
-      {/* Cleopatra - Gold jewelry and Egyptian collar */}
+      {/* Cleopatra - Gold jewelry, Egyptian collar, and asp bracelet */}
       {skinConfig.accessory === 'cleopatraJewels' && (
         <group>
-          {/* Egyptian collar necklace */}
-          <mesh position={[0, -0.1, 0]}>
-            <torusGeometry args={[0.32, 0.04, 8, 32]} />
-            <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.1} emissive="#B8860B" emissiveIntensity={0.3} />
+          {/* Grand Egyptian usekh collar - multiple layers */}
+          <mesh position={[0, -0.08, 0]}>
+            <torusGeometry args={[0.32, 0.05, 8, 32]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.95} roughness={0.05} emissive="#B8860B" emissiveIntensity={0.4} />
           </mesh>
-          {/* Jeweled pendants */}
-          {[0, 40, 80, -40, -80].map((angle, i) => {
-            const colors = ['#00BCD4', '#D4AF37', '#4CAF50', '#D4AF37', '#E91E63'];
+          <mesh position={[0, -0.13, 0]}>
+            <torusGeometry args={[0.34, 0.03, 8, 32]} />
+            <meshStandardMaterial color="#1a237e" metalness={0.6} roughness={0.3} />
+          </mesh>
+          {/* Jeweled scarab pendants */}
+          {[0, 30, 60, -30, -60, 90, -90].map((angle, i) => {
+            const colors = ['#00BCD4', '#D4AF37', '#4CAF50', '#E91E63', '#D4AF37', '#00BCD4', '#4CAF50'];
             return (
-              <mesh key={i} position={[Math.sin((angle * Math.PI) / 180) * 0.32, -0.15, Math.cos((angle * Math.PI) / 180) * 0.32]}>
+              <mesh key={i} position={[Math.sin((angle * Math.PI) / 180) * 0.34, -0.17, Math.cos((angle * Math.PI) / 180) * 0.34]}>
                 <sphereGeometry args={[0.02, 8, 8]} />
-                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={0.5} />
+                <meshPhongMaterial color={colors[i]} emissive={colors[i]} emissiveIntensity={0.6} />
               </mesh>
             );
           })}
+          {/* Asp bracelet on left arm */}
+          <mesh position={[-0.36, -0.05, 0.1]}>
+            <torusGeometry args={[0.05, 0.012, 8, 16]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.95} roughness={0.05} />
+          </mesh>
+          <mesh position={[-0.36, -0.02, 0.14]}>
+            <coneGeometry args={[0.015, 0.04, 6]} />
+            <meshStandardMaterial color="#D4AF37" metalness={0.9} emissive="#FFD700" emissiveIntensity={0.3} />
+          </mesh>
+          {/* Ankh symbol held in right hand */}
+          <mesh position={[0.36, -0.05, 0.12]}>
+            <torusGeometry args={[0.03, 0.008, 8, 12]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
+          </mesh>
+          <mesh position={[0.36, -0.1, 0.12]}>
+            <boxGeometry args={[0.015, 0.08, 0.008]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
+          </mesh>
+          <mesh position={[0.36, -0.08, 0.12]}>
+            <boxGeometry args={[0.04, 0.015, 0.008]} />
+            <meshStandardMaterial color="#FFD700" metalness={0.95} roughness={0.05} />
+          </mesh>
+          {/* Kohl eyeliner extended */}
+          <mesh position={[-0.15, 0.04, 0.27]}>
+            <boxGeometry args={[0.06, 0.01, 0.005]} />
+            <meshBasicMaterial color="#000000" />
+          </mesh>
+          <mesh position={[0.15, 0.04, 0.27]}>
+            <boxGeometry args={[0.06, 0.01, 0.005]} />
+            <meshBasicMaterial color="#000000" />
+          </mesh>
         </group>
       )}
 
