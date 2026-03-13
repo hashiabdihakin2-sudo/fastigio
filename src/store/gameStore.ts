@@ -18,21 +18,14 @@ const SKIN_PRICES = {
   golden: 2500,
   ninja: 3500,
   robot: 4500,
-  // International Women's Day - Iconic Women
-  cleopatra: 2000,
-  frida: 3000,
-  amelia: 4000,
-  curie: 5000,
-  florence: 5500,
-  rosa_w: 6000,
-  harriet_w: 7000,
+  // Premium
+  cleopatra: 6000,
   coco: 8000,
-  malala: 9000,
-  joan: 10000,
-  queen: 12000,
-  wonder: 15000,
-  serena: 18000,
-  legend_woman: 25000,
+  phoenix: 10000,
+  galaxy: 12000,
+  samurai: 15000,
+  dragon: 20000,
+  legend: 25000,
 } as const;
 
 type SkinType = keyof typeof SKIN_PRICES;
