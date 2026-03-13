@@ -14,19 +14,12 @@ const SKINS = [
   { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷' },
   { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖' },
   { id: 'cleopatra' as const, name: 'Cleopatra', color: '#D4AF37', emoji: '👸' },
-  { id: 'frida' as const, name: 'Frida', color: '#CC3333', emoji: '🎨' },
-  { id: 'amelia' as const, name: 'Earhart', color: '#8B6914', emoji: '✈️' },
-  { id: 'curie' as const, name: 'Curie', color: '#4A90D9', emoji: '⚗️' },
-  { id: 'florence' as const, name: 'Nightingale', color: '#F5F5F5', emoji: '🏥' },
-  { id: 'rosa_w' as const, name: 'Rosa Parks', color: '#C4A35A', emoji: '🚌' },
-  { id: 'harriet_w' as const, name: 'Tubman', color: '#8B6914', emoji: '🌟' },
   { id: 'coco' as const, name: 'Chanel', color: '#1a1a1a', emoji: '💎' },
-  { id: 'malala' as const, name: 'Malala', color: '#E91E63', emoji: '📚' },
-  { id: 'joan' as const, name: 'Joan', color: '#C0C0C0', emoji: '⚔️' },
-  { id: 'queen' as const, name: 'Queen', color: '#4169E1', emoji: '👑' },
-  { id: 'wonder' as const, name: 'Wonder W.', color: '#CC0000', emoji: '⭐' },
-  { id: 'serena' as const, name: 'Serena', color: '#FF69B4', emoji: '🎾' },
-  { id: 'legend_woman' as const, name: 'Legend ★', color: '#FFD700', emoji: '💜' },
+  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF4500', emoji: '🔥' },
+  { id: 'galaxy' as const, name: 'Galaxy', color: '#4B0082', emoji: '🌌' },
+  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '⚔️' },
+  { id: 'dragon' as const, name: 'Dragon', color: '#228B22', emoji: '🐉' },
+  { id: 'legend' as const, name: 'Legend ★', color: '#FFD700', emoji: '⭐' },
 ];
 
 export type SkinId = typeof SKINS[number]['id'];
@@ -126,7 +119,7 @@ export const LocalMultiplayerLobby = ({ onStartGame, onBack }: LocalMultiplayerL
           <span className="hidden sm:inline">Tillbaka</span>
         </Button>
         <h1 className="text-lg sm:text-2xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
-          💜 1v1 Women's Day 💜
+          ⚡ 1v1 Battle ⚡
         </h1>
         <div className="flex items-center gap-1 text-accent">
           <Coins className="w-4 h-4" />

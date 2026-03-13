@@ -49,17 +49,11 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         // Theme colors
-        violet: {
-          deep: "hsl(var(--violet-deep))",
-        },
-        magenta: {
-          bright: "hsl(var(--magenta-bright))",
-        },
-        rose: {
-          soft: "hsl(var(--rose-soft))",
-        },
-        gold: {
-          warm: "hsl(var(--gold-warm))",
+        neon: {
+          blue: "hsl(var(--neon-blue))",
+          cyan: "hsl(var(--neon-cyan))",
+          purple: "hsl(var(--neon-purple))",
+          pink: "hsl(var(--neon-pink))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

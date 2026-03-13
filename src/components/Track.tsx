@@ -19,98 +19,96 @@ export const Track = ({ ballPosition }: TrackProps) => {
     
     sections.push(
       <group key={i} position={[0, 0, zPos]}>
-        {/* Purple/magenta gradient platform */}
+        {/* Dark blue platform */}
         <mesh receiveShadow position={[0, -0.1, 0]}>
           <boxGeometry args={[TRACK_WIDTH, 0.2, SECTION_LENGTH - 0.2]} />
           <meshStandardMaterial 
-            color={i % 2 === 0 ? '#1a0a2e' : '#200e3a'}
-            emissive={i % 2 === 0 ? '#3a1060' : '#2a0850'}
+            color={i % 2 === 0 ? '#0a1628' : '#0d1a30'}
+            emissive={i % 2 === 0 ? '#0a2040' : '#081830'}
             emissiveIntensity={0.3}
-            metalness={0.4}
-            roughness={0.6}
+            metalness={0.5}
+            roughness={0.5}
           />
         </mesh>
         
-        {/* Shimmering top layer */}
+        {/* Glowing top layer */}
         <mesh position={[0, 0.05, 0]}>
           <boxGeometry args={[TRACK_WIDTH - 0.5, 0.08, SECTION_LENGTH - 0.3]} />
           <meshStandardMaterial 
-            color="#2a1050"
-            emissive="#4a1880"
-            emissiveIntensity={0.2}
-            metalness={0.5}
+            color="#0a1a35"
+            emissive="#0066CC"
+            emissiveIntensity={0.15}
+            metalness={0.6}
             roughness={0.4}
           />
         </mesh>
         
-        {/* Gold and magenta borders */}
+        {/* Cyan and blue neon borders */}
         <mesh position={[TRACK_WIDTH / 2, 0, 0]}>
           <boxGeometry args={[0.25, 0.6, SECTION_LENGTH]} />
           <meshStandardMaterial 
-            color={i % 2 === 0 ? '#D4AF37' : '#E91E63'}
-            emissive={i % 2 === 0 ? '#aa8833' : '#C2185B'}
-            emissiveIntensity={0.4}
-            metalness={0.7}
-            roughness={0.3}
+            color={i % 2 === 0 ? '#00BFFF' : '#7B68EE'}
+            emissive={i % 2 === 0 ? '#0099CC' : '#6A5ACD'}
+            emissiveIntensity={0.5}
+            metalness={0.8}
+            roughness={0.2}
           />
         </mesh>
         <mesh position={[-TRACK_WIDTH / 2, 0, 0]}>
           <boxGeometry args={[0.25, 0.6, SECTION_LENGTH]} />
           <meshStandardMaterial 
-            color={i % 2 === 0 ? '#E91E63' : '#D4AF37'}
-            emissive={i % 2 === 0 ? '#C2185B' : '#aa8833'}
-            emissiveIntensity={0.4}
-            metalness={0.7}
-            roughness={0.3}
+            color={i % 2 === 0 ? '#7B68EE' : '#00BFFF'}
+            emissive={i % 2 === 0 ? '#6A5ACD' : '#0099CC'}
+            emissiveIntensity={0.5}
+            metalness={0.8}
+            roughness={0.2}
           />
         </mesh>
         
-        {/* Elegant arches - classical feminine architecture */}
+        {/* Cyber pillars */}
         {i % 5 === 0 && (
           <>
-            {/* Left arch */}
             <group position={[-TRACK_WIDTH / 2 - 2, 0, 0]}>
               <mesh position={[0, 0.3, 0]}>
                 <boxGeometry args={[1.2, 0.6, 1.2]} />
-                <meshStandardMaterial color="#E8D0F0" metalness={0.3} roughness={0.5} />
+                <meshStandardMaterial color="#1a1a3e" metalness={0.5} roughness={0.4} />
               </mesh>
               <mesh position={[0, 2, 0]}>
                 <cylinderGeometry args={[0.25, 0.3, 3, 16]} />
-                <meshStandardMaterial color="#F0E0F8" metalness={0.4} roughness={0.4} emissive="#9C27B0" emissiveIntensity={0.1} />
+                <meshStandardMaterial color="#1a1a40" metalness={0.6} roughness={0.3} emissive="#0066CC" emissiveIntensity={0.15} />
               </mesh>
               <mesh position={[0, 3.7, 0]}>
                 <sphereGeometry args={[0.5, 16, 16]} />
-                <meshStandardMaterial color="#E91E63" metalness={0.5} roughness={0.3} emissive="#E91E63" emissiveIntensity={0.2} />
+                <meshStandardMaterial color="#00BFFF" metalness={0.6} roughness={0.2} emissive="#00BFFF" emissiveIntensity={0.3} />
               </mesh>
             </group>
             
-            {/* Right arch */}
             <group position={[TRACK_WIDTH / 2 + 2, 0, 0]}>
               <mesh position={[0, 0.3, 0]}>
                 <boxGeometry args={[1.2, 0.6, 1.2]} />
-                <meshStandardMaterial color="#E8D0F0" metalness={0.3} roughness={0.5} />
+                <meshStandardMaterial color="#1a1a3e" metalness={0.5} roughness={0.4} />
               </mesh>
               <mesh position={[0, 2, 0]}>
                 <cylinderGeometry args={[0.25, 0.3, 3, 16]} />
-                <meshStandardMaterial color="#F0E0F8" metalness={0.4} roughness={0.4} emissive="#9C27B0" emissiveIntensity={0.1} />
+                <meshStandardMaterial color="#1a1a40" metalness={0.6} roughness={0.3} emissive="#0066CC" emissiveIntensity={0.15} />
               </mesh>
               <mesh position={[0, 3.7, 0]}>
                 <sphereGeometry args={[0.5, 16, 16]} />
-                <meshStandardMaterial color="#E91E63" metalness={0.5} roughness={0.3} emissive="#E91E63" emissiveIntensity={0.2} />
+                <meshStandardMaterial color="#00BFFF" metalness={0.6} roughness={0.2} emissive="#00BFFF" emissiveIntensity={0.3} />
               </mesh>
             </group>
           </>
         )}
         
-        {/* Warm purple/pink ambient lights */}
+        {/* Blue/cyan ambient lights */}
         {i % 2 === 0 && (
           <>
-            <pointLight position={[TRACK_WIDTH / 2, 0.5, -1]} color="#E91E63" intensity={0.4} distance={3} />
-            <pointLight position={[-TRACK_WIDTH / 2, 0.5, 1]} color="#9C27B0" intensity={0.3} distance={3} />
+            <pointLight position={[TRACK_WIDTH / 2, 0.5, -1]} color="#00BFFF" intensity={0.4} distance={3} />
+            <pointLight position={[-TRACK_WIDTH / 2, 0.5, 1]} color="#7B68EE" intensity={0.3} distance={3} />
           </>
         )}
         {i % 3 === 0 && (
-          <pointLight position={[0, 2, 0]} color="#F8BBD9" intensity={0.3} distance={4} />
+          <pointLight position={[0, 2, 0]} color="#87CEEB" intensity={0.3} distance={4} />
         )}
       </group>
     );
