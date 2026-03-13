@@ -15,7 +15,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
 
   const backgroundElements = [];
   
-  // Elegant buildings with purple/pink glow
+  // Cyber buildings with neon glow
   for (let i = 0; i < 20; i++) {
     const x = (i - 10) * 15;
     const height = 20 + Math.random() * 30;
@@ -25,17 +25,17 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       <mesh key={`building-${i}`} position={[x, height / 2, z]}>
         <boxGeometry args={[8, height, 8]} />
         <meshBasicMaterial 
-          color="#1a0a2e"
+          color="#0a0a20"
           transparent
           opacity={0.3}
         />
       </mesh>
     );
     
-    // Purple/pink window lights
+    // Neon window lights
     for (let j = 0; j < 5; j++) {
       const lightY = 5 + j * (height / 6);
-      const colors = ['#E91E63', '#9C27B0', '#F8BBD9', '#D4AF37'];
+      const colors = ['#00BFFF', '#7B68EE', '#00CED1', '#FFD700'];
       backgroundElements.push(
         <mesh key={`light-${i}-${j}`} position={[x, lightY, z + 4]}>
           <boxGeometry args={[1, 1, 0.1]} />
@@ -49,7 +49,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     }
   }
   
-  // Floating flower petals - soft pink
+  // Floating particles - cyan/blue
   for (let i = 0; i < 30; i++) {
     const x = (Math.random() - 0.5) * 100;
     const y = 10 + Math.random() * 20;
@@ -58,7 +58,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     
     backgroundElements.push(
       <mesh 
-        key={`petal-${i}`} 
+        key={`particle-${i}`} 
         position={[
           x + Math.sin(timeRef.current * speed + i) * 3,
           y + Math.cos(timeRef.current * speed * 0.7 + i) * 2,
@@ -68,7 +68,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       >
         <sphereGeometry args={[0.1, 6, 6]} />
         <meshBasicMaterial 
-          color={i % 3 === 0 ? '#F8BBD9' : i % 3 === 1 ? '#CE93D8' : '#FFD700'}
+          color={i % 3 === 0 ? '#00BFFF' : i % 3 === 1 ? '#7B68EE' : '#00CED1'}
           transparent
           opacity={0.4 + Math.sin(timeRef.current * 2 + i) * 0.2}
         />
@@ -76,7 +76,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     );
   }
   
-  // Glowing rings - purple and gold
+  // Glowing rings - blue and cyan
   for (let i = 0; i < 8; i++) {
     const x = (Math.random() - 0.5) * 80;
     const y = 15 + Math.random() * 10;
@@ -92,7 +92,7 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
       >
         <ringGeometry args={[3, 3.15, 32]} />
         <meshBasicMaterial 
-          color={i % 2 === 0 ? '#9C27B0' : '#D4AF37'}
+          color={i % 2 === 0 ? '#00BFFF' : '#7B68EE'}
           transparent
           opacity={0.25}
           side={2}
@@ -105,11 +105,11 @@ export const CyberBackground = ({ ballPosition }: CyberBackgroundProps) => {
     <group>
       {backgroundElements}
       
-      {/* Deep purple atmosphere */}
+      {/* Deep blue atmosphere */}
       <mesh position={[0, 0, ballPosition.z + 200]} scale={[200, 100, 200]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshBasicMaterial 
-          color="#0a0515"
+          color="#020510"
           transparent
           opacity={0.1}
         />
