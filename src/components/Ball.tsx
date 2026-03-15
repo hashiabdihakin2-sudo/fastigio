@@ -374,6 +374,32 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
         </group>
       )}
 
+      {/* Neon Glow - glowing ring */}
+      {skinConfig.accessory === 'neonGlow' && (
+        <group>
+          <mesh position={[0, 0, 0]}>
+            <torusGeometry args={[0.35, 0.02, 16, 32]} />
+            <meshPhongMaterial color={skinConfig.emissive} emissive={skinConfig.emissive} emissiveIntensity={2.0} transparent opacity={0.8} />
+          </mesh>
+          <mesh position={[0, 0.15, 0]}>
+            <torusGeometry args={[0.25, 0.015, 16, 32]} />
+            <meshPhongMaterial color={skinConfig.emissive} emissive={skinConfig.emissive} emissiveIntensity={1.5} transparent opacity={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Pixel Trail - small cubes */}
+      {skinConfig.accessory === 'pixelTrail' && (
+        <group>
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.35, (i % 3) * 0.08 - 0.1, Math.sin((angle * Math.PI) / 180) * 0.35]}>
+              <boxGeometry args={[0.05, 0.05, 0.05]} />
+              <meshPhongMaterial color={skinConfig.color} emissive={skinConfig.emissive} emissiveIntensity={0.8} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
       {/* ========== PREMIUM ACCESSORIES ========== */}
 
       {/* Cleopatra - Gold jewelry & Egyptian collar */}
