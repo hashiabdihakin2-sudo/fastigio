@@ -9,23 +9,36 @@ interface HighScore {
 }
 
 const SKIN_PRICES = {
-  // Standard
+  // Standard (free & cheap)
   classic: 0,
-  fire: 800,
-  ice: 800,
-  ghost: 1000,
-  rainbow: 1500,
-  golden: 2500,
-  ninja: 3500,
-  robot: 4500,
+  fire: 200,
+  ice: 200,
+  ghost: 300,
+  neon: 300,
+  pixel: 400,
+  rainbow: 500,
+  golden: 600,
+  ninja: 700,
+  robot: 800,
+  // Mid-tier
+  lava: 1000,
+  ocean: 1000,
+  electric: 1200,
+  crystal: 1200,
+  shadow: 1500,
+  candy: 1500,
+  toxic: 1800,
+  sunset: 1800,
+  arctic: 2000,
+  chrome: 2000,
   // Premium
-  cleopatra: 6000,
-  coco: 8000,
-  phoenix: 10000,
-  galaxy: 12000,
-  samurai: 15000,
-  dragon: 20000,
-  legend: 25000,
+  cleopatra: 3000,
+  coco: 3500,
+  phoenix: 4000,
+  galaxy: 5000,
+  samurai: 6000,
+  dragon: 8000,
+  legend: 12000,
 } as const;
 
 type SkinType = keyof typeof SKIN_PRICES;

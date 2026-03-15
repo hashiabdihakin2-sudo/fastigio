@@ -87,7 +87,7 @@ export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
         {/* Logo */}
         <div className="space-y-3">
           <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text">
-            ⚡ SLOPE RUSH ⚡
+            ⚡ FASTIGIO ⚡
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground">
             Race down the neon track

@@ -13,11 +13,25 @@ const SKIN_CONFIGS: Record<string, {
   fire: { color: '#FF4500', emissive: '#FF6347', emissiveIntensity: 0.8, hat: 'flame', accessory: 'spark' },
   ice: { color: '#87CEEB', emissive: '#B0E0E6', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
   ghost: { color: '#F0F8FF', emissive: '#FFFFFF', emissiveIntensity: 0.9, hat: 'ghostSheet', accessory: 'ghostGlow' },
+  neon: { color: '#39FF14', emissive: '#00FF41', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  pixel: { color: '#FF69B4', emissive: '#FF1493', emissiveIntensity: 0.6, hat: null, accessory: 'pixelTrail' },
   rainbow: { color: '#FF1493', emissive: '#9400D3', emissiveIntensity: 0.9, hat: 'crown', accessory: 'stars' },
   golden: { color: '#FFD700', emissive: '#FFA500', emissiveIntensity: 0.6, hat: 'kingCrown', accessory: 'goldRings' },
   ninja: { color: '#2C2C2C', emissive: '#FF0000', emissiveIntensity: 0.5, hat: 'ninjaHeadband', accessory: 'shurikens' },
   robot: { color: '#C0C0C0', emissive: '#00FF00', emissiveIntensity: 0.9, hat: 'antenna', accessory: 'circuits' },
   
+  // Mid-tier
+  lava: { color: '#FF3300', emissive: '#FF4400', emissiveIntensity: 0.9, hat: 'flame', accessory: 'spark' },
+  ocean: { color: '#006994', emissive: '#0099CC', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
+  electric: { color: '#FFFF00', emissive: '#FFD700', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  crystal: { color: '#E0E8FF', emissive: '#AABBFF', emissiveIntensity: 0.8, hat: 'crown', accessory: 'stars' },
+  shadow: { color: '#1a1a2e', emissive: '#4a0080', emissiveIntensity: 0.6, hat: 'ninjaHeadband', accessory: 'ghostGlow' },
+  candy: { color: '#FF69B4', emissive: '#FF1493', emissiveIntensity: 0.7, hat: 'crown', accessory: 'stars' },
+  toxic: { color: '#7FFF00', emissive: '#ADFF2F', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  sunset: { color: '#FF6347', emissive: '#FF4500', emissiveIntensity: 0.8, hat: 'flame', accessory: 'spark' },
+  arctic: { color: '#B0E0E6', emissive: '#E0FFFF', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
+  chrome: { color: '#C0C0C0', emissive: '#E8E8E8', emissiveIntensity: 0.5, hat: 'antenna', accessory: 'circuits' },
+
   // Premium
   cleopatra: { color: '#D4AF37', emissive: '#B8860B', emissiveIntensity: 0.5, hat: 'cleopatraCrown', accessory: 'cleopatraJewels' },
   coco: { color: '#1a1a1a', emissive: '#333333', emissiveIntensity: 0.2, hat: 'cocoHat', accessory: 'cocoPearls' },
