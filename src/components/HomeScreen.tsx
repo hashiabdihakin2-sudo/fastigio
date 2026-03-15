@@ -11,22 +11,36 @@ interface HomeScreenProps {
 const ALL_SKINS = [
   // Standard skins
   { id: 'classic' as const, name: 'BENO', color: '#808080', emoji: '⚪', price: 0 },
-  { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥', price: 800 },
-  { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️', price: 800 },
-  { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻', price: 1000 },
-  { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈', price: 1500 },
-  { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑', price: 2500 },
-  { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 3500 },
-  { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 4500 },
+  { id: 'fire' as const, name: 'Fire', color: '#FF4500', emoji: '🔥', price: 200 },
+  { id: 'ice' as const, name: 'Ice', color: '#87CEEB', emoji: '❄️', price: 200 },
+  { id: 'ghost' as const, name: 'Ghost', color: '#F0F8FF', emoji: '👻', price: 300 },
+  { id: 'neon' as const, name: 'Neon', color: '#39FF14', emoji: '💚', price: 300 },
+  { id: 'pixel' as const, name: 'Pixel', color: '#FF69B4', emoji: '🎮', price: 400 },
+  { id: 'rainbow' as const, name: 'Rainbow', color: '#FF1493', emoji: '🌈', price: 500 },
+  { id: 'golden' as const, name: 'Golden', color: '#FFD700', emoji: '👑', price: 600 },
+  { id: 'ninja' as const, name: 'Ninja', color: '#2C2C2C', emoji: '🥷', price: 700 },
+  { id: 'robot' as const, name: 'Robot', color: '#C0C0C0', emoji: '🤖', price: 800 },
+
+  // Mid-tier skins
+  { id: 'lava' as const, name: 'Lava', color: '#FF3300', emoji: '🌋', price: 1000, desc: 'Molten Core' },
+  { id: 'ocean' as const, name: 'Ocean', color: '#006994', emoji: '🌊', price: 1000, desc: 'Deep Blue' },
+  { id: 'electric' as const, name: 'Electric', color: '#FFFF00', emoji: '⚡', price: 1200, desc: 'Lightning Speed' },
+  { id: 'crystal' as const, name: 'Crystal', color: '#E0E8FF', emoji: '💠', price: 1200, desc: 'Pure Shine' },
+  { id: 'shadow' as const, name: 'Shadow', color: '#1a1a2e', emoji: '🖤', price: 1500, desc: 'Dark Force' },
+  { id: 'candy' as const, name: 'Candy', color: '#FF69B4', emoji: '🍬', price: 1500, desc: 'Sweet Rush' },
+  { id: 'toxic' as const, name: 'Toxic', color: '#7FFF00', emoji: '☢️', price: 1800, desc: 'Radioactive' },
+  { id: 'sunset' as const, name: 'Sunset', color: '#FF6347', emoji: '🌅', price: 1800, desc: 'Golden Hour' },
+  { id: 'arctic' as const, name: 'Arctic', color: '#B0E0E6', emoji: '🧊', price: 2000, desc: 'Frozen Tundra' },
+  { id: 'chrome' as const, name: 'Chrome', color: '#C0C0C0', emoji: '🪞', price: 2000, desc: 'Mirror Finish' },
 
   // Premium skins
-  { id: 'cleopatra' as const, name: 'Cleopatra', color: '#D4AF37', emoji: '👸', price: 6000, desc: 'Queen of Egypt' },
-  { id: 'coco' as const, name: 'Coco Chanel', color: '#1a1a1a', emoji: '💎', price: 8000, desc: 'Fashion Icon' },
-  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF4500', emoji: '🔥', price: 10000, desc: 'Rise from Ashes' },
-  { id: 'galaxy' as const, name: 'Galaxy', color: '#4B0082', emoji: '🌌', price: 12000, desc: 'Cosmic Power' },
-  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '⚔️', price: 15000, desc: 'Way of the Sword' },
-  { id: 'dragon' as const, name: 'Dragon', color: '#228B22', emoji: '🐉', price: 20000, desc: 'Ancient Beast' },
-  { id: 'legend' as const, name: 'Legend ★', color: '#FFD700', emoji: '⭐', price: 25000, desc: 'Legendary Edition' },
+  { id: 'cleopatra' as const, name: 'Cleopatra', color: '#D4AF37', emoji: '👸', price: 3000, desc: 'Queen of Egypt' },
+  { id: 'coco' as const, name: 'Coco Chanel', color: '#1a1a1a', emoji: '💎', price: 3500, desc: 'Fashion Icon' },
+  { id: 'phoenix' as const, name: 'Phoenix', color: '#FF4500', emoji: '🔥', price: 4000, desc: 'Rise from Ashes' },
+  { id: 'galaxy' as const, name: 'Galaxy', color: '#4B0082', emoji: '🌌', price: 5000, desc: 'Cosmic Power' },
+  { id: 'samurai' as const, name: 'Samurai', color: '#8B0000', emoji: '⚔️', price: 6000, desc: 'Way of the Sword' },
+  { id: 'dragon' as const, name: 'Dragon', color: '#228B22', emoji: '🐉', price: 8000, desc: 'Ancient Beast' },
+  { id: 'legend' as const, name: 'Legend ★', color: '#FFD700', emoji: '⭐', price: 12000, desc: 'Legendary Edition' },
 ];
 
 export const HomeScreen = ({ onStartGame }: HomeScreenProps) => {
