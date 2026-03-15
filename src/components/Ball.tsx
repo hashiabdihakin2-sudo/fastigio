@@ -13,11 +13,25 @@ const SKIN_CONFIGS: Record<string, {
   fire: { color: '#FF4500', emissive: '#FF6347', emissiveIntensity: 0.8, hat: 'flame', accessory: 'spark' },
   ice: { color: '#87CEEB', emissive: '#B0E0E6', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
   ghost: { color: '#F0F8FF', emissive: '#FFFFFF', emissiveIntensity: 0.9, hat: 'ghostSheet', accessory: 'ghostGlow' },
+  neon: { color: '#39FF14', emissive: '#00FF41', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  pixel: { color: '#FF69B4', emissive: '#FF1493', emissiveIntensity: 0.6, hat: null, accessory: 'pixelTrail' },
   rainbow: { color: '#FF1493', emissive: '#9400D3', emissiveIntensity: 0.9, hat: 'crown', accessory: 'stars' },
   golden: { color: '#FFD700', emissive: '#FFA500', emissiveIntensity: 0.6, hat: 'kingCrown', accessory: 'goldRings' },
   ninja: { color: '#2C2C2C', emissive: '#FF0000', emissiveIntensity: 0.5, hat: 'ninjaHeadband', accessory: 'shurikens' },
   robot: { color: '#C0C0C0', emissive: '#00FF00', emissiveIntensity: 0.9, hat: 'antenna', accessory: 'circuits' },
   
+  // Mid-tier
+  lava: { color: '#FF3300', emissive: '#FF4400', emissiveIntensity: 0.9, hat: 'flame', accessory: 'spark' },
+  ocean: { color: '#006994', emissive: '#0099CC', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
+  electric: { color: '#FFFF00', emissive: '#FFD700', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  crystal: { color: '#E0E8FF', emissive: '#AABBFF', emissiveIntensity: 0.8, hat: 'crown', accessory: 'stars' },
+  shadow: { color: '#1a1a2e', emissive: '#4a0080', emissiveIntensity: 0.6, hat: 'ninjaHeadband', accessory: 'ghostGlow' },
+  candy: { color: '#FF69B4', emissive: '#FF1493', emissiveIntensity: 0.7, hat: 'crown', accessory: 'stars' },
+  toxic: { color: '#7FFF00', emissive: '#ADFF2F', emissiveIntensity: 1.0, hat: null, accessory: 'neonGlow' },
+  sunset: { color: '#FF6347', emissive: '#FF4500', emissiveIntensity: 0.8, hat: 'flame', accessory: 'spark' },
+  arctic: { color: '#B0E0E6', emissive: '#E0FFFF', emissiveIntensity: 0.7, hat: 'snowflake', accessory: 'frost' },
+  chrome: { color: '#C0C0C0', emissive: '#E8E8E8', emissiveIntensity: 0.5, hat: 'antenna', accessory: 'circuits' },
+
   // Premium
   cleopatra: { color: '#D4AF37', emissive: '#B8860B', emissiveIntensity: 0.5, hat: 'cleopatraCrown', accessory: 'cleopatraJewels' },
   coco: { color: '#1a1a1a', emissive: '#333333', emissiveIntensity: 0.2, hat: 'cocoHat', accessory: 'cocoPearls' },
@@ -355,6 +369,32 @@ export const Ball = forwardRef<Group, BallProps>(({ skinId }, ref) => {
           {[0, 120, 240].map((angle, i) => (
             <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.4, Math.sin(i * 0.3) * 0.1, Math.sin((angle * Math.PI) / 180) * 0.4]}>
               <sphereGeometry args={[0.06, 16, 16]} /><meshPhongMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={1.5} transparent opacity={0.5} />
+            </mesh>
+          ))}
+        </group>
+      )}
+
+      {/* Neon Glow - glowing ring */}
+      {skinConfig.accessory === 'neonGlow' && (
+        <group>
+          <mesh position={[0, 0, 0]}>
+            <torusGeometry args={[0.35, 0.02, 16, 32]} />
+            <meshPhongMaterial color={skinConfig.emissive} emissive={skinConfig.emissive} emissiveIntensity={2.0} transparent opacity={0.8} />
+          </mesh>
+          <mesh position={[0, 0.15, 0]}>
+            <torusGeometry args={[0.25, 0.015, 16, 32]} />
+            <meshPhongMaterial color={skinConfig.emissive} emissive={skinConfig.emissive} emissiveIntensity={1.5} transparent opacity={0.6} />
+          </mesh>
+        </group>
+      )}
+
+      {/* Pixel Trail - small cubes */}
+      {skinConfig.accessory === 'pixelTrail' && (
+        <group>
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+            <mesh key={i} position={[Math.cos((angle * Math.PI) / 180) * 0.35, (i % 3) * 0.08 - 0.1, Math.sin((angle * Math.PI) / 180) * 0.35]}>
+              <boxGeometry args={[0.05, 0.05, 0.05]} />
+              <meshPhongMaterial color={skinConfig.color} emissive={skinConfig.emissive} emissiveIntensity={0.8} />
             </mesh>
           ))}
         </group>
